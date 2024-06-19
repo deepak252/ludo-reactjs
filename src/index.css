@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Poppins&family=Quicksand:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Veneer';
+  src: url('/fonts/Veneer.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+  font-family: 'Poppins', sans-serif;
+}
+
+@layer components {
+  .base-button {
+    @apply text-sm rounded-xl py-3 px-6;
+  }
+  /* .icon-button {
+    @apply flex-center p-1 box-border rounded-full hover:bg-gray-1100 active:bg-gray-1200;
+  }
+  .btn-filled {
+    @apply base-button bg-primary text-white border border-primary active:bg-[#565dc3];
+  }
+  .btn-outlined {
+    @apply base-button bg-transparent text-primary border-[1.5px] border-primary active:bg-[#E0E0FFAA];
+  } */
+
+  /* Auth User-Type Button */
+  .btn-user-type {
+    @apply inline-block p-6 bg-gray-1200 w-full max-w-96 -skew-x-[36deg];
+  }
+  .btn-user-type span {
+    @apply inline-block skew-x-[36deg];
+  }
+  .btn-user-type.active {
+    @apply bg-primary;
+  }
+  /* Auth Pages Button */
+  .btn-auth {
+    @apply inline-flex items-center justify-center text-17 text-black font-medium bg-primary py-3 px-5 rounded-[10px] border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary;
+  }
+  .btn-auth:hover svg {
+    @apply fill-primary;
+  }
+  .btn-auth-provider {
+    @apply inline-flex items-center w-full text-17 text-black bg-white py-4 px-5 rounded-[10px] max-w-96 max-md:text-15;
+  }
+  .btn-auth-provider img {
+    @apply me-2;
+  }
+  .btn-auth-provider span {
+    @apply w-full overflow-ellipsis;
+  }
+
+  .auth-input-wrapper {
+    @apply flex items-center bg-gray-800 py-[10px] px-[22px] w-full rounded-[10px];
+  }
+  .auth-input-wrapper input {
+    @apply w-full bg-transparent outline-none border-none text-17 py-3 max-md:text-15 focus:text-white;
+  }
+  .auth-input-wrapper input:-webkit-autofill,
+  .auth-input-wrapper input:-webkit-autofill:hover,
+  .auth-input-wrapper input:-webkit-autofill:focus,
+  .auth-input-wrapper input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #323645 inset !important;
+    -webkit-text-fill-color: white !important;
+  }
+
+  .auth-input-wrapper .rmdp-input {
+    @apply py-[21px] px-0 outline-none border-none shadow-none;
+  }
+  .auth-input-wrapper .rmdp-week-day {
+    @apply text-primary;
+  }
+  .auth-input-wrapper .rmdp-today span {
+    @apply bg-gray-300 text-black;
+  }
+  .auth-input-wrapper .rmdp-selected span {
+    @apply !bg-primary;
+  }
+  .auth-input-wrapper .rmdp-day span:hover {
+    @apply !bg-primary-200;
+  }
+
+  .visibility-off::before {
+    @apply absolute top-[-2px] left-[11px] w-[2px] h-[27px] bg-white content-[''] -rotate-45;
+  }
+
+  .dropdown {
+    @apply absolute end-0 z-40  min-w-52 bg-white p-2 mt-0 border border-gray-400 shadow-3xl rounded-2xl custom-scrollbar;
+  }
+  .dropdown-item {
+    @apply flex items-center text-sm text-gray-700 font-normal rounded-lg p-2 overflow-hidden bg-white cursor-pointer disable-select hover:bg-primary-200 border border-white;
+  }
+  .dropdown-item.selected {
+    @apply text-primary;
+  }
+  .dropdown-item.selected svg {
+    @apply fill-primary;
+  }
+
+  .textfield {
+    @apply flex items-center border border-gray-400 p-[10px] rounded-xl focus-within:border-primary;
+  }
+  .textfield input {
+    @apply border-none outline-none min-w-0 ps-3 pe-2;
+  }
+
+  .form-input {
+    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
+  }
+
+  .chip {
+    @apply inline-flex items-center px-4 py-[6px] border border-gray-500 text-gray-700 rounded-full text-sm disable-select cursor-pointer;
+  }
+  .chip.active {
+    @apply border-primary text-primary bg-primary-100 font-semibold;
+  }
+
+  .home-diagonal::before {
+    @apply block  content-[""] absolute h-[16vw] -top-[16vw] left-0 right-0;
+    background-image: linear-gradient(
+      to bottom right,
+      transparent 50%,
+      #f8f8f8 50%
+    );
+  }
+  .home-diagonal::after {
+    @apply block  content-[""] absolute h-[16vw] -bottom-[16vw] left-0 right-0;
+    background-image: linear-gradient(
+      to bottom right,
+      #f8f8f8 50%,
+      transparent 50%
+    );
+  }
+
+  .home-diagonal2::before {
+    @apply block  content-[""] absolute h-[16vw] -top-[16vw] left-0 right-0;
+    background-image: linear-gradient(
+      to bottom right,
+      transparent 50%,
+      #f8f8f8 50%
+    );
+  }
+}
+
+@layer utilities {
+  .disable-select {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+  }
+
+  .absolute-center {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .overflow-ellipsis {
+    @apply whitespace-nowrap overflow-hidden text-ellipsis;
+  }
+
+  .animated-link {
+    @apply text-primary hover:underline;
+  }
+  .animated-link {
+    @apply text-primary hover:underline;
+  }
+
+  .max-container {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+h1 {
+  @apply text-5xl font-medium leading-normal;
+}
+h2 {
+  @apply text-4xl font-medium leading-normal;
+}
+h3 {
+  @apply text-3xl font-medium leading-normal;
+}
+h4 {
+  @apply text-2xl font-medium leading-normal;
+}
+
+input {
+  @apply text-sm;
+}
+input::placeholder {
+  @apply text-gray-600 font-normal;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  margin: 8px 0px;
+  background: #70707080;
+  border-radius: 100px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #fcac1d;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}
+/* Horizontal Scroll Thumb*/
+.custom-scrollbar::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  background-color: #1e1e1e77;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+/* input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+} */
