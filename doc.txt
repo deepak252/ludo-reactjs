@@ -1,0 +1,27 @@
+A. Using SVG in React TS + Vite
+   1. npm i 'vite-plugin-svgr'
+   2. vite.config.ts
+      export default defineConfig({
+         plugins: [react(), svgr()],
+      })
+   3. App.tsx
+      /// <reference types="vite-plugin-svgr/client" />
+
+B. Absolute Imports
+   1. npm i -D 'vite-tsconfig-paths'
+   2. vite.config.ts
+      export default defineConfig({
+         plugins: [react(), tsconfigPaths()],
+      })
+   3. tsconfig.json
+      "compilerOptions":{
+         "baseUrl": ".",
+         "paths": {
+            "@": ["src"],
+            "@/*": ["src/*"]
+            // "@components/*": ["src/components/*"]
+         },
+      }
+C. Tailwind CSS
+   > npm i -D tailwindcss postcss autoprefixer
+   > npx tailwindcss init -p
