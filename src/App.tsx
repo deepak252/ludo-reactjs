@@ -6,12 +6,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={
-              <Dashboard />
-          }
-        ></Route>
+        <Route path="/" element={<Dashboard />}></Route>
       </Routes>
     </>
   )

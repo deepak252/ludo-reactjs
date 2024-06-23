@@ -11,7 +11,7 @@ const YELLOW_CELLS = [134, 119, 118, 117, 116, 115]
 const SAFE_CELLS = [92, 37, 24, 103, 134, 189, 202, 123]
 
 const RED_PATH = [
-  92, 93, 94, 95, 96, 82, 67, 52, 37, 22, 7, 8, 9, 24, 39, 54, 69, 83, 100, 101,
+  92, 93, 94, 95, 96, 82, 67, 52, 37, 22, 7, 8, 9, 24, 39, 54, 69, 84, 100, 101,
   102, 103, 104, 105, 120, 135, 134, 133, 132, 131, 130, 144, 159, 174, 189,
   204, 219, 218, 217, 202, 187, 172, 157, 142, 126, 125, 124, 123, 122, 121,
   106, 107, 108, 109, 110, 111,
@@ -23,19 +23,19 @@ const Board = () => {
   const d = (Math.min(height, width) * 0.9) / 15
 
   const [counter, setCounter] = useState(0)
-  const left = RED_PATH[counter] % 15
-  const top = Math.floor((RED_PATH[counter] - 1) / 15) + 1
-  // console.log({ counter, top, left })
+  const left = (RED_PATH[counter] - 1) % 15
+  const top = Math.floor(RED_PATH[counter] / 15)
+  console.log(RED_PATH[counter], { top, left })
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCounter((prev) => {
-        if (prev === 57) {
+        if (prev === RED_PATH.length - 1) {
           clearInterval(interval)
         }
         return prev + 1
       })
-    }, 1000)
+    }, 300)
 
     return () => {
       clearInterval(interval)
@@ -90,7 +90,7 @@ const BoardCell = ({ index }: { index: number }) => {
           <StarIcon className="size-[min(4vh,4vw)] " />
         </div>
       )}
-      {/* {index} */}
+      {index}
     </div>
   )
 }
