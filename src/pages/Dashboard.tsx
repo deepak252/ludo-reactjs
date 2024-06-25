@@ -3,7 +3,7 @@ import Board from '@/components/Board'
 import useWindowDimensions from '@/hooks/useWindowDimensions'
 import Token from '@/components/Token'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { rollDice, startMatch } from '@/slices/matchSlice'
+import { move, rollDice, startMatch } from '@/slices/matchSlice'
 import { PATH } from '@/constants'
 
 function Dashboard() {
@@ -121,7 +121,7 @@ function Dashboard() {
             )
           })} */}
         {matchState.activePlayers.map((player) =>
-          matchState.players[player].tokens.map((token) => {
+          matchState.players[player].tokens.map((token, index) => {
             // console.log(p, t, PATH[p][t])
 
             if (token.pos < 0) return <div key={token.id}></div>
@@ -133,6 +133,13 @@ function Dashboard() {
                 top={Math.floor(PATH[player][token.pos] / 15) * d}
                 left={(PATH[player][token.pos] % 15) * d}
                 highlight={token.canMove}
+                onClick={() => {
+                  dispatch(
+                    move({
+                      tokenIndex: index,
+                    })
+                  )
+                }}
               />
             )
           })

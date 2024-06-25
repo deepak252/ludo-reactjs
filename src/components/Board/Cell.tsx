@@ -23,7 +23,7 @@ const Cell = ({ index }: { index: number }) => {
           <StarIcon className="size-[min(4vh,4vw)] " />
         </div>
       )}
-      {index}
+      {/* {index} */}
     </div>
   )
 }

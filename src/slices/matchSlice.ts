@@ -111,18 +111,18 @@ const matchSlice = createSlice({
       if (num === 6) {
         if (movableTokensIndexes.length === baseTokensIndexes.length) {
           // Only base tokens can move, take token out of the base
-          moveToken(state, currPlayer, movableTokensIndexes[0], 0)
+          moveToken(state, movableTokensIndexes[0], 0)
         } else {
           if (movableTokensIndexes.length == 1) {
             // Only ONE movable token is in the path, auto move token
-            moveToken(state, currPlayer, movableTokensIndexes[0], num)
+            moveToken(state, movableTokensIndexes[0], num)
           }
         }
       } else {
         // No base tokens can move
         if (movableTokensIndexes.length == 1) {
           // Only one movable token is in the path, auto move token
-          moveToken(state, currPlayer, movableTokensIndexes[0], num)
+          moveToken(state, movableTokensIndexes[0], num)
           //TODO:: Kill other player Tokens if possible
           nextPlayerTurn(state)
         }
@@ -187,37 +187,39 @@ const matchSlice = createSlice({
       // } else {
       // }
     },
-    move: (state, action: PayloadAction<{ token: number }>) => {
+    move: (state, action: PayloadAction<{ tokenIndex: number }>) => {
       const { activePlayers, turn, dice } = state
-      const token = action.payload.token
-      state.players[activePlayers[turn]].tokens[token].pos += dice
-      if (activePlayers.length) {
-        state.turn = (turn + 1) % activePlayers.length
+      const tokenIndex = action.payload.tokenIndex
+      state.players[activePlayers[turn]].tokens[tokenIndex].pos += dice
+
+      resetMovableTokens(state)
+      if (state.dice !== 6) {
+        nextPlayerTurn(state)
       }
-      state.canRollDice = true
     },
   },
 })
 
 const moveToken = (
   state: MatchState,
-  player: PlayerName,
   tokenIndex: number,
   diceValue: number
 ) => {
   // console.log({ player, tokenIndex, diceValue })
+  const currPlayer = state.activePlayers[state.turn]
 
   if (diceValue === 0) {
-    state.players[player].tokens[tokenIndex].pos = 0
+    state.players[currPlayer].tokens[tokenIndex].pos = 0
   } else {
-    state.players[player].tokens[tokenIndex].pos += diceValue
+    state.players[currPlayer].tokens[tokenIndex].pos += diceValue
   }
-  resetMovableTokens(state, player)
+  resetMovableTokens(state)
 }
 
-const resetMovableTokens = (state: MatchState, player: PlayerName) => {
+const resetMovableTokens = (state: MatchState) => {
+  const currPlayer = state.activePlayers[state.turn]
   for (let i = 0; i < 4; i++) {
-    state.players[player].tokens[i].canMove = false
+    state.players[currPlayer].tokens[i].canMove = false
   }
   state.canRollDice = true
 }
