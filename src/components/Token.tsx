@@ -19,12 +19,14 @@ const Token = ({
   className,
 }: TokenProps) => {
   if (top == 0 && left == 0) return <></>
+  console.log(top, left)
+
   return (
     <div>
       <LocationIcon
         onClick={onClick}
         className={classNames(
-          'absolute size-[min(5vh,5vw)] stroke-black stroke-[6px]',
+          'absolute z-20 size-[min(5vh,5vw)] stroke-black stroke-[6px]',
           className,
           {
             'stroke-cyan-500 z-50 cursor-pointer stroke-[min(3vh,3vw)] !size-[min(6vh,6vw)]':

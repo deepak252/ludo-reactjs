@@ -20,9 +20,9 @@ const BaseHome = ({
             key={i}
             className="relative size-full rounded-full bg-white bg-opacity-40"
           >
-            {i < tokenCount && (
+            {/* {i < tokenCount && (
               <Token color={tokenColor} className="absolute-center z-50" />
-            )}
+            )} */}
           </div>
         ))}
       </div>

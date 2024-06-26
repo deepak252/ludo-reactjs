@@ -11,7 +11,14 @@ function Dashboard() {
   const dispatch = useAppDispatch()
   const { height, width } = useWindowDimensions()
   const maxSize = Math.min(height, width)
-  const d = (maxSize * 0.9) / 15
+  const d = (maxSize * 0.9) / 15 //Single cell size
+
+  const base_offset = {
+    red: { x: d * 1.5, y: d * 1.5 },
+    green: { x: d * 10.5, y: d * 1.5 },
+    blue: { x: d * 1.5, y: d * 10.5 },
+    yellow: { x: d * 10.5, y: d * 10.5 },
+  }
 
   useEffect(() => {
     dispatch(
@@ -19,7 +26,7 @@ function Dashboard() {
         players: ['red', 'yellow'],
       })
     )
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -59,7 +66,24 @@ function Dashboard() {
           matchState.players[player].tokens.map((token, index) => {
             // console.log(p, t, PATH[p][t])
 
-            if (token.pos < 0) return <div key={token.id}></div>
+            // if (token.pos < 0) return <div key={token.id}></div>
+            if (token.pos < 0)
+              return (
+                <Token
+                  key={token.id}
+                  color={token.color}
+                  top={base_offset[player].y + Math.floor(index / 2) * d * 2.1}
+                  left={base_offset[player].x + (index % 2) * d * 2.16}
+                  highlight={token.canMove}
+                  onClick={() => {
+                    dispatch(
+                      move({
+                        tokenNumber: index,
+                      })
+                    )
+                  }}
+                />
+              )
             return (
               <Token
                 key={token.id}
@@ -70,7 +94,7 @@ function Dashboard() {
                 onClick={() => {
                   dispatch(
                     move({
-                      tokenIndex: index,
+                      tokenNumber: index,
                     })
                   )
                 }}
