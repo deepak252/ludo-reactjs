@@ -34,13 +34,6 @@ const Token = ({
         style={{ fill: color, top, left }}
       />
     </div>
-    // <div
-    //   className={classNames(
-    //     'size-[min(6vh,6vw)] rounded-full border-[3px] border-gray-700 shadow-md',
-    //     className
-    //   )}
-    //   style={{ backgroundColor: color, top, left }}
-    // ></div>
   )
 }
 

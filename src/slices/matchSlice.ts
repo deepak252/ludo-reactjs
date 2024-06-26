@@ -21,7 +21,6 @@ type MatchState = {
     blue: Player
     yellow: Player
   }
-  // board: Record<number, Record<PlayerName, number>>
   dice: number
   canRollDice: boolean
   activePlayers: PlayerName[]
@@ -36,7 +35,6 @@ const initialState: MatchState = {
     blue: { tokens: [], isActive: false },
     yellow: { tokens: [], isActive: false },
   },
-  // board: {},
   dice: 0,
   canRollDice: true,
   activePlayers: [],
@@ -67,16 +65,7 @@ const matchSlice = createSlice({
             color: p,
           })
         }
-        // const token = {
-        //   pos: -1,
-        //   canMove: false,
-        //   color: p,
-        // }
-        // state.players[p].tokens = [token, token, token, token]
       }
-      // for (let i = 0; i < 225; i++) {
-      //   state.board[i] = { red: 0, green: 0, blue: 0, yellow: 0 }
-      // }
       state.activePlayers = action.payload.players
     },
     rollDice: (state) => {
@@ -127,65 +116,6 @@ const matchSlice = createSlice({
           nextPlayerTurn(state)
         }
       }
-
-      // if (num === 6) {
-      //   if (movableTokensIndexes.length === baseTokensIndexes.length) {
-      //     // Only base tokens can move, take token out of the base
-      //     state.players[currPlayer].tokens[movableTokensIndexes[0]].pos = 0
-      //   } else {
-      //     if (movableTokensIndexes.length == 1) {
-      //       // Only ONE movable token is in the path, auto move token
-      //       state.players[currPlayer].tokens[movableTokensIndexes[0]].pos += num
-      //     }
-      //   }
-      // } else {
-      //   // No base tokens can move
-      //   if (movableTokensIndexes.length == 1) {
-      //     // Only one movable token is in the path, auto move token
-      //     state.players[currPlayer].tokens[movableTokensIndexes[0]].pos += num
-      //   }
-      // }
-
-      // for (let i = 0; i < 4; i++) {
-      //   const token = state.players[currPlayer].tokens[i]
-      //   if (
-      //     (token.pos !== -1 && token.pos + num <= 56) ||
-      //     (token.pos === -1 && num === 6)
-      //   ) {
-      //     state.players[currPlayer].tokens[i].canMove = true
-      //     movableTokensCount++
-      //     if (token.pos === -1) {
-      //       // Token at base
-      //       baseTokensCount++
-      //     }
-      //   }
-      // }
-
-      // const movableTokens = state.players[currPlayer].tokens.filter(
-      //   (token) => {
-      //     if(token.pos !== -1 && token.pos + num <= 56){
-
-      //     }
-      //   }
-      // )
-
-      // const isAllBase: boolean =
-      //   state.players[currPlayer].tokens.filter(
-      //     (t) => t.pos === -1 || t.pos + num > 57
-      //   ).length == 4
-      // if (isAllBase) {
-      //   if (num === 6) {
-      //     // Take token out of Base
-      //     const i = state.players[currPlayer].tokens.findIndex(
-      //       (t) => t.pos === -1
-      //     )
-      //     if (i != -1) state.players[currPlayer].tokens[i].pos = 0
-      //   } else {
-      //     state.turn = (turn + 1) % activePlayers.length
-      //   }
-      //   state.canRollDice = true
-      // } else {
-      // }
     },
     move: (state, action: PayloadAction<{ tokenIndex: number }>) => {
       const { activePlayers, turn, dice } = state
