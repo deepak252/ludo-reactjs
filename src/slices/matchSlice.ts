@@ -1,3 +1,4 @@
+import { Position } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type Token = {
@@ -50,6 +51,9 @@ const matchSlice = createSlice({
   name: 'match',
   initialState,
   reducers: {
+    cellClicked: (_, action: PayloadAction<{ position: Position }>) => {
+      console.log('Cell Clicked', action.payload)
+    },
     startMatch: (state, action: PayloadAction<{ players: PlayerName[] }>) => {
       if (state.isOngoing) {
         return
@@ -153,7 +157,7 @@ const nextPlayerTurn = (state: MatchState) => {
   state.canRollDice = true
 }
 
-export const { startMatch, move, rollDice } = matchSlice.actions
+export const { startMatch, move, rollDice, cellClicked } = matchSlice.actions
 
 export default matchSlice.reducer
 

@@ -2,19 +2,24 @@
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   safelist: [
-    'bg-green-500',
-    'bg-yellow-500',
-    'bg-blue-500',
-    'bg-red-500',
     'bg-green-200',
     'bg-yellow-200',
     'bg-blue-200',
     'bg-red-200',
+    'bg-green-500',
+    'bg-yellow-500',
+    'bg-blue-500',
+    'bg-red-500',
+    'bg-green-600',
+    'bg-yellow-600',
+    'bg-blue-600',
+    'bg-red-600',
   ],
   theme: {
     extend: {
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
+        coin: '0 2px 4px rgba(0, 0, 0, 0.4)',
       },
       colors: {
         primary: {
