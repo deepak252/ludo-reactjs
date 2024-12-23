@@ -9,7 +9,9 @@ import { PlayerType } from '@/shared.types'
 
 export const PlayerTypes: PlayerType[] = ['green', 'yellow', 'blue', 'red']
 
-export enum MatchStatus {
+export enum LudoStatus {
+  throwDice,
+  pickToken,
+  moving,
   ended,
-  ongoing,
 }

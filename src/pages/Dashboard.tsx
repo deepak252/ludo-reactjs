@@ -1,4 +1,5 @@
 import Board from '@/components/Board'
+import Dice from '@/components/Dice'
 import Tokens from '@/components/Tokens'
 
 function Dashboard() {
@@ -8,6 +9,7 @@ function Dashboard() {
         <Board />
         <Tokens />
       </div>
+      <Dice />
     </div>
   )
 }

@@ -1,13 +1,14 @@
 import Token from './Token'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { cellClicked } from '@/slices/matchSlice'
+import { pickToken } from '@/slices/matchSlice'
 import { Position } from '@/shared.types'
 
 const Tokens = () => {
   const dispatch = useAppDispatch()
   const players = useAppSelector((state) => state.match.players)
   const handleCellClick = (position: Position) => {
-    dispatch(cellClicked({ position }))
+    // dispatch(cellClicked({ position }))
+    dispatch(pickToken({ position }))
   }
   return (
     <div>

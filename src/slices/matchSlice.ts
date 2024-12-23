@@ -1,11 +1,14 @@
-import { MatchStatus, PlayerTypes } from '@/constants'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { LudoStatus, PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
 import { LudoColor, PlayerType, Position } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import _ from 'lodash'
 
 type Token = {
   id: string
   color: LudoColor
+  pathIndex: number
   position: Position
 }
 
@@ -14,7 +17,8 @@ type Player = {
   isActive: boolean
 }
 
-type MatchState = {
+export type MatchState = {
+  isOngoing: boolean
   players: {
     green: Player
     yellow: Player
@@ -23,16 +27,19 @@ type MatchState = {
   }
   // turn: 0 | 1 | 2 | 3
   turn: PlayerType
-  status?: MatchStatus
+  dice: { value: number }
+  status?: LudoStatus
 }
 
 const initialState: MatchState = {
+  isOngoing: false,
   players: {
     red: { tokens: [], isActive: false },
     green: { tokens: [], isActive: false },
     blue: { tokens: [], isActive: false },
     yellow: { tokens: [], isActive: false },
   },
+  dice: { value: 0 },
   turn: 'green',
 }
 
@@ -48,6 +55,10 @@ const matchSlice = createSlice({
       console.log('Cell Clicked', action.payload)
     },
     startMatch: (state, action: PayloadAction<{ playerCount: number }>) => {
+      if (state.isOngoing) {
+        return
+      }
+      state.isOngoing = true
       const { playerCount } = action.payload
       if (playerCount < 2 || playerCount > 4) {
         return
@@ -69,184 +80,140 @@ const matchSlice = createSlice({
           state.players[playerType].tokens.push({
             id: `${playerType}_${i}`,
             color: playerType,
+            pathIndex: -1,
             position: BoardConstants.HOME[playerType][i],
           })
         }
       }
+      state.turn = 'green'
+      state.status = LudoStatus.throwDice
       console.log('Match started', action.payload)
+    },
+
+    throwDice: (state) => {
+      if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
+        return
+      }
+      // const value = Math.floor(Math.random() * 6) + 1
+      const value = 6
+      state.dice = { value }
+      state.status = LudoStatus.pickToken
+      console.log('Dice Rolled')
+    },
+
+    pickToken: (state, action: PayloadAction<{ position: Position }>) => {
+      // if (!state.isOngoing || state.status !== LudoStatus.pickToken) {
+      //   return
+      // }
+      // const { position } = action.payload
+      // const i = checkTokenPresent(state, position)
+      // if (i === -1) {
+      //   console.log('Token not present at this position')
+      //   return
+      // }
+      // if (!moveToken(state, i)) {
+      //   console.log('Invalid Token move')
+      //   return
+      // }
+      //// state.status = LudoStatus.throwDice
+      //// nextPlayerTurn(state)
+    },
+    moveToken: (
+      state,
+      action: PayloadAction<{ tokenIndex: number; pathIndex: number }>
+    ) => {
+      console.log('moveToken')
+      const { tokenIndex, pathIndex } = action.payload
+      const currPlayer = state.turn
+      state.players[currPlayer].tokens[tokenIndex].pathIndex = pathIndex
+      state.players[currPlayer].tokens[tokenIndex].position =
+        BoardConstants.PATH[currPlayer][pathIndex]
+    },
+    pickTokenSuccess: (state) => {
+      console.log('pickTokenSuccess')
+      state.status = LudoStatus.throwDice
+      nextPlayerTurn(state)
+    },
+    pickTokenFailure: (_, action: PayloadAction<{ message: string }>) => {
+      const { message } = action.payload
+      // console.log('Token not present at this position')
+      console.log({ message })
     },
   },
 })
 
-const nextPlayerTurn = (state: MatchState) => {
-  const curr = state.turn
-  const players = [...PlayerTypes, ...PlayerTypes]
-  for(const player of players){
+// /**
+//  * @param index : Token index
+//  */
+// const moveToken = (state: MatchState, index: number) => {
+//   const currPlayer = state.turn
+//   const diceValue = state.dice.value
+//   const token = { ...state.players[currPlayer].tokens[index] }
+//   if (token.pathIndex === -1) {
+//     if (diceValue === 6) {
+//       token.pathIndex = 0
+//     } else {
+//       return false
+//     }
+//   } else {
+//     if (token.pathIndex + diceValue <= 56) {
+//       token.pathIndex += diceValue
+//     } else {
+//       return false
+//     }
+//   }
+//   token.position = BoardConstants.PATH[currPlayer][token.pathIndex]
+//   state.players[currPlayer].tokens[index] = token
+//   console.log(token)
 
+//   return true
+// }
+//// Return token index at position
+// const checkTokenPresent = (state: MatchState, position: Position) => {
+//   const currPlayer = state.turn
+//   const tokens = state.players[currPlayer].tokens
+//   for (let i = 0; i < 4; i++) {
+//     if (_.isEqual(tokens[i].position, position)) {
+//       return i
+//     }
+//   }
+//   return -1
+//   // for (const token of tokens) {
+//   //   if (_.isEqual(token.position, position)) {
+//   //     return true
+//   //   }
+//   // }
+//   // return false
+// }
+
+const nextPlayerTurn = (state: MatchState) => {
+  const currPlayer = state.turn
+  let nextPlayer = currPlayer
+  for (let i = 0; i < 8; i++) {
+    if (PlayerTypes[i] === currPlayer) {
+      i++
+      while (i < 8) {
+        const j = i % 4
+        if (state.players[PlayerTypes[j]].isActive) {
+          nextPlayer = PlayerTypes[j]
+          break
+        }
+        i++
+      }
+      break
+    }
   }
-  // state.turn = (state.turn + 1) % state.activePlayers.length
-  // state.canRollDice = true
+  state.turn = nextPlayer
 }
 
-export const { cellClicked, startMatch } = matchSlice.actions
+export const {
+  cellClicked,
+  startMatch,
+  throwDice,
+  pickToken,
+  pickTokenFailure,
+  pickTokenSuccess,
+  moveToken,
+} = matchSlice.actions
 
 export default matchSlice.reducer
-
-// import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-
-// type Token = {
-//   id: string
-//   pos: number // position from base, 0 indexed
-//   canMove: boolean
-//   color: PlayerName
-// }
-
-// type Player = {
-//   tokens: Token[]
-//   isActive?: boolean
-// }
-// type PlayerName = keyof MatchState['players'] // red, green, blue, yellow
-
-// type MatchState = {
-//   isOngoing: boolean
-//   players: {
-//     red: Player
-//     green: Player
-//     blue: Player
-//     yellow: Player
-//   }
-//   dice: number
-//   canRollDice: boolean
-//   activePlayers: PlayerName[]
-//   turn: number
-// }
-
-// const initialState: MatchState = {
-//   isOngoing: false,
-//   players: {
-//     red: { tokens: [], isActive: false },
-//     green: { tokens: [], isActive: false },
-//     blue: { tokens: [], isActive: false },
-//     yellow: { tokens: [], isActive: false },
-//   },
-//   dice: 0,
-//   canRollDice: true,
-//   activePlayers: [],
-//   turn: 0, // 0...3
-// }
-
-// /**
-//  * 1. If any token is in the base and no other move possible (dice + token > 57 ) and dice===6, move token out of the base
-//  * 2. If only one token is in the path and dice!==6, move token automatically
-//  */
-
-// const matchSlice = createSlice({
-//   name: 'match',
-//   initialState,
-//   reducers: {
-//     startMatch: (state, action: PayloadAction<{ players: PlayerName[] }>) => {
-//       if (state.isOngoing) {
-//         return
-//       }
-//       state.isOngoing = true
-//       for (const p of action.payload.players) {
-//         state.players[p].isActive = true
-//         for (let i = 0; i < 4; i++) {
-//           state.players[p].tokens.push({
-//             id: `${p}_${i}`,
-//             pos: -1,
-//             canMove: false,
-//             color: p,
-//           })
-//         }
-//       }
-//       state.activePlayers = action.payload.players
-//     },
-//     rollDice: (state) => {
-//       const num = Math.floor(Math.random() * 6) + 1
-//       state.dice = num
-//       state.canRollDice = false
-//       const currPlayer = state.activePlayers[state.turn]
-//       const movableTokenNumbers: number[] = []
-//       const baseTokenNumbers: number[] = []
-
-//       for (let i = 0; i < 4; i++) {
-//         const token = state.players[currPlayer].tokens[i]
-//         if (
-//           (token.pos !== -1 && token.pos + num <= 56) ||
-//           (token.pos === -1 && num === 6)
-//         ) {
-//           state.players[currPlayer].tokens[i].canMove = true
-//           movableTokenNumbers.push(i)
-//           if (token.pos === -1) {
-//             // Token at base
-//             baseTokenNumbers.push(i)
-//           }
-//         }
-//       }
-//       // console.log({ movableTokenNumbers, baseTokenNumbers })
-
-//       if (!movableTokenNumbers.length) {
-//         nextPlayerTurn(state)
-//         return
-//       }
-
-//       if (num === 6) {
-//         if (movableTokenNumbers.length === baseTokenNumbers.length) {
-//           // Only base tokens can move, take token out of the base
-//           moveToken(state, movableTokenNumbers[0])
-//         } else {
-//           if (movableTokenNumbers.length == 1) {
-//             // Only ONE movable token is in the path, auto move token
-//             moveToken(state, movableTokenNumbers[0])
-//           }
-//         }
-//       } else {
-//         // No base tokens can move
-//         if (movableTokenNumbers.length == 1) {
-//           // Only one movable token is in the path, auto move token
-//           moveToken(state, movableTokenNumbers[0])
-//           //TODO:: Kill other player Tokens if possible
-//           // nextPlayerTurn(state)
-//         }
-//       }
-//     },
-//     move: (state, action: PayloadAction<{ tokenNumber: number }>) => {
-//       // const { activePlayers, turn, dice } = state
-//       const tokenNumber = action.payload.tokenNumber
-//       moveToken(state, tokenNumber)
-//     },
-//   },
-// })
-
-// const moveToken = (state: MatchState, tokenNumber: number) => {
-//   const { players, activePlayers, turn, dice } = state
-
-//   const currPlayer = activePlayers[turn]
-//   const tokenPos = players[currPlayer].tokens[tokenNumber].pos
-
-//   if (tokenPos === -1 && dice === 6) {
-//     state.players[currPlayer].tokens[tokenNumber].pos = 0
-//   } else {
-//     state.players[currPlayer].tokens[tokenNumber].pos += dice
-//     nextPlayerTurn(state)
-//   }
-//   resetMovableTokens(state)
-// }
-
-// const resetMovableTokens = (state: MatchState) => {
-//   const currPlayer = state.activePlayers[state.turn]
-//   for (let i = 0; i < 4; i++) {
-//     state.players[currPlayer].tokens[i].canMove = false
-//   }
-//   state.canRollDice = true
-// }
-
-// const nextPlayerTurn = (state: MatchState) => {
-//   state.turn = (state.turn + 1) % state.activePlayers.length
-//   state.canRollDice = true
-// }
-
-// export const { startMatch, move, rollDice } = matchSlice.actions
-
-// export default matchSlice.reducer
