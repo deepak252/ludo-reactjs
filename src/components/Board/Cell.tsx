@@ -10,7 +10,7 @@ const Cell = ({
 }: {
   row: number
   col: number
-  onClick: (position: Position) => void
+  onClick?: (position: Position) => void
   isSafeCell?: boolean
   className?: string
 }) => {

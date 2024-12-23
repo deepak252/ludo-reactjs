@@ -19,7 +19,7 @@ export default {
     extend: {
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
-        coin: '0 2px 4px rgba(0, 0, 0, 0.4)',
+        token: '0 2px 4px rgba(0, 0, 0, 0.4)',
       },
       colors: {
         primary: {

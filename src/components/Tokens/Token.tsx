@@ -1,16 +1,21 @@
-import { LudoColor } from '@/shared.types'
+import { LudoColor, Position } from '@/shared.types'
 import classNames from 'classnames'
 
 type TokenProps = {
   color: LudoColor
   highlight?: boolean
-  top?: number
-  left?: number
+  position: Position
+  onClick?: (position: Position) => void
 }
 
-const Token = ({ color, top = 0, left = 0, highlight }: TokenProps) => {
-  const posTop = `${top * 6.666}%`
-  const posLeft = `${left * 6.666}%`
+const Token = ({
+  color,
+  position = [0, 0],
+  highlight,
+  onClick,
+}: TokenProps) => {
+  const posTop = `${position[0] * 6.666}%`
+  const posLeft = `${position[1] * 6.666}%`
 
   return (
     <div
@@ -18,10 +23,14 @@ const Token = ({ color, top = 0, left = 0, highlight }: TokenProps) => {
         'bg-indigo-300': highlight,
       })}
       style={{ top: posTop, left: posLeft }}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.(position)
+      }}
     >
       <div
         className={classNames(
-          `absolute-center size-2/3 bg-${color}-600 rounded-full shadow-coin`
+          `absolute-center size-2/3 bg-${color}-600 rounded-full shadow-token`
         )}
       >
         <div

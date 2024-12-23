@@ -1,4 +1,4 @@
-import { Position } from '@/shared.types'
+import { PlayerType, Position } from '@/shared.types'
 
 export default class BoardConstants {
   static readonly COLORS = Object.freeze({
@@ -18,6 +18,58 @@ export default class BoardConstants {
     [13, 6],
     [6, 1],
   ]
+
+  static readonly HOME: Record<PlayerType, Position[]> = Object.freeze({
+    green: [
+      [1.5, 1.5],
+      [3.5, 1.5],
+      [1.5, 3.5],
+      [3.5, 3.5],
+    ],
+    yellow: [
+      [1.5, 10.5],
+      [3.5, 10.5],
+      [1.5, 12.5],
+      [3.5, 12.5],
+    ],
+    blue: [
+      [10.5, 10.5],
+      [12.5, 10.5],
+      [10.5, 12.5],
+      [12.5, 12.5],
+    ],
+    red: [
+      [10.5, 1.5],
+      [12.5, 1.5],
+      [10.5, 3.5],
+      [12.5, 3.5],
+    ],
+  })
+
+  // static readonly GREEN_HOME: Position[] = [
+  //   [1.5, 1.5],
+  //   [3.5, 1.5],
+  //   [1.5, 3.5],
+  //   [3.5, 3.5],
+  // ]
+  // static readonly YELLOW_HOME: Position[] = [
+  //   [1.5, 10.5],
+  //   [3.5, 10.5],
+  //   [1.5, 12.5],
+  //   [3.5, 12.5],
+  // ]
+  // static readonly BLUE_HOME: Position[] = [
+  //   [10.5, 10.5],
+  //   [12.5, 10.5],
+  //   [10.5, 12.5],
+  //   [12.5, 12.5],
+  // ]
+  // static readonly RED_HOME: Position[] = [
+  //   [10.5, 1.5],
+  //   [12.5, 1.5],
+  //   [10.5, 3.5],
+  //   [12.5, 3.5],
+  // ]
 
   static readonly GREEN_CELLS: Position[] = [
     [6, 1],
