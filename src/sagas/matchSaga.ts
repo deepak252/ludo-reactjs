@@ -1,4 +1,4 @@
-import { LudoStatus } from '@/constants'
+import { DICE_VALUES, LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
   MatchState,
@@ -6,6 +6,9 @@ import {
   pickToken,
   pickTokenFailure,
   pickTokenSuccess,
+  throwDice,
+  throwDiceFailure,
+  throwDiceSuccess,
 } from '@/slices/matchSlice'
 import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
@@ -55,7 +58,7 @@ function* pickTokenWorker(
   console.log('pickTokenWorker')
   const state = yield select((state: RootState) => state.match)
   if (!state.isOngoing || state.status !== LudoStatus.pickToken) {
-    yield put(pickTokenFailure({ message: 'Invalid move' }))
+    yield put(pickTokenFailure({ message: 'Pick token disabled' }))
     return
   }
   const { position } = action.payload
@@ -76,6 +79,24 @@ function* pickTokenWorker(
   yield put(pickTokenSuccess())
 }
 
+function* throwDiceWorker(): Generator<any, any, any> {
+  const state = yield select((state: RootState) => state.match)
+  console.log('throwDiceWorker', state.status)
+
+  const di = Math.floor(Math.random() * DICE_VALUES.length)
+  const diceValue = DICE_VALUES[di]
+  // state.dice = { value: DICE_VALUES[di] }
+  // state.status = LudoStatus.pickToken
+  if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
+    yield put(throwDiceFailure({ message: 'Invalid move' }))
+    return
+  }
+  yield put(throwDiceSuccess({ diceValue }))
+}
+
 export default function* () {
-  yield all([takeLatest(pickToken.type, pickTokenWorker)])
+  yield all([
+    takeLatest(throwDice.type, throwDiceWorker),
+    takeLatest(pickToken.type, pickTokenWorker),
+  ])
 }

@@ -23,9 +23,9 @@ const Cell = ({
       onClick={() => onClick?.([row, col])}
     >
       {isSafeCell && <StarIcon className="size-2/3 absolute-center" />}
-      <div>
+      {/* <div>
         {row}, {col}
-      </div>
+      </div> */}
     </div>
   )
 }

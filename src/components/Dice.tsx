@@ -10,7 +10,9 @@ const Dice = () => {
   const status = useAppSelector((state) => state.match.status)
 
   const handleDiceClick = () => {
-    dispatch(throwDice())
+    if (status === LudoStatus.throwDice) {
+      dispatch(throwDice())
+    }
   }
 
   return (
@@ -19,7 +21,7 @@ const Dice = () => {
         className={classNames(
           'relative size-20 bg-red-600 rounded-2xl cursor-pointer disable-select',
           {
-            'bg-gray': status !== LudoStatus.throwDice,
+            '!bg-gray': status !== LudoStatus.throwDice,
           }
         )}
         onClick={handleDiceClick}

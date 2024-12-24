@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LudoStatus, PlayerTypes } from '@/constants'
+import { DICE_VALUES, LudoStatus, PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
 import { LudoColor, PlayerType, Position } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
@@ -91,14 +91,32 @@ const matchSlice = createSlice({
     },
 
     throwDice: (state) => {
-      if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
-        return
-      }
-      // const value = Math.floor(Math.random() * 6) + 1
-      const value = 6
+      // if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
+      //   return
+      // }
+      //// const value = Math.floor(Math.random() * 6) + 1
+      // const di = Math.floor(Math.random() * DICE_VALUES.length)
+      // state.dice = { value: DICE_VALUES[di] }
+      // state.status = LudoStatus.pickToken
+      console.log('Dice Rolled')
+    },
+    throwDiceSuccess: (state, action: PayloadAction<{ diceValue: number }>) => {
+      const { diceValue: value } = action.payload
       state.dice = { value }
       state.status = LudoStatus.pickToken
-      console.log('Dice Rolled')
+      console.log('throwDiceSuccess')
+    },
+    throwDiceFailure: (
+      state,
+      action: PayloadAction<{ diceValue?: number; message?: string }>
+    ) => {
+      const { diceValue: value, message } = action.payload
+      if (value) {
+        state.dice = { value }
+        state.status = LudoStatus.throwDice
+        nextPlayerTurn(state)
+      }
+      console.log('throwDiceFailure: ', message)
     },
 
     pickToken: (state, action: PayloadAction<{ position: Position }>) => {
@@ -118,6 +136,15 @@ const matchSlice = createSlice({
       //// state.status = LudoStatus.throwDice
       //// nextPlayerTurn(state)
     },
+    pickTokenSuccess: (state) => {
+      console.log('pickTokenSuccess')
+      state.status = LudoStatus.throwDice
+      nextPlayerTurn(state)
+    },
+    pickTokenFailure: (_, action: PayloadAction<{ message: string }>) => {
+      const { message } = action.payload
+      console.log('pickTokenFailure: ', message)
+    },
     moveToken: (
       state,
       action: PayloadAction<{ tokenIndex: number; pathIndex: number }>
@@ -128,16 +155,6 @@ const matchSlice = createSlice({
       state.players[currPlayer].tokens[tokenIndex].pathIndex = pathIndex
       state.players[currPlayer].tokens[tokenIndex].position =
         BoardConstants.PATH[currPlayer][pathIndex]
-    },
-    pickTokenSuccess: (state) => {
-      console.log('pickTokenSuccess')
-      state.status = LudoStatus.throwDice
-      nextPlayerTurn(state)
-    },
-    pickTokenFailure: (_, action: PayloadAction<{ message: string }>) => {
-      const { message } = action.payload
-      // console.log('Token not present at this position')
-      console.log({ message })
     },
   },
 })
@@ -210,6 +227,8 @@ export const {
   cellClicked,
   startMatch,
   throwDice,
+  throwDiceSuccess,
+  throwDiceFailure,
   pickToken,
   pickTokenFailure,
   pickTokenSuccess,
