@@ -2,7 +2,7 @@ import Board from '@/components/Board'
 import Dice from '@/components/Dice'
 import Tokens from '@/components/Tokens'
 
-function Dashboard() {
+function MatchPage() {
   return (
     <div className="">
       <div className="game-board absolute-center">
@@ -14,4 +14,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default MatchPage

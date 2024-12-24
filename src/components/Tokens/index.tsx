@@ -1,6 +1,6 @@
 import Token from './Token'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { pickToken } from '@/slices/matchSlice'
+import { pickToken } from '@/features/match/matchSlice'
 import { Position } from '@/shared.types'
 
 const Tokens = () => {

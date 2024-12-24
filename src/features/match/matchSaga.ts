@@ -9,7 +9,7 @@ import {
   throwDice,
   throwDiceFailure,
   throwDiceSuccess,
-} from '@/slices/matchSlice'
+} from '@/features/match/matchSlice'
 import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { all, delay, put, select, takeLatest } from 'redux-saga/effects'

@@ -1,6 +1,6 @@
 import { LudoStatus } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { throwDice } from '@/slices/matchSlice'
+import { throwDice } from '@/features/match/matchSlice'
 import classNames from 'classnames'
 
 const Dice = () => {

@@ -1,9 +1,9 @@
 /// <reference types="vite-plugin-svgr/client" />
 import { Route, Routes, useSearchParams } from 'react-router-dom'
-import Dashboard from '@/pages/Dashboard'
+import Dashboard from '@/features/match/pages/Dashboard'
 import { useEffect } from 'react'
 import { useAppDispatch } from './hooks'
-import { startMatch } from './slices/matchSlice'
+import { startMatch } from './features/match/matchSlice'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -13,7 +13,6 @@ function App() {
     if (!isNaN(Number(playerCount))) {
       dispatch(startMatch({ playerCount: Number(playerCount) }))
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerCount])
   return (
