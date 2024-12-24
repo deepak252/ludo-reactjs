@@ -2,6 +2,7 @@ import { LudoColor, Position } from '@/shared.types'
 import classNames from 'classnames'
 
 type TokenProps = {
+  delta?: number
   color: LudoColor
   highlight?: boolean
   position: Position
@@ -9,12 +10,13 @@ type TokenProps = {
 }
 
 const Token = ({
+  delta = 0,
   color,
   position = [0, 0],
   highlight,
   onClick,
 }: TokenProps) => {
-  const posTop = `${position[0] * 6.666}%`
+  const posTop = `${position[0] * 6.666 - delta}%`
   const posLeft = `${position[1] * 6.666}%`
 
   return (

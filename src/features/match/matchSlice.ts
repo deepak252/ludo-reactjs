@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { LudoStatus, PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
-import { LudoColor, PlayerType, Position } from '@/shared.types'
+import { LudoColor, PlayerType, Position, TokenInfo } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-type Token = {
-  id: string
-  color: LudoColor
-  pathIndex: number
-  position: Position
-  highlight?: boolean
-}
-
 type Player = {
-  tokens: Token[]
+  tokens: TokenInfo[]
   isActive: boolean
 }
 

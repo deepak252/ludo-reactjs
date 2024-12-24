@@ -8,3 +8,11 @@ export type TokenMove = {
   currIndex: number
   nextIndex: number
 }
+
+export type TokenInfo = {
+  id: string
+  color: LudoColor
+  pathIndex: number
+  position: Position
+  highlight?: boolean
+}
