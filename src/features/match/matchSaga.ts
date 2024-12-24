@@ -1,4 +1,4 @@
-import { DICE_VALUES, LudoStatus } from '@/constants'
+import { LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
   MatchState,
@@ -13,43 +13,73 @@ import {
 import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { all, delay, put, select, takeLatest } from 'redux-saga/effects'
-import _ from 'lodash'
+import {
+  checkTokenPresent,
+  getDiceRandomNumber,
+  getMovableTokens,
+  getTokenAutoMove,
+  getTokenMove,
+} from './matchUtil'
 
-// Check if token is present at selected position, return token index
-const checkTokenPresent = (state: MatchState, position: Position) => {
-  const currPlayer = state.turn
-  const tokens = state.players[currPlayer].tokens
-  for (let i = 0; i < 4; i++) {
-    if (_.isEqual(tokens[i].position, position)) {
-      return i
-    }
+function* throwDiceWorker(): Generator<any, any, any> {
+  const state = yield select((state: RootState) => state.match)
+  const matchState: MatchState = { ...state }
+  console.log('throwDiceWorker', matchState.status)
+  if (!matchState.isOngoing || matchState.status !== LudoStatus.throwDice) {
+    yield put(throwDiceFailure({ message: 'Invalid move' }))
+    return
   }
-  return -1
-}
+  const diceValue = getDiceRandomNumber()
+  // const diceValue = 6
+  yield put(
+    throwDiceSuccess({
+      diceValue,
+      status: LudoStatus.moving,
+      isNextPlayerTurn: false,
+    })
+  )
 
-/**
- * @param index : Token index
- */
-const getTokenNextPosition = (state: MatchState, tokenIndex: number) => {
-  const currPlayer = state.turn
-  const diceValue = state.dice.value
-  const token = { ...state.players[currPlayer].tokens[tokenIndex] }
-  const currIndex = token.pathIndex
-  let nextIndex = token.pathIndex
-  if (token.pathIndex === -1) {
-    if (diceValue === 6) {
-      nextIndex = 0
-    } else {
-      return null
+  matchState.dice = { value: diceValue }
+
+  const movableTokens = getMovableTokens(matchState)
+
+  if (!movableTokens.length) {
+    // yield put(throwDiceFailure({ message: "Can't move token", diceValue }))
+    yield put(
+      throwDiceSuccess({
+        diceValue,
+        status: LudoStatus.throwDice,
+        isNextPlayerTurn: diceValue !== 6,
+      })
+    )
+    return
+  }
+
+  const tokenAutoMove = getTokenAutoMove(matchState)
+
+  if (tokenAutoMove) {
+    const { currIndex, nextIndex, tokenIndex } = tokenAutoMove
+    for (let i = currIndex + 1; i <= nextIndex; i++) {
+      yield put(moveToken({ tokenIndex, pathIndex: i }))
+      yield delay(200)
     }
+    //TODO: Check if other token killed
+    yield put(
+      throwDiceSuccess({
+        diceValue,
+        status: LudoStatus.throwDice,
+        isNextPlayerTurn: diceValue !== 6,
+      })
+    )
   } else {
-    if (token.pathIndex + diceValue <= 56) {
-      nextIndex += diceValue
-    } else {
-      return null
-    }
+    yield put(
+      throwDiceSuccess({
+        diceValue,
+        status: LudoStatus.pickToken,
+        isNextPlayerTurn: diceValue !== 6,
+      })
+    )
   }
-  return { currIndex, nextIndex }
 }
 
 function* pickTokenWorker(
@@ -57,41 +87,28 @@ function* pickTokenWorker(
 ): Generator<any, any, any> {
   console.log('pickTokenWorker')
   const state = yield select((state: RootState) => state.match)
-  if (!state.isOngoing || state.status !== LudoStatus.pickToken) {
+  const matchState: MatchState = { ...state }
+  if (!matchState.isOngoing || matchState.status !== LudoStatus.pickToken) {
     yield put(pickTokenFailure({ message: 'Pick token disabled' }))
     return
   }
   const { position } = action.payload
-  const tokenIndex = checkTokenPresent(state, position)
+  const tokenIndex = checkTokenPresent(matchState, position)
   if (tokenIndex === -1) {
     yield put(pickTokenFailure({ message: 'Invalid move' }))
     return
   }
-  const res = getTokenNextPosition(state, tokenIndex)
-  if (!res) {
+  const move = getTokenMove(matchState, tokenIndex)
+  if (!move) {
     yield put(pickTokenFailure({ message: 'Invalid Token move' }))
     return
   }
-  for (let i = res.currIndex + 1; i <= res.nextIndex; i++) {
+  for (let i = move.currIndex + 1; i <= move.nextIndex; i++) {
     yield put(moveToken({ tokenIndex, pathIndex: i }))
     yield delay(200)
   }
-  yield put(pickTokenSuccess())
-}
-
-function* throwDiceWorker(): Generator<any, any, any> {
-  const state = yield select((state: RootState) => state.match)
-  console.log('throwDiceWorker', state.status)
-
-  const di = Math.floor(Math.random() * DICE_VALUES.length)
-  const diceValue = DICE_VALUES[di]
-  // state.dice = { value: DICE_VALUES[di] }
-  // state.status = LudoStatus.pickToken
-  if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
-    yield put(throwDiceFailure({ message: 'Invalid move' }))
-    return
-  }
-  yield put(throwDiceSuccess({ diceValue }))
+  //TODO: Check if other token killed
+  yield put(pickTokenSuccess({ isNextPlayerTurn: matchState.dice.value !== 6 }))
 }
 
 export default function* () {

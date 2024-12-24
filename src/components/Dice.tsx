@@ -19,7 +19,8 @@ const Dice = () => {
     <div className="flex items-center m-4">
       <div
         className={classNames(
-          'relative size-20 bg-red-600 rounded-2xl cursor-pointer disable-select',
+          'relative size-20 rounded-2xl cursor-pointer disable-select',
+          `bg-${playerTurn}-500`,
           {
             '!bg-gray': status !== LudoStatus.throwDice,
           }

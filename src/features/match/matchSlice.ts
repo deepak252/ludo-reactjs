@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DICE_VALUES, LudoStatus, PlayerTypes } from '@/constants'
+import { LudoStatus, PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
 import { LudoColor, PlayerType, Position } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import _ from 'lodash'
 
 type Token = {
   id: string
   color: LudoColor
   pathIndex: number
   position: Position
+  highlight?: boolean
 }
 
 type Player = {
@@ -100,25 +100,35 @@ const matchSlice = createSlice({
       // state.status = LudoStatus.pickToken
       console.log('Dice Rolled')
     },
-    throwDiceSuccess: (state, action: PayloadAction<{ diceValue: number }>) => {
-      const { diceValue: value } = action.payload
-      state.dice = { value }
-      state.status = LudoStatus.pickToken
-      console.log('throwDiceSuccess')
-    },
-    throwDiceFailure: (
+    throwDiceSuccess: (
       state,
-      action: PayloadAction<{ diceValue?: number; message?: string }>
+      action: PayloadAction<{
+        diceValue: number
+        status: LudoStatus
+        isNextPlayerTurn: boolean
+      }>
     ) => {
-      const { diceValue: value, message } = action.payload
-      if (value) {
-        state.dice = { value }
-        state.status = LudoStatus.throwDice
+      const { diceValue: value, status, isNextPlayerTurn } = action.payload
+      state.dice = { value }
+      // state.status = LudoStatus.pickToken
+      state.status = status
+      if (isNextPlayerTurn && status === LudoStatus.throwDice) {
         nextPlayerTurn(state)
       }
-      console.log('throwDiceFailure: ', message)
+      console.log('throwDiceSuccess')
     },
-
+    throwDiceFailure: (_, action: PayloadAction<{ message?: string }>) => {
+      const { message } = action.payload
+      console.log('throwDiceFailure: ', message)
+      // if (value) {
+      //   state.dice = { value }
+      //   state.status = LudoStatus.throwDice
+      //   nextPlayerTurn(state)
+      // }
+    },
+    /**
+     *  @param position is used to hancle click for overlapped tokens
+     */
     pickToken: (state, action: PayloadAction<{ position: Position }>) => {
       // if (!state.isOngoing || state.status !== LudoStatus.pickToken) {
       //   return
@@ -136,10 +146,18 @@ const matchSlice = createSlice({
       //// state.status = LudoStatus.throwDice
       //// nextPlayerTurn(state)
     },
-    pickTokenSuccess: (state) => {
+    pickTokenSuccess: (
+      state,
+      action: PayloadAction<{
+        isNextPlayerTurn: boolean
+      }>
+    ) => {
       console.log('pickTokenSuccess')
+      const { isNextPlayerTurn } = action.payload
       state.status = LudoStatus.throwDice
-      nextPlayerTurn(state)
+      if (isNextPlayerTurn) {
+        nextPlayerTurn(state)
+      }
     },
     pickTokenFailure: (_, action: PayloadAction<{ message: string }>) => {
       const { message } = action.payload

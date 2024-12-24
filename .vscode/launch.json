@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Brave Linux",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src",
+      "userDataDir": "${workspaceFolder}/.vscode/chrome",
+      "runtimeExecutable": "/usr/bin/brave-browser",
+      "runtimeArgs": ["--remote-debugging-port=9222"]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Brave Mac",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src",
+      "userDataDir": "${workspaceFolder}/.vscode/chrome",
+      "runtimeExecutable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+      "runtimeArgs": ["--remote-debugging-port=9222"]
+    }
+  ]
+}
