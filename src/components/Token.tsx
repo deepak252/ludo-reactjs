@@ -23,7 +23,7 @@ const Token = ({
 
   return (
     <div
-      className="absolute size-[6.66%] transition-all duration-500"
+      className="absolute size-[6.66%] transition-all duration-200"
       style={{ top: posTop, left: posLeft }}
       onClick={(e) => {
         e.stopPropagation()

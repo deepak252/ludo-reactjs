@@ -1,7 +1,7 @@
 import { PlayerType, Position } from '@/shared.types'
 
 export default class BoardConstants {
-  static readonly ANIMATION_DELAY = 500
+  static readonly ANIMATION_DELAY = 200
   static readonly DICE_DELAY = 1000
   static readonly COLORS = Object.freeze({
     green: 'green',
