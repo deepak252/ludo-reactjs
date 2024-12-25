@@ -9,7 +9,7 @@ type Player = {
   isActive: boolean
 }
 
-export type MatchState = {
+export type OfflineMatchState = {
   isOngoing: boolean
   players: Record<PlayerType, Player>
   turn: PlayerType
@@ -17,7 +17,7 @@ export type MatchState = {
   status?: LudoStatus
 }
 
-const initialState: MatchState = {
+const initialState: OfflineMatchState = {
   isOngoing: false,
   players: {
     red: { tokens: [], isActive: false },
@@ -29,8 +29,8 @@ const initialState: MatchState = {
   turn: 'green',
 }
 
-const matchSlice = createSlice({
-  name: 'match',
+const offlineMatchSlice = createSlice({
+  name: 'matchOffline',
   initialState,
   reducers: {
     startMatch: (state, action: PayloadAction<{ playerCount: number }>) => {
@@ -167,7 +167,7 @@ const matchSlice = createSlice({
   },
 })
 
-const nextPlayerTurn = (state: MatchState) => {
+const nextPlayerTurn = (state: OfflineMatchState) => {
   const currPlayer = state.turn
   let nextPlayer = currPlayer
   for (let i = 0; i < 8; i++) {
@@ -202,6 +202,6 @@ export const {
   killTokens,
   setHighlightTokens,
   setStatus,
-} = matchSlice.actions
+} = offlineMatchSlice.actions
 
-export default matchSlice.reducer
+export default offlineMatchSlice.reducer

@@ -1,24 +1,18 @@
 /// <reference types="vite-plugin-svgr/client" />
-import { Route, Routes, useSearchParams } from 'react-router-dom'
-import Dashboard from '@/features/match/pages/Dashboard'
-import { useEffect } from 'react'
-import { useAppDispatch } from './hooks'
-import { startMatch } from './features/match/matchSlice'
+import { Route, Routes } from 'react-router-dom'
+import OfflineMatchPage from '@/features/matchOffline/pages/OffilneMatchPage'
+import Dashboard from './pages/Dashboard'
+import MainLayout from './components/layouts/MainLayout'
 
 function App() {
-  const dispatch = useAppDispatch()
-  const [searchParams] = useSearchParams()
-  const playerCount = searchParams.get('count') || 4
-  useEffect(() => {
-    if (!isNaN(Number(playerCount))) {
-      dispatch(startMatch({ playerCount: Number(playerCount) }))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerCount])
   return (
     <>
       <Routes>
-        <Route path="/" element={<Dashboard />}></Route>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/offline" element={<OfflineMatchPage />} />
+          <Route path="/live" element={<OfflineMatchPage />} />
+        </Route>
       </Routes>
     </>
   )

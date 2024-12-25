@@ -1,5 +1,5 @@
 import { DICE_VALUES } from '@/constants'
-import { MatchState } from './matchSlice'
+import { OfflineMatchState } from './offlineMatchSlice'
 import { KilledToken, PlayerType, Position, TokenMove } from '@/shared.types'
 import _ from 'lodash'
 import BoardConstants from '@/constants/boardConstants'
@@ -16,7 +16,7 @@ export const getDiceRandomNumber = () => {
  * @param index - Token index
  */
 export const getTokenMove = (
-  state: MatchState,
+  state: OfflineMatchState,
   tokenIndex: number
 ): TokenMove | null => {
   const currPlayer = state.turn
@@ -44,7 +44,10 @@ export const getTokenMove = (
  * @param position
  * @returns token index if present at position, otherwise -1
  */
-export const checkTokenPresent = (state: MatchState, position: Position) => {
+export const checkTokenPresent = (
+  state: OfflineMatchState,
+  position: Position
+) => {
   const currPlayer = state.turn
   const tokens = state.players[currPlayer].tokens
   for (let i = 0; i < 4; i++) {
@@ -55,7 +58,7 @@ export const checkTokenPresent = (state: MatchState, position: Position) => {
   return -1
 }
 
-export const getMovableTokens = (state: MatchState) => {
+export const getMovableTokens = (state: OfflineMatchState) => {
   const movableTokens: (TokenMove & {
     tokenIndex: number
   })[] = []
@@ -69,7 +72,7 @@ export const getMovableTokens = (state: MatchState) => {
   return movableTokens
 }
 
-export const getTokenAutoMove = (state: MatchState) => {
+export const getTokenAutoMove = (state: OfflineMatchState) => {
   const movableTokens = getMovableTokens(state)
   if (!movableTokens.length) {
     return null
@@ -85,7 +88,7 @@ export const getTokenAutoMove = (state: MatchState) => {
 }
 
 export const checkTokenKill = (
-  state: MatchState,
+  state: OfflineMatchState,
   pathIndex: number
 ): KilledToken[] => {
   const currPlayer = state.turn

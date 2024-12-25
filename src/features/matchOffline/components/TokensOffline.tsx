@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
-import Token from './Token'
+import Token from '../../../components/Token'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { pickToken } from '@/features/match/matchSlice'
+import { pickToken } from '@/features/matchOffline/offlineMatchSlice'
 import { Position, TokenInfo } from '@/shared.types'
 
-const Tokens = () => {
+const TokensOffline = () => {
   const dispatch = useAppDispatch()
-  const players = useAppSelector((state) => state.match.players)
-  const turn = useAppSelector((state) => state.match.turn)
+  const players = useAppSelector((state) => state.matchOffline.players)
+  const turn = useAppSelector((state) => state.matchOffline.turn)
 
   const mappedTokens = useMemo(() => {
     const tokenMapping: Record<string, TokenInfo[]> = {}
@@ -56,4 +56,4 @@ const Tokens = () => {
   )
 }
 
-export default Tokens
+export default TokensOffline

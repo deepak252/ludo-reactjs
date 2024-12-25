@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects'
-import matchSaga from '../features/match/matchSaga'
+import offlineMatchSaga from '../features/matchOffline/offlineMatchSaga'
 
 export function* rootSaga() {
-  yield all([matchSaga()])
+  yield all([offlineMatchSaga()])
 }

@@ -22,15 +22,15 @@
   .base-button {
     @apply text-sm rounded-xl py-3 px-6;
   }
-  /* .icon-button {
-    @apply flex-center p-1 box-border rounded-full hover:bg-gray-1100 active:bg-gray-1200;
+  .icon-button {
+    @apply flex-center p-1 rounded-full hover:bg-gray-1100 active:bg-gray-1200;
   }
   .btn-filled {
     @apply base-button bg-primary text-white border border-primary active:bg-[#565dc3];
   }
   .btn-outlined {
     @apply base-button bg-transparent text-primary border-[1.5px] border-primary active:bg-[#E0E0FFAA];
-  } */
+  }
 
   /* Auth User-Type Button */
   .btn-user-type {
@@ -73,22 +73,6 @@
     -webkit-text-fill-color: white !important;
   }
 
-  .auth-input-wrapper .rmdp-input {
-    @apply py-[21px] px-0 outline-none border-none shadow-none;
-  }
-  .auth-input-wrapper .rmdp-week-day {
-    @apply text-primary;
-  }
-  .auth-input-wrapper .rmdp-today span {
-    @apply bg-gray-300 text-black;
-  }
-  .auth-input-wrapper .rmdp-selected span {
-    @apply !bg-primary;
-  }
-  .auth-input-wrapper .rmdp-day span:hover {
-    @apply !bg-primary-200;
-  }
-
   .visibility-off::before {
     @apply absolute top-[-2px] left-[11px] w-[2px] h-[27px] bg-white content-[''] -rotate-45;
   }
@@ -124,31 +108,6 @@
     @apply border-primary text-primary bg-primary-100 font-semibold;
   }
 
-  .home-diagonal::before {
-    @apply block  content-[""] absolute h-[16vw] -top-[16vw] left-0 right-0;
-    background-image: linear-gradient(
-      to bottom right,
-      transparent 50%,
-      #f8f8f8 50%
-    );
-  }
-  .home-diagonal::after {
-    @apply block  content-[""] absolute h-[16vw] -bottom-[16vw] left-0 right-0;
-    background-image: linear-gradient(
-      to bottom right,
-      #f8f8f8 50%,
-      transparent 50%
-    );
-  }
-
-  .home-diagonal2::before {
-    @apply block  content-[""] absolute h-[16vw] -top-[16vw] left-0 right-0;
-    background-image: linear-gradient(
-      to bottom right,
-      transparent 50%,
-      #f8f8f8 50%
-    );
-  }
 }
 
 @layer utilities {
@@ -239,8 +198,3 @@ input[type='number']::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
-/* input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-} */

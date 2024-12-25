@@ -1,5 +1,5 @@
-import matchSlice from '../features/match/matchSlice'
+import offlineMatchSlice from '../features/matchOffline/offlineMatchSlice'
 
 export const rootReducer = {
-  match: matchSlice,
+  matchOffline: offlineMatchSlice,
 }

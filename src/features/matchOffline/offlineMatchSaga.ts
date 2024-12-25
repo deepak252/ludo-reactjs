@@ -2,7 +2,7 @@ import { LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
   killTokens,
-  MatchState,
+  OfflineMatchState,
   moveToken,
   pickToken,
   pickTokenFailure,
@@ -12,7 +12,7 @@ import {
   throwDice,
   throwDiceFailure,
   throwDiceSuccess,
-} from '@/features/match/matchSlice'
+} from '@/features/matchOffline/offlineMatchSlice'
 import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
 import {
@@ -30,12 +30,12 @@ import {
   getMovableTokens,
   getTokenAutoMove,
   getTokenMove,
-} from './matchUtil'
+} from './offlineMatchUtil'
 import BoardConstants from '@/constants/boardConstants'
 
 function* throwDiceWorker(): Generator<any, any, any> {
-  const state = yield select((state: RootState) => state.match)
-  const matchState: MatchState = { ...state }
+  const state = yield select((state: RootState) => state.matchOffline)
+  const matchState: OfflineMatchState = { ...state }
   console.log('throwDiceWorker', matchState.status)
   if (!matchState.isOngoing || matchState.status !== LudoStatus.throwDice) {
     yield put(throwDiceFailure({ message: 'Throw dice disabled' }))
@@ -110,8 +110,8 @@ function* pickTokenWorker(
   action: PayloadAction<{ position: Position }>
 ): Generator<any, any, any> {
   console.log('pickTokenWorker')
-  const state = yield select((state: RootState) => state.match)
-  const matchState: MatchState = { ...state }
+  const state = yield select((state: RootState) => state.matchOffline)
+  const matchState: OfflineMatchState = { ...state }
   if (!matchState.isOngoing || matchState.status !== LudoStatus.pickToken) {
     yield put(pickTokenFailure({ message: 'Pick token disabled' }))
     return
