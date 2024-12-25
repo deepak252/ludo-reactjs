@@ -20,11 +20,13 @@ function OfflineMatchPage() {
 
   return (
     <div>
-      <div className="game-board absolute-center">
+      <div className="relative size-[min(calc(90vh-100px),90vw)] mx-auto">
         <Board />
         <TokensOffline />
       </div>
-      <DiceOffline />
+      <div className="mt-6 flex justify-center">
+        <DiceOffline />
+      </div>
     </div>
   )
 }

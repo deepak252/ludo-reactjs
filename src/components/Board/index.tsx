@@ -8,7 +8,7 @@ import BoardConstants from '@/constants/boardConstants'
 const arr = [...new Array(15)]
 const Board = () => {
   return (
-    <div className="relative grid grid-cols-[repeat(15,1fr)] bg-slate-200  size-[min(90vh,90vw)] rounded-3xl overflow-hidden">
+    <div className="relative grid grid-cols-[repeat(15,1fr)] bg-slate-200 size-full rounded-3xl overflow-hidden">
       {arr.map((_, row) => {
         return arr.map((_, col) => (
           <Cell
