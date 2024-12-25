@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import Board from '@/components/Board'
 import TokensOffline from '@/features/matchOffline/components/TokensOffline'
 import DiceOffline from '../components/DiceOffline'
+import BoardOverlayOffline from '../components/BoardOverlayOffline'
 import { useAppDispatch } from '@/hooks'
 import { startMatch } from '../offlineMatchSlice'
 
@@ -23,6 +24,7 @@ function OfflineMatchPage() {
       <div className="relative size-[min(calc(90vh-100px),90vw)] mx-auto">
         <Board />
         <TokensOffline />
+        <BoardOverlayOffline />
       </div>
       <div className="mt-6 flex justify-center">
         <DiceOffline />
