@@ -11,8 +11,14 @@ export type TokenMove = {
 
 export type TokenInfo = {
   id: string
+  index: number
   color: LudoColor
   pathIndex: number
   position: Position
   highlight?: boolean
+}
+
+export type KilledToken = {
+  token: TokenInfo
+  player: PlayerType
 }

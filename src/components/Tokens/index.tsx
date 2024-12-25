@@ -1,12 +1,13 @@
+import { useMemo } from 'react'
+import Token from './Token'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { pickToken } from '@/features/match/matchSlice'
 import { Position, TokenInfo } from '@/shared.types'
-import { useMemo } from 'react'
-import Token from './Token'
 
 const Tokens = () => {
   const dispatch = useAppDispatch()
   const players = useAppSelector((state) => state.match.players)
+
   const mappedTokens = useMemo(() => {
     const tokenMapping: Record<string, TokenInfo[]> = {}
     Object.values(players).forEach((player) => {
@@ -35,6 +36,7 @@ const Tokens = () => {
             color={token.color}
             position={token.position}
             onClick={handleCellClick}
+            highlight={token.highlight}
           />
         ))
       })}

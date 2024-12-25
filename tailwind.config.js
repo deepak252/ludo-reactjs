@@ -14,6 +14,10 @@ export default {
     'bg-yellow-600',
     'bg-blue-600',
     'bg-red-600',
+    'animate-glow-red',
+    'animate-glow-green',
+    'animate-glow-blue',
+    'animate-glow-yellow',
   ],
   theme: {
     extend: {
@@ -93,6 +97,31 @@ export default {
         13: '13px',
         15: '15px',
         17: '17px',
+      },
+
+      keyframes: {
+        glowRed: {
+          '0%, 100%': { boxShadow: '0 0 0 3px rgba(132, 0, 0, 0.2)' },
+          '50%': { boxShadow: '0 0 0 12px rgba(132, 0, 0, 0.3)' },
+        },
+        glowGreen: {
+          '0%, 100%': { boxShadow: '0 0 0 3px rgba(3, 90, 0, 0.2)' },
+          '50%': { boxShadow: '0 0 0 12px rgba(3, 90, 0, 0.3)' },
+        },
+        glowBlue: {
+          '0%, 100%': { boxShadow: '0 0 0 3px rgba(0, 27, 111, 0.2)' },
+          '50%': { boxShadow: '0 0 0 12px rgba(0, 27, 111, 0.3)' },
+        },
+        glowYellow: {
+          '0%, 100%': { boxShadow: '0 0 0 3px rgba(111, 99, 0, 0.2)' },
+          '50%': { boxShadow: '0 0 0 12px rgba(111, 99, 0, 0.3)' },
+        },
+      },
+      animation: {
+        'glow-red': 'glowRed 2s infinite', // 2 seconds, infinite loop
+        'glow-green': 'glowGreen 2s infinite',
+        'glow-blue': 'glowBlue 2s infinite',
+        'glow-yellow': 'glowYellow 2s infinite',
       },
     },
   },

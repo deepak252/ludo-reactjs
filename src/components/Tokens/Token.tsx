@@ -21,9 +21,7 @@ const Token = ({
 
   return (
     <div
-      className={classNames('absolute size-[6.66%]', {
-        'bg-indigo-300': highlight,
-      })}
+      className="absolute size-[6.66%]"
       style={{ top: posTop, left: posLeft }}
       onClick={(e) => {
         e.stopPropagation()
@@ -32,12 +30,15 @@ const Token = ({
     >
       <div
         className={classNames(
-          `absolute-center size-2/3 bg-${color}-600 rounded-full shadow-token`
+          `absolute-center size-2/3 bg-${color}-600 rounded-full shadow-token`,
+          {
+            [`animate-glow-${color}`]: highlight,
+          }
         )}
       >
         <div
           className={`absolute-center size-[88%] border-2 border-white bg-${color}-600 rounded-full`}
-        ></div>
+        />
       </div>
     </div>
   )

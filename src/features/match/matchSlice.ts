@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { LudoStatus, PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
-import { LudoColor, PlayerType, Position, TokenInfo } from '@/shared.types'
+import { KilledToken, PlayerType, Position, TokenInfo } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type Player = {
@@ -11,13 +11,7 @@ type Player = {
 
 export type MatchState = {
   isOngoing: boolean
-  players: {
-    green: Player
-    yellow: Player
-    blue: Player
-    red: Player
-  }
-  // turn: 0 | 1 | 2 | 3
+  players: Record<PlayerType, Player>
   turn: PlayerType
   dice: { value: number }
   status?: LudoStatus
@@ -35,10 +29,6 @@ const initialState: MatchState = {
   turn: 'green',
 }
 
-/**
- * 1. If any token is in the base and no other move possible (dice + token > 57 ) and dice===6, move token out of the base
- * 2. If only one token is in the path and dice!==6, move token automatically
- */
 const matchSlice = createSlice({
   name: 'match',
   initialState,
@@ -71,6 +61,7 @@ const matchSlice = createSlice({
         for (let i = 0; i < 4; i++) {
           state.players[playerType].tokens.push({
             id: `${playerType}_${i}`,
+            index: i,
             color: playerType,
             pathIndex: -1,
             position: BoardConstants.HOME[playerType][i],
@@ -82,15 +73,8 @@ const matchSlice = createSlice({
       console.log('Match started', action.payload)
     },
 
-    throwDice: (state) => {
-      // if (!state.isOngoing || state.status !== LudoStatus.throwDice) {
-      //   return
-      // }
-      //// const value = Math.floor(Math.random() * 6) + 1
-      // const di = Math.floor(Math.random() * DICE_VALUES.length)
-      // state.dice = { value: DICE_VALUES[di] }
-      // state.status = LudoStatus.pickToken
-      console.log('Dice Rolled')
+    throwDice: (_) => {
+      console.log('Dice Thrown')
     },
     throwDiceSuccess: (
       state,
@@ -112,31 +96,12 @@ const matchSlice = createSlice({
     throwDiceFailure: (_, action: PayloadAction<{ message?: string }>) => {
       const { message } = action.payload
       console.log('throwDiceFailure: ', message)
-      // if (value) {
-      //   state.dice = { value }
-      //   state.status = LudoStatus.throwDice
-      //   nextPlayerTurn(state)
-      // }
     },
     /**
      *  @param position is used to hancle click for overlapped tokens
      */
-    pickToken: (state, action: PayloadAction<{ position: Position }>) => {
-      // if (!state.isOngoing || state.status !== LudoStatus.pickToken) {
-      //   return
-      // }
-      // const { position } = action.payload
-      // const i = checkTokenPresent(state, position)
-      // if (i === -1) {
-      //   console.log('Token not present at this position')
-      //   return
-      // }
-      // if (!moveToken(state, i)) {
-      //   console.log('Invalid Token move')
-      //   return
-      // }
-      //// state.status = LudoStatus.throwDice
-      //// nextPlayerTurn(state)
+    pickToken: (_, __: PayloadAction<{ position: Position }>) => {
+      console.log('Pick Token')
     },
     pickTokenSuccess: (
       state,
@@ -162,56 +127,39 @@ const matchSlice = createSlice({
       console.log('moveToken')
       const { tokenIndex, pathIndex } = action.payload
       const currPlayer = state.turn
+      state.status = LudoStatus.moving
       state.players[currPlayer].tokens[tokenIndex].pathIndex = pathIndex
       state.players[currPlayer].tokens[tokenIndex].position =
         BoardConstants.PATH[currPlayer][pathIndex]
     },
+    killToken: (state, action: PayloadAction<{ killedToken: KilledToken }>) => {
+      console.log('moveToken')
+      const { token, player } = action.payload.killedToken
+      state.players[player].tokens[token.index].pathIndex = -1
+      state.players[player].tokens[token.index].position =
+        BoardConstants.HOME[player][token.index]
+    },
+    setHighlightTokens: (
+      state,
+      action: PayloadAction<{ tokenIndexes?: number[]; highlight: boolean }>
+    ) => {
+      console.log('highlightTokens')
+      const currPlayer = state.turn
+      const { tokenIndexes, highlight } = action.payload
+      if (highlight) {
+        if (tokenIndexes?.length) {
+          for (const i of tokenIndexes) {
+            state.players[currPlayer].tokens[i].highlight = highlight
+          }
+        }
+      } else {
+        for (let i = 0; i < 4; i++) {
+          state.players[currPlayer].tokens[i].highlight = false
+        }
+      }
+    },
   },
 })
-
-// /**
-//  * @param index : Token index
-//  */
-// const moveToken = (state: MatchState, index: number) => {
-//   const currPlayer = state.turn
-//   const diceValue = state.dice.value
-//   const token = { ...state.players[currPlayer].tokens[index] }
-//   if (token.pathIndex === -1) {
-//     if (diceValue === 6) {
-//       token.pathIndex = 0
-//     } else {
-//       return false
-//     }
-//   } else {
-//     if (token.pathIndex + diceValue <= 56) {
-//       token.pathIndex += diceValue
-//     } else {
-//       return false
-//     }
-//   }
-//   token.position = BoardConstants.PATH[currPlayer][token.pathIndex]
-//   state.players[currPlayer].tokens[index] = token
-//   console.log(token)
-
-//   return true
-// }
-//// Return token index at position
-// const checkTokenPresent = (state: MatchState, position: Position) => {
-//   const currPlayer = state.turn
-//   const tokens = state.players[currPlayer].tokens
-//   for (let i = 0; i < 4; i++) {
-//     if (_.isEqual(tokens[i].position, position)) {
-//       return i
-//     }
-//   }
-//   return -1
-//   // for (const token of tokens) {
-//   //   if (_.isEqual(token.position, position)) {
-//   //     return true
-//   //   }
-//   // }
-//   // return false
-// }
 
 const nextPlayerTurn = (state: MatchState) => {
   const currPlayer = state.turn
@@ -243,6 +191,8 @@ export const {
   pickTokenFailure,
   pickTokenSuccess,
   moveToken,
+  killToken,
+  setHighlightTokens,
 } = matchSlice.actions
 
 export default matchSlice.reducer

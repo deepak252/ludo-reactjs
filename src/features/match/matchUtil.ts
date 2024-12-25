@@ -1,7 +1,8 @@
 import { DICE_VALUES } from '@/constants'
 import { MatchState } from './matchSlice'
-import { Position, TokenMove } from '@/shared.types'
+import { KilledToken, PlayerType, Position, TokenMove } from '@/shared.types'
 import _ from 'lodash'
+import BoardConstants from '@/constants/boardConstants'
 /**
  * @returns random number from 1 to 6
  */
@@ -81,4 +82,32 @@ export const getTokenAutoMove = (state: MatchState) => {
     }
   }
   return tokenAutoMove
+}
+
+export const checkTokenKill = (
+  state: MatchState,
+  pathIndex: number
+): KilledToken | null => {
+  const currPlayer = state.turn
+  const pos = BoardConstants.PATH[currPlayer][pathIndex]
+  if (BoardConstants.SAFE_CELLS.includesDeep(pos)) {
+    console.log('Safe Cell')
+    return null
+  }
+  let killedToken: KilledToken | null = null
+  Object.entries(state.players).forEach(([key, player]) => {
+    if (key === currPlayer || killedToken) {
+      return
+    }
+    const tokens = player.tokens
+    for (let i = 0; i < tokens.length; i++) {
+      if (_.isEqual(tokens[i].position, pos)) {
+        killedToken = {
+          token: tokens[i],
+          player: key as PlayerType,
+        }
+      }
+    }
+  })
+  return killedToken
 }

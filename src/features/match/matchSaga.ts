@@ -1,19 +1,29 @@
 import { LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
+  killToken,
   MatchState,
   moveToken,
   pickToken,
   pickTokenFailure,
   pickTokenSuccess,
+  setHighlightTokens,
   throwDice,
   throwDiceFailure,
   throwDiceSuccess,
 } from '@/features/match/matchSlice'
 import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { all, delay, put, select, takeLatest } from 'redux-saga/effects'
 import {
+  all,
+  delay,
+  put,
+  select,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects'
+import {
+  checkTokenKill,
   checkTokenPresent,
   getDiceRandomNumber,
   getMovableTokens,
@@ -44,7 +54,6 @@ function* throwDiceWorker(): Generator<any, any, any> {
   const movableTokens = getMovableTokens(matchState)
 
   if (!movableTokens.length) {
-    // yield put(throwDiceFailure({ message: "Can't move token", diceValue }))
     yield put(
       throwDiceSuccess({
         diceValue,
@@ -59,19 +68,29 @@ function* throwDiceWorker(): Generator<any, any, any> {
 
   if (tokenAutoMove) {
     const { currIndex, nextIndex, tokenIndex } = tokenAutoMove
-    for (let i = currIndex + 1; i <= nextIndex; i++) {
-      yield put(moveToken({ tokenIndex, pathIndex: i }))
+    yield moveTokenWorker({ currIndex, nextIndex, tokenIndex })
+
+    //Check if other token killed
+    const killedToken = checkTokenKill(state, nextIndex)
+    if (killedToken) {
+      // yield killTokenWorker(killedToken)
+      yield put(killToken({ killedToken }))
       yield delay(200)
     }
-    //TODO: Check if other token killed
     yield put(
       throwDiceSuccess({
         diceValue,
         status: LudoStatus.throwDice,
-        isNextPlayerTurn: diceValue !== 6,
+        isNextPlayerTurn: diceValue !== 6 && !killedToken && nextIndex !== 56,
       })
     )
   } else {
+    yield put(
+      setHighlightTokens({
+        tokenIndexes: movableTokens.map((e) => e.tokenIndex),
+        highlight: true,
+      })
+    )
     yield put(
       throwDiceSuccess({
         diceValue,
@@ -103,17 +122,49 @@ function* pickTokenWorker(
     yield put(pickTokenFailure({ message: 'Invalid Token move' }))
     return
   }
-  for (let i = move.currIndex + 1; i <= move.nextIndex; i++) {
-    yield put(moveToken({ tokenIndex, pathIndex: i }))
+  yield put(
+    setHighlightTokens({
+      highlight: false,
+    })
+  )
+
+  const { currIndex, nextIndex } = move
+  yield moveTokenWorker({ currIndex, nextIndex, tokenIndex })
+
+  //Check if other token killed
+  const killedToken = checkTokenKill(state, nextIndex)
+  if (killedToken) {
+    yield put(killToken({ killedToken }))
     yield delay(200)
   }
-  //TODO: Check if other token killed
-  yield put(pickTokenSuccess({ isNextPlayerTurn: matchState.dice.value !== 6 }))
+  yield put(
+    pickTokenSuccess({
+      isNextPlayerTurn:
+        matchState.dice.value !== 6 && !killedToken && nextIndex !== 56,
+    })
+  )
+}
+
+function* moveTokenWorker({
+  currIndex,
+  nextIndex,
+  tokenIndex,
+}: {
+  currIndex: number
+  nextIndex: number
+  tokenIndex: number
+}) {
+  for (let i = currIndex + 1; i <= nextIndex; i++) {
+    yield put(moveToken({ tokenIndex, pathIndex: i }))
+    if (i < nextIndex) {
+      yield delay(200)
+    }
+  }
 }
 
 export default function* () {
   yield all([
     takeLatest(throwDice.type, throwDiceWorker),
-    takeLatest(pickToken.type, pickTokenWorker),
+    takeEvery(pickToken.type, pickTokenWorker),
   ])
 }
