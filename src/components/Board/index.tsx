@@ -4,16 +4,9 @@ import Base from './Base'
 import Cell from './Cell'
 import Terminal from './Terminal'
 import BoardConstants from '@/constants/boardConstants'
-// import { useAppDispatch } from '@/hooks'
-// import { cellClicked } from '@/slices/matchSlice'
-// import { Position } from '@/shared.types'
 
 const arr = [...new Array(15)]
 const Board = () => {
-  // const dispatch = useAppDispatch()
-  // const handleCellClick = (position: Position) => {
-  //   dispatch(cellClicked({ position }))
-  // }
   return (
     <div className="relative grid grid-cols-[repeat(15,1fr)] bg-slate-200  size-[min(90vh,90vw)] rounded-3xl overflow-hidden">
       {arr.map((_, row) => {
@@ -35,7 +28,6 @@ const Board = () => {
               'bg-blue-500': BoardConstants.BLUE_CELLS.includesDeep([row, col]),
               'bg-red-500': BoardConstants.RED_CELLS.includesDeep([row, col]),
             })}
-            // onClick={handleCellClick}
           />
         ))
       })}

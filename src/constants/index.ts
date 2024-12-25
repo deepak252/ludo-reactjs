@@ -4,6 +4,7 @@ export const PlayerTypes: PlayerType[] = ['green', 'yellow', 'blue', 'red']
 
 export enum LudoStatus {
   throwDice,
+  throwing,
   pickToken,
   moving,
   ended,

@@ -1,13 +1,14 @@
 import { LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
-  killToken,
+  killTokens,
   MatchState,
   moveToken,
   pickToken,
   pickTokenFailure,
   pickTokenSuccess,
   setHighlightTokens,
+  setStatus,
   throwDice,
   throwDiceFailure,
   throwDiceSuccess,
@@ -30,16 +31,20 @@ import {
   getTokenAutoMove,
   getTokenMove,
 } from './matchUtil'
+import BoardConstants from '@/constants/boardConstants'
 
 function* throwDiceWorker(): Generator<any, any, any> {
   const state = yield select((state: RootState) => state.match)
   const matchState: MatchState = { ...state }
   console.log('throwDiceWorker', matchState.status)
   if (!matchState.isOngoing || matchState.status !== LudoStatus.throwDice) {
-    yield put(throwDiceFailure({ message: 'Invalid move' }))
+    yield put(throwDiceFailure({ message: 'Throw dice disabled' }))
     return
   }
+  yield put(setStatus(LudoStatus.throwing))
   const diceValue = getDiceRandomNumber()
+  yield delay(BoardConstants.DICE_DELAY)
+
   // const diceValue = 6
   yield put(
     throwDiceSuccess({
@@ -71,17 +76,17 @@ function* throwDiceWorker(): Generator<any, any, any> {
     yield moveTokenWorker({ currIndex, nextIndex, tokenIndex })
 
     //Check if other token killed
-    const killedToken = checkTokenKill(state, nextIndex)
-    if (killedToken) {
-      // yield killTokenWorker(killedToken)
-      yield put(killToken({ killedToken }))
-      yield delay(200)
+    const killedTokens = checkTokenKill(state, nextIndex)
+    if (killedTokens.length) {
+      yield put(killTokens({ killedTokens }))
+      yield delay(BoardConstants.ANIMATION_DELAY)
     }
     yield put(
       throwDiceSuccess({
         diceValue,
         status: LudoStatus.throwDice,
-        isNextPlayerTurn: diceValue !== 6 && !killedToken && nextIndex !== 56,
+        isNextPlayerTurn:
+          diceValue !== 6 && !killedTokens.length && nextIndex !== 56,
       })
     )
   } else {
@@ -132,15 +137,15 @@ function* pickTokenWorker(
   yield moveTokenWorker({ currIndex, nextIndex, tokenIndex })
 
   //Check if other token killed
-  const killedToken = checkTokenKill(state, nextIndex)
-  if (killedToken) {
-    yield put(killToken({ killedToken }))
-    yield delay(200)
+  const killedTokens = checkTokenKill(state, nextIndex)
+  if (killedTokens.length) {
+    yield put(killTokens({ killedTokens }))
+    yield delay(BoardConstants.ANIMATION_DELAY)
   }
   yield put(
     pickTokenSuccess({
       isNextPlayerTurn:
-        matchState.dice.value !== 6 && !killedToken && nextIndex !== 56,
+        matchState.dice.value !== 6 && !killedTokens.length && nextIndex !== 56,
     })
   )
 }
@@ -157,7 +162,7 @@ function* moveTokenWorker({
   for (let i = currIndex + 1; i <= nextIndex; i++) {
     yield put(moveToken({ tokenIndex, pathIndex: i }))
     if (i < nextIndex) {
-      yield delay(200)
+      yield delay(BoardConstants.ANIMATION_DELAY)
     }
   }
 }

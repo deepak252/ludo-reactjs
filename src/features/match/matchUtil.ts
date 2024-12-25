@@ -87,27 +87,27 @@ export const getTokenAutoMove = (state: MatchState) => {
 export const checkTokenKill = (
   state: MatchState,
   pathIndex: number
-): KilledToken | null => {
+): KilledToken[] => {
   const currPlayer = state.turn
   const pos = BoardConstants.PATH[currPlayer][pathIndex]
   if (BoardConstants.SAFE_CELLS.includesDeep(pos)) {
     console.log('Safe Cell')
-    return null
+    return []
   }
-  let killedToken: KilledToken | null = null
+  const killedTokens: KilledToken[] = []
   Object.entries(state.players).forEach(([key, player]) => {
-    if (key === currPlayer || killedToken) {
+    if (key === currPlayer || killedTokens.length) {
       return
     }
     const tokens = player.tokens
     for (let i = 0; i < tokens.length; i++) {
       if (_.isEqual(tokens[i].position, pos)) {
-        killedToken = {
+        killedTokens.push({
           token: tokens[i],
           player: key as PlayerType,
-        }
+        })
       }
     }
   })
-  return killedToken
+  return killedTokens
 }

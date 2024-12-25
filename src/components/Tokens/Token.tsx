@@ -2,10 +2,11 @@ import { LudoColor, Position } from '@/shared.types'
 import classNames from 'classnames'
 
 type TokenProps = {
-  delta?: number
   color: LudoColor
-  highlight?: boolean
   position: Position
+  delta?: number
+  highlight?: boolean
+  // moving?: boolean
   onClick?: (position: Position) => void
 }
 
@@ -14,6 +15,7 @@ const Token = ({
   color,
   position = [0, 0],
   highlight,
+  // moving,
   onClick,
 }: TokenProps) => {
   const posTop = `${position[0] * 6.666 - delta}%`
@@ -21,7 +23,7 @@ const Token = ({
 
   return (
     <div
-      className="absolute size-[6.66%]"
+      className="absolute size-[6.66%] transition-all duration-500"
       style={{ top: posTop, left: posLeft }}
       onClick={(e) => {
         e.stopPropagation()
@@ -33,6 +35,8 @@ const Token = ({
           `absolute-center size-2/3 bg-${color}-600 rounded-full shadow-token`,
           {
             [`animate-glow-${color}`]: highlight,
+            // 'z-20': moving,
+            // 'z-10': !moving,
           }
         )}
       >

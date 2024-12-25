@@ -33,9 +33,6 @@ const matchSlice = createSlice({
   name: 'match',
   initialState,
   reducers: {
-    cellClicked: (_, action: PayloadAction<{ position: Position }>) => {
-      console.log('Cell Clicked', action.payload)
-    },
     startMatch: (state, action: PayloadAction<{ playerCount: number }>) => {
       if (state.isOngoing) {
         return
@@ -132,12 +129,18 @@ const matchSlice = createSlice({
       state.players[currPlayer].tokens[tokenIndex].position =
         BoardConstants.PATH[currPlayer][pathIndex]
     },
-    killToken: (state, action: PayloadAction<{ killedToken: KilledToken }>) => {
-      console.log('moveToken')
-      const { token, player } = action.payload.killedToken
-      state.players[player].tokens[token.index].pathIndex = -1
-      state.players[player].tokens[token.index].position =
-        BoardConstants.HOME[player][token.index]
+    killTokens: (
+      state,
+      action: PayloadAction<{ killedTokens: KilledToken[] }>
+    ) => {
+      console.log('killTokens')
+      const killedTokens = action.payload.killedTokens
+      killedTokens.forEach((killedToken) => {
+        const { token, player } = killedToken
+        state.players[player].tokens[token.index].pathIndex = -1
+        state.players[player].tokens[token.index].position =
+          BoardConstants.HOME[player][token.index]
+      })
     },
     setHighlightTokens: (
       state,
@@ -157,6 +160,9 @@ const matchSlice = createSlice({
           state.players[currPlayer].tokens[i].highlight = false
         }
       }
+    },
+    setStatus: (state, action: PayloadAction<LudoStatus>) => {
+      state.status = action.payload
     },
   },
 })
@@ -182,17 +188,20 @@ const nextPlayerTurn = (state: MatchState) => {
 }
 
 export const {
-  cellClicked,
   startMatch,
+
   throwDice,
   throwDiceSuccess,
   throwDiceFailure,
+
   pickToken,
   pickTokenFailure,
   pickTokenSuccess,
   moveToken,
-  killToken,
+
+  killTokens,
   setHighlightTokens,
+  setStatus,
 } = matchSlice.actions
 
 export default matchSlice.reducer
