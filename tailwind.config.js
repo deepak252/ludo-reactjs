@@ -80,12 +80,42 @@ export default {
           '0%, 100%': { boxShadow: '0 0 0 3px rgba(111, 99, 0, 0.2)' },
           '50%': { boxShadow: '0 0 0 12px rgba(111, 99, 0, 0.3)' },
         },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        shimmer: {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
       },
       animation: {
         'glow-red': 'glowRed 2s infinite', // 2 seconds, infinite loop
         'glow-green': 'glowGreen 2s infinite',
         'glow-blue': 'glowBlue 2s infinite',
         'glow-yellow': 'glowYellow 2s infinite',
+        fadeIn: 'fadeIn 0.2s ease-in-out',
+        fadeOut: 'fadeOut 0.2s ease-in-out',
+        shimmer: 'shimmer 1.5s infinite',
+      },
+      screens: {
+        xs: '480px',
+      },
+      zIndex: {
+        dropdown: 50,
+        navbar: 200,
+        drawerMobile: 900,
+        modal: 500,
+        toast: 990,
+        loader: 1000,
       },
     },
   },

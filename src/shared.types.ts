@@ -22,3 +22,8 @@ export type KilledToken = {
   token: TokenInfo
   player: PlayerType
 }
+
+export type ToastData = {
+  type?: 'success' | 'failure' | 'message' | null
+  message?: string | null
+}

@@ -6,14 +6,13 @@ function Dashboard() {
       <h1 className="text-white text-center py-8">Ludo</h1>
       <div className="flex justify-center mt-10">
         <Link
-          to="/live"
+          to="/match/live"
           className="btn-filled bg-secondary inline-block m-4 p-10 text-xl uppercase text-center"
         >
           Play Online
         </Link>
-
         <Link
-          to="/offline"
+          to="/match/offline"
           className="btn-filled bg-white text-black inline-block m-4 p-10 text-xl uppercase  text-center"
         >
           Play Offline
