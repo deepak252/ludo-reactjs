@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Quicksand&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Quicksand&family=Poppins&family=Poetsen+One&display=swap:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +8,8 @@
   padding: 0;
   box-sizing: border-box;
   font-weight: normal;
-  font-family: 'Poppins', sans-serif;
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: "Poetsen One", serif;
 }
 
 @layer components {
@@ -45,17 +46,18 @@
     @apply flex-center fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-[#00000077] z-modal animate-fadeIn;
   }
   .modal-container {
-    @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96;
+    /* @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96; */
+    @apply flex flex-col p-5 bg-primary border-4 border-secondary rounded-3xl shadow-2xl shadow-secondary max-h-[80vh] max-w-[90vw] min-h-40 min-w-80;
   }
 
   .form-input-wrapper {
-    /* @apply relative inline-flex items-center bg-white w-full rounded-md border border-gray-300 px-3 pt-2 pb-1 mt-3; */
-    @apply relative inline-flex items-center bg-gray-200 w-full rounded-lg mt-2 overflow-hidden;
+    /* @apply relative inline-flex items-center bg-gray-200 w-full rounded-lg mt-2 overflow-hidden; */
+    @apply relative inline-flex items-center bg-primary-500 border border-gray-500 w-full rounded-2xl mt-2 overflow-hidden;
   }
   .form-input-wrapper input:not([type='color']),
   .form-input-wrapper textarea,
   .form-input-wrapper select {
-    @apply w-full bg-transparent outline-none border-none text-base text-gray-800 font-medium px-4 py-3 resize-none placeholder:text-gray-700;
+    @apply w-full bg-transparent outline-none border-none text-17 text-white font-medium px-5 py-4 resize-none placeholder:text-gray-500;
   }
   .form-input-wrapper select option {
     @apply text-black;

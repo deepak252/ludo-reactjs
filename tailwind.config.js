@@ -31,7 +31,7 @@ export default {
           100: '#E1E0F9', // Chip
           200: '#FFD690', // Floating Button
           300: '#B3B5D9',
-          500: '#00235C',
+          500: '#214285',
         },
         secondary: '#2A64BF',
         gray: {

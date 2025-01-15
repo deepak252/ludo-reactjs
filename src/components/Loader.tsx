@@ -26,7 +26,7 @@ const Spinner = ({ className, center }: SpinnerProps) => {
 const Loader = ({ isLoading }: { isLoading: boolean }) => {
   return (
     isLoading && (
-      <ModalWrapper isOpen={isLoading} className="z-[1000]">
+      <ModalWrapper isOpen={isLoading} className="z-loader">
         <Spinner center />
       </ModalWrapper>
     )
