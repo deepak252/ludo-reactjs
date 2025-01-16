@@ -1,16 +1,7 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import CloseIcon from '@/assets/icons/close.svg?react'
-
-export type ToastData = {
-  type?: 'success' | 'failure' | null
-  message?: string | null
-}
-
-export const TOAST_INITIAL_DATA: ToastData = {
-  type: null,
-  message: null,
-}
+import { ToastData } from '@/shared.types'
 
 type ToastProps = {
   onClose?: () => void
@@ -37,14 +28,15 @@ const Toast = ({
 
   const handleCloseToast = () => {
     setIsOpen(false)
-    onClose && onClose()
+    onClose?.()
   }
 
   const containerClassNames = classNames(
-    'flex items-center fixed top-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-[30px] min-w-80 max-w-5xl min-h-14',
+    'flex items-center fixed top-12 left-1/2 -translate-x-1/2 z-toast px-4 py-3 rounded-[30px] min-w-80 max-w-5xl min-h-14',
     {
       'bg-red-600 ': type === 'failure',
       'bg-green': type === 'success',
+      'bg-gray-600': type === 'message',
     }
   )
 

@@ -7,19 +7,19 @@ function Dashboard() {
 
   return (
     <div>
-      <h1 className="text-white text-center py-8">Ludo</h1>
+      <h1 className="text-white text-center py-8"> </h1>
       <div className="flex justify-center mt-10">
         <div
           onClick={() => setIsJoinMatch(true)}
           className="btn-filled bg-secondary inline-block m-4 p-10 text-xl uppercase text-center"
         >
-          Play Online
+          OnClick
         </div>
         <Link
           to="/match/offline"
           className="btn-filled bg-white text-black inline-block m-4 p-10 text-xl uppercase text-center"
         >
-          Play Offline
+          OffClick
         </Link>
       </div>
 
