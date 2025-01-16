@@ -32,8 +32,9 @@ export default {
           200: '#FFD690', // Floating Button
           300: '#B3B5D9',
           500: '#214285',
+          800: '#011940',
         },
-        secondary: '#2A64BF',
+        secondary: '#F5C601',
         gray: {
           DEFAULT: '#9E9E9E',
           100: '#F8F8F8',

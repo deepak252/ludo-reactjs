@@ -13,7 +13,6 @@ function AppRoutes() {
       path: '/',
       element: <RootLayout />,
       children: [
-        authRoutes,
         {
           path: '',
           element: <MainLayout />,
@@ -23,6 +22,7 @@ function AppRoutes() {
               element: <Dashboard />,
             },
             matchRoutes,
+            authRoutes,
           ],
         },
       ],

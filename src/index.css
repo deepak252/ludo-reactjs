@@ -9,7 +9,7 @@
   box-sizing: border-box;
   font-weight: normal;
   /* font-family: 'Poppins', sans-serif; */
-  font-family: "Poetsen One", serif;
+  font-family: 'Poetsen One', serif;
 }
 
 @layer components {
@@ -19,7 +19,10 @@
   .btn-filled {
     @apply base-button bg-primary text-white font-medium;
   }
-
+  .btn-filled-green {
+    @apply base-button bg-[#03C91E] border-2 border-b-4 border-[#36f14f] rounded-2xl text-white mt-6;
+  }
+  
   .card {
     @apply p-3 rounded-md bg-white shadow-md;
   }
@@ -136,7 +139,7 @@
 }
 
 a {
-  @apply text-primary;
+  @apply text-secondary;
 }
 
 h1 {

@@ -4,38 +4,75 @@ import FormInputWrapper from '@/components/FormInputWrapper'
 import { SignUpFormError, SignUpFormValues } from '../auth.types'
 import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { validateSignUpForm } from '../authUtil'
-import { signUp } from '../authSlice'
+import { checkUsername, signUp } from '../authSlice'
+import _ from 'lodash'
+import { useEffect, useMemo } from 'react'
+import { Spinner } from '@/components/Loader'
 
 export default function SignUpPage() {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector((state) => state.auth.signUp.isLoading)
+  const usernameState = useAppSelector((state) => state.auth.username)
+  const debouncedCheckUsername = useMemo(
+    () =>
+      _.debounce((username: string) => {
+        dispatch(checkUsername({ username }))
+      }, 400),
+    [dispatch] // Only recreate the function if `dispatch` changes
+  )
+
   const formik = useFormik<SignUpFormValues>({
     initialValues: {
-      name: '',
+      username: '',
       email: '',
       password: '',
       isPasswordVisible: false,
     },
     validate: validateSignUpForm,
     onSubmit: (values) => {
+      if (
+        errors.username ||
+        usernameState.isLoading ||
+        !usernameState.isAvailable
+      )
+        return
       dispatch(signUp(values))
     },
   })
   const errors = useFormikErrors<SignUpFormValues, SignUpFormError>(formik)
 
+  useEffect(() => {
+    const username = formik.values.username
+    if (username.trim()) {
+      debouncedCheckUsername(formik.values.username)
+    }
+  }, [formik.values.username, debouncedCheckUsername])
+
+  console.log(usernameState)
+
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto text-white">
       <form onSubmit={formik.handleSubmit}>
         <h2 className="text-center mt-10 max-md:text-2xl">Create Account</h2>
-        <p className="text-center text-gray-600 text-sm">
+        <p className="text-center text-gray-300 text-sm">
           Please enter the details
         </p>
-        <FormInputWrapper className="mt-10" error={errors.name}>
+        <FormInputWrapper
+          className="mt-10"
+          error={errors.username || usernameState.error}
+          trailing={
+            usernameState.isLoading ? (
+              <Spinner className="border-secondary size-6 mx-4" />
+            ) : (
+              <></>
+            )
+          }
+        >
           <input
             type="text"
-            name="name"
-            placeholder="Enter name"
-            value={formik.values.name}
+            name="username"
+            placeholder="Enter username"
+            value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
@@ -61,12 +98,9 @@ export default function SignUpPage() {
           />
         </FormInputWrapper>
 
-        <div className="text-end text-sm mt-3">
-          <Link to="/auth/forgot-password">Forgot Password?</Link>
-        </div>
         <button
           type="submit"
-          className="btn-filled w-full mt-10"
+          className="btn-filled-green w-full mt-10"
           disabled={isLoading}
         >
           Sign Up

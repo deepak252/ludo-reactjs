@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ToastData } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { SignInFormValues } from './auth.types'
+import { SignInFormValues, SignUpFormValues } from './auth.types'
 
 type AuthState = {
   isAuthenticated?: boolean
@@ -11,6 +11,13 @@ type AuthState = {
   signUp: {
     isLoading: boolean
   }
+
+  username: {
+    value?: string
+    isAvailable?: boolean
+    isLoading: boolean
+    error?: string
+  }
   toastData?: ToastData | null
 }
 
@@ -19,6 +26,11 @@ const initialState: AuthState = {
     isLoading: false,
   },
   signUp: {
+    isLoading: false,
+  },
+  username: {
+    value: '',
+    isAvailable: false,
     isLoading: false,
   },
 }
@@ -44,7 +56,7 @@ const authSlice = createSlice({
     },
 
     // Sign In
-    signUp: (state, _: PayloadAction<SignInFormValues>) => {
+    signUp: (state, _: PayloadAction<SignUpFormValues>) => {
       state.signUp.isLoading = true
     },
     signUpSuccess: (state) => {
@@ -53,6 +65,27 @@ const authSlice = createSlice({
     },
     signUpFailure: (state, action) => {
       state.signUp.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+    // Check username available
+    checkUsername: (state, action: PayloadAction<{ username: string }>) => {
+      state.username = {
+        value: action.payload.username,
+        isAvailable: false,
+        isLoading: true,
+      }
+    },
+    checkUsernameSuccess: (state) => {
+      state.username.isLoading = false
+      state.username.isAvailable = true
+    },
+    checkUsernameFailure: (state, action) => {
+      state.username.isLoading = false
+      state.username.isAvailable = false
+      state.username.error = action.payload
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -85,6 +118,10 @@ export const {
   signUp,
   signUpSuccess,
   signUpFailure,
+
+  checkUsername,
+  checkUsernameSuccess,
+  checkUsernameFailure,
 
   setAuthToast,
   resetAuthState,

@@ -1,23 +1,23 @@
 export type SignUpFormValues = {
-  name: string
+  username: string
   email: string
   password: string
   isPasswordVisible?: boolean
 }
 
 export type SignUpFormError = {
-  name?: string
+  username?: string
   email?: string
   password?: string
 }
 
 export type SignInFormValues = {
-  email: string
+  usernameOrEmail: string
   password: string
   isPasswordVisible?: boolean
 }
 
 export type SignInFormError = {
-  email?: string
+  usernameOrEmail?: string
   password?: string
 }

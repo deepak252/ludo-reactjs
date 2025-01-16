@@ -8,9 +8,12 @@ import {
 
 export const validateSignInForm = (values: SignInFormValues) => {
   const errors: SignInFormError = {}
-  const emailErr = validateEmail(values.email)
-  if (emailErr) {
-    errors.email = emailErr
+  // const emailErr = validateEmail(values.)
+  // if (emailErr) {
+  //   errors.email = emailErr
+  // }
+  if (!values.usernameOrEmail.trim()) {
+    errors.usernameOrEmail = 'Enter username or email'
   }
   if (!values.password.trim()) {
     errors.password = "Password can't be empty"
@@ -24,8 +27,8 @@ export const validateSignUpForm = (values: SignUpFormValues) => {
   if (emailErr) {
     errors.email = emailErr
   }
-  if (!values.name.trim()) {
-    errors.name = "Name can't be empty"
+  if (!values.username.trim()) {
+    errors.username = "Username can't be empty"
   }
   if (!values.password.trim()) {
     errors.password = "Password can't be empty"

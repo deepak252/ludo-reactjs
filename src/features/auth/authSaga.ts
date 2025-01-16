@@ -1,5 +1,8 @@
 import { all, put, takeLatest } from 'redux-saga/effects'
 import {
+  checkUsername,
+  checkUsernameFailure,
+  checkUsernameSuccess,
   signIn,
   signInFailure,
   signInSuccess,
@@ -7,17 +10,17 @@ import {
   signUpFailure,
   signUpSuccess,
 } from './authSlice'
-import { signInApi, signUpApi } from './authApi'
+import { checkUsernameApi, signInApi, signUpApi } from './authApi'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { SignInFormValues, SignUpFormValues } from './auth.types'
 import { apiWorker } from '@/services/api'
 // import { saveAccessToken } from '@/utils/storage'
 
 function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
-  const { email, password } = action.payload
+  const { usernameOrEmail, password } = action.payload
   yield* apiWorker(
     signInApi,
-    { email, password },
+    { usernameOrEmail, password },
     {
       onSuccess: function* (response) {
         // saveAccessToken(response.data?.data?.access_token)
@@ -31,10 +34,10 @@ function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
 }
 
 function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
-  const { name, email, password } = action.payload
+  const { username, email, password } = action.payload
   yield* apiWorker(
     signUpApi,
-    { name, email, password },
+    { username, email, password },
     {
       onSuccess: function* (response) {
         // saveAccessToken(response.data?.data?.access_token)
@@ -47,9 +50,30 @@ function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
   )
 }
 
+function* checkUsernameWorker(
+  action: PayloadAction<{ username: string }>
+): Generator {
+  const { username } = action.payload
+  yield* apiWorker(
+    checkUsernameApi,
+    { username },
+    {
+      onSuccess: function* (response) {
+        yield put(checkUsernameSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(
+          checkUsernameFailure(error?.message || 'Something went wrong')
+        )
+      },
+    }
+  )
+}
+
 export default function* () {
   yield all([
     takeLatest(signIn.type, signInWorker),
     takeLatest(signUp.type, signUpWorker),
+    takeLatest(checkUsername.type, checkUsernameWorker),
   ])
 }

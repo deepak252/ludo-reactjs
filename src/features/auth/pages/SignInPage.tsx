@@ -11,7 +11,7 @@ export default function SignInPage() {
   const isLoading = useAppSelector((state) => state.auth.signIn.isLoading)
   const formik = useFormik<SignInFormValues>({
     initialValues: {
-      email: '',
+      usernameOrEmail: '',
       password: '',
       isPasswordVisible: false,
     },
@@ -23,18 +23,18 @@ export default function SignInPage() {
   const errors = useFormikErrors<SignInFormValues, SignInFormError>(formik)
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto text-white">
       <form onSubmit={formik.handleSubmit}>
         <h2 className="text-center mt-10 max-md:text-2xl">Welcome Back</h2>
-        <p className="text-center text-gray-600 text-sm">
+        <p className="text-center text-gray-300 text-sm">
           Please login to your account
         </p>
-        <FormInputWrapper className="mt-10" error={errors.email}>
+        <FormInputWrapper className="mt-10" error={errors.usernameOrEmail}>
           <input
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={formik.values.email}
+            type="text"
+            name="usernameOrEmail"
+            placeholder="Enter username or email"
+            value={formik.values.usernameOrEmail}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
@@ -55,7 +55,7 @@ export default function SignInPage() {
         </div>
         <button
           type="submit"
-          className="btn-filled w-full mt-10"
+          className="btn-filled-green w-full mt-10"
           disabled={isLoading}
         >
           Sign In
