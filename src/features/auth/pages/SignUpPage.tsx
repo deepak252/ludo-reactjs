@@ -48,8 +48,6 @@ export default function SignUpPage() {
     }
   }, [formik.values.username, debouncedCheckUsername])
 
-  console.log(usernameState)
-
   return (
     <div className="max-w-md mx-auto text-white">
       <form onSubmit={formik.handleSubmit}>
@@ -62,7 +60,7 @@ export default function SignUpPage() {
           error={errors.username || usernameState.error}
           trailing={
             usernameState.isLoading ? (
-              <Spinner className="border-secondary size-6 mx-4" />
+              <Spinner className="size-6 mx-4" />
             ) : (
               <></>
             )

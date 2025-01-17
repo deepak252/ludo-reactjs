@@ -16,8 +16,8 @@ const AuthLayout = () => {
       navigate(from, { replace: true })
       dispatch(resetAuthState())
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from, isLocalSignedIn, isLocalSignedIn, dispatch])
+  }, [from, isLocalSignedIn, dispatch])
+
   return (
     <div className="p-4">
       <Outlet />

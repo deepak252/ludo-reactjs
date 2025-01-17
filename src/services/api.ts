@@ -1,10 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { call } from 'redux-saga/effects'
 import { API_BASE_URL } from '@/constants/environment'
+import { getAccessToken } from '@/utils/storage'
 // import { getAccessToken } from '@/utils/storage'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
 })
 
 type RequestConfig = AxiosRequestConfig & {
@@ -15,13 +17,13 @@ type RequestConfig = AxiosRequestConfig & {
 const getAuthHeader = (
   headers: Record<string, string>
 ): Record<string, string> => {
-  // const accessToken = getAccessToken()
-  // if (accessToken) {
-  //   return {
-  //     Authorization: `Bearer ${accessToken}`,
-  //     ...headers,
-  //   }
-  // }
+  const accessToken = getAccessToken()
+  if (accessToken) {
+    return {
+      Authorization: `Bearer ${accessToken}`,
+      ...headers,
+    }
+  }
   return headers
 }
 
@@ -37,7 +39,7 @@ export const setupInterceptor = (navigate?: (path: string) => void): void => {
       const statusCode = error.response?.status
       if (statusCode === 401) {
         // removeUserFromStorage();
-        navigate?.('/auth/login')
+        navigate?.('/auth/sign-in')
       }
       return Promise.reject(error)
     }

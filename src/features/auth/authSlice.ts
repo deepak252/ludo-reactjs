@@ -11,6 +11,9 @@ type AuthState = {
   signUp: {
     isLoading: boolean
   }
+  signOut: {
+    isLoading: boolean
+  }
 
   username: {
     value?: string
@@ -26,6 +29,9 @@ const initialState: AuthState = {
     isLoading: false,
   },
   signUp: {
+    isLoading: false,
+  },
+  signOut: {
     isLoading: false,
   },
   username: {
@@ -55,7 +61,7 @@ const authSlice = createSlice({
       }
     },
 
-    // Sign In
+    // Sign Up
     signUp: (state, _: PayloadAction<SignUpFormValues>) => {
       state.signUp.isLoading = true
     },
@@ -70,6 +76,19 @@ const authSlice = createSlice({
         message: action.payload,
       }
     },
+
+    // Sign Out
+    signOut: (state) => {
+      state.signOut.isLoading = true
+    },
+    signOutSuccess: (state) => {
+      state.signOut.isLoading = false
+      state.isAuthenticated = false
+    },
+    signOutFailure: (state) => {
+      state.signOut.isLoading = false
+    },
+
     // Check username available
     checkUsername: (state, action: PayloadAction<{ username: string }>) => {
       state.username = {
@@ -118,6 +137,10 @@ export const {
   signUp,
   signUpSuccess,
   signUpFailure,
+
+  signOut,
+  signOutSuccess,
+  signOutFailure,
 
   checkUsername,
   checkUsernameSuccess,
