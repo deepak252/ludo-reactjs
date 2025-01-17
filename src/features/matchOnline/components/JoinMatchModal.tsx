@@ -1,11 +1,20 @@
 import FormInputWrapper from '@/components/FormInputWrapper'
 import ModalWrapper from '@/components/ModalWrapper'
+import { useFormik } from 'formik'
 
 type JoinMatchModalProps = {
   isOpen: boolean
   onClose: () => void
 }
 const JoinMatchModal = ({ isOpen, onClose }: JoinMatchModalProps) => {
+  const formik = useFormik({
+    initialValues: {
+      roomId: '',
+    },
+    onSubmit: (values) => {
+      console.log(values)
+    },
+  })
   return (
     isOpen && (
       <ModalWrapper
@@ -15,29 +24,24 @@ const JoinMatchModal = ({ isOpen, onClose }: JoinMatchModalProps) => {
         closeOnOutsideClick
       >
         <div className="modal-container">
-          <FormInputWrapper>
-            <input
-              type="text"
-              name="username"
-              placeholder="Enter username"
-              // value={formik.values.email}
-              // onChange={formik.handleChange}
-              // onBlur={formik.handleBlur}
-            />
-          </FormInputWrapper>
           <FormInputWrapper className="mt-4">
             <input
               type="text"
               name="roomId"
               placeholder="Enter room id"
-              // value={formik.values.email}
-              // onChange={formik.handleChange}
-              // onBlur={formik.handleBlur}
+              value={formik.values.roomId}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </FormInputWrapper>
-          <button className="base-button bg-[#03C91E] border-2 border-b-4 border-[#36f14f] rounded-2xl text-white mt-6">
+          <button
+            className="btn-filled-green mt-6"
+            disabled={!formik.values.roomId.trim()}
+          >
             Join Match
           </button>
+          <p className="text-center my-3">OR</p>
+          <button className="btn-filled-secondary">Create Match</button>
         </div>
       </ModalWrapper>
     )

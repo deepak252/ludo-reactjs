@@ -20,9 +20,12 @@
     @apply base-button bg-primary text-white font-medium;
   }
   .btn-filled-green {
-    @apply base-button bg-[#03C91E] border-2 border-b-4 border-[#36f14f] rounded-2xl text-white mt-6;
+    @apply base-button bg-[#03C91E] border-2 border-b-4 border-[#36f14f] rounded-2xl text-white;
   }
-  
+  .btn-filled-secondary {
+    @apply base-button bg-secondary border-2 border-b-4 border-secondary-500 rounded-2xl text-white;
+  }
+
   .card {
     @apply p-3 rounded-md bg-white shadow-md;
   }
@@ -50,7 +53,7 @@
   }
   .modal-container {
     /* @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96; */
-    @apply flex flex-col p-5 bg-primary border-4 border-secondary rounded-3xl shadow-2xl shadow-secondary max-h-[80vh] max-w-[90vw] min-h-40 min-w-80;
+    @apply flex flex-col p-5 bg-primary border-4 border-primary-500 rounded-3xl shadow-2xl shadow-primary-500 max-h-[80vh] max-w-[90vw] min-h-40 min-w-80;
   }
 
   .form-input-wrapper {
