@@ -5,8 +5,13 @@ import { useFormik } from 'formik'
 type JoinMatchModalProps = {
   isOpen: boolean
   onClose: () => void
+  onCreateMatchClick?: () => void
 }
-const JoinMatchModal = ({ isOpen, onClose }: JoinMatchModalProps) => {
+const JoinMatchModal = ({
+  isOpen,
+  onClose,
+  onCreateMatchClick,
+}: JoinMatchModalProps) => {
   const formik = useFormik({
     initialValues: {
       roomId: '',
@@ -24,6 +29,7 @@ const JoinMatchModal = ({ isOpen, onClose }: JoinMatchModalProps) => {
         closeOnOutsideClick
       >
         <div className="modal-container">
+          <p className="text-lg">Join Match</p>
           <FormInputWrapper className="mt-4">
             <input
               type="text"
@@ -38,10 +44,12 @@ const JoinMatchModal = ({ isOpen, onClose }: JoinMatchModalProps) => {
             className="btn-filled-green mt-6"
             disabled={!formik.values.roomId.trim()}
           >
-            Join Match
+            Join
           </button>
           <p className="text-center my-3">OR</p>
-          <button className="btn-filled-secondary">Create Match</button>
+          <button className="btn-filled-secondary" onClick={onCreateMatchClick}>
+            Create Match
+          </button>
         </div>
       </ModalWrapper>
     )

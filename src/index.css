@@ -29,6 +29,12 @@
   .card {
     @apply p-3 rounded-md bg-white shadow-md;
   }
+  .base-chip {
+    @apply bg-primary-500 px-4 py-2 m-2 rounded-xl border border-gray-500;
+  }
+  .base-chip.active {
+    @apply border-secondary border-2;
+  }
   .chip-red {
     @apply base-chip bg-red;
   }
@@ -63,7 +69,7 @@
   .form-input-wrapper input:not([type='color']),
   .form-input-wrapper textarea,
   .form-input-wrapper select {
-    @apply w-full bg-transparent outline-none border-none text-17 text-white font-medium px-5 py-4 resize-none placeholder:text-gray-500;
+    @apply w-full bg-transparent outline-none border-none text-17 text-white font-medium px-5 py-3 resize-none placeholder:text-gray-500;
   }
   .form-input-wrapper select option {
     @apply text-black;

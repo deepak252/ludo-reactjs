@@ -8,10 +8,6 @@ import {
 
 export const validateSignInForm = (values: SignInFormValues) => {
   const errors: SignInFormError = {}
-  // const emailErr = validateEmail(values.)
-  // if (emailErr) {
-  //   errors.email = emailErr
-  // }
   if (!values.usernameOrEmail.trim()) {
     errors.usernameOrEmail = 'Enter username or email'
   }

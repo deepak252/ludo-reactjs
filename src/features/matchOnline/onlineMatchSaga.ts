@@ -1,36 +1,32 @@
-import { RootState } from '@/store'
 import { PayloadAction } from '@reduxjs/toolkit'
-import {
-  all,
-  delay,
-  put,
-  select,
-  takeEvery,
-  takeLatest,
-} from 'redux-saga/effects'
-import { checkUsername } from './onlineMatchSlice'
+import { all, put, takeLatest } from 'redux-saga/effects'
 import { apiWorker } from '@/services/api'
-import { signUpApi } from '../auth/authApi'
+import {
+  createRoom,
+  createRoomFailure,
+  createRoomSuccess,
+} from './onlineMatchSlice'
+import { CreateRoomFormValues } from '@/shared.types'
+import { createRoomApi } from './onlineMatchApi'
 
-function* checkUsernameHandler(
-  action: PayloadAction<{ username: string }>
+function* createRoomWorker(
+  action: PayloadAction<CreateRoomFormValues>
 ): Generator {
-  const { username } = action.payload
+  const { maxPlayersCount = 2 } = action.payload
   yield* apiWorker(
-    signUpApi,
-    { username },
+    createRoomApi,
+    { maxPlayersCount },
     {
       onSuccess: function* (response) {
-        saveAccessToken(response.data?.data?.access_token)
-        yield put(signInSuccess(response.data))
+        yield put(createRoomSuccess(response.data))
       },
       onFailure: function* (error) {
-        yield put(signInFailure(error?.message || 'Something went wrong'))
+        yield put(createRoomFailure(error?.message || 'Something went wrong'))
       },
     }
   )
 }
 
 export default function* () {
-  yield all([takeLatest(checkUsername.type, checkUsernameHandler)])
+  yield all([takeLatest(createRoom.type, createRoomWorker)])
 }

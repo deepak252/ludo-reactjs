@@ -4,3 +4,5 @@ export const SIGN_OUT_API = 'auth/sign-out'
 export const USERNAME_CHECK_API = 'auth/check-username'
 
 export const USER_PROFILE_API = 'user/profile'
+
+export const MATCH_API = 'match'

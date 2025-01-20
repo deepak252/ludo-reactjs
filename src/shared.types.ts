@@ -27,3 +27,12 @@ export type ToastData = {
   type?: 'success' | 'failure' | 'message' | null
   message?: string | null
 }
+
+export type CreateRoomFormValues = {
+  maxPlayersCount?: 2 | 3 | 4
+  users?: string[]
+}
+export type CreateRoomFormError = {
+  maxPlayersCount?: string
+  users?: string
+}
