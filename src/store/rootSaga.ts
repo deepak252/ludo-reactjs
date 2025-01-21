@@ -1,8 +1,9 @@
 import { all } from 'redux-saga/effects'
-import offlineMatchSaga from '@/features/matchOffline/offlineMatchSaga'
 import authSaga from '@/features/auth/authSaga'
 import userSaga from '@/features/user/userSaga'
+import offlineMatchSaga from '@/features/matchOffline/offlineMatchSaga'
+import onlineMatchSaga from '@/features/matchOnline/onlineMatchSaga'
 
 export function* rootSaga() {
-  yield all([offlineMatchSaga(), authSaga(), userSaga()])
+  yield all([authSaga(), userSaga(), offlineMatchSaga(), onlineMatchSaga()])
 }

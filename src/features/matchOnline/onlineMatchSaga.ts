@@ -2,31 +2,55 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { all, put, takeLatest } from 'redux-saga/effects'
 import { apiWorker } from '@/services/api'
 import {
-  createRoom,
-  createRoomFailure,
-  createRoomSuccess,
+  createMatch,
+  createMatchFailure,
+  createMatchSuccess,
+  joinMatch,
+  joinMatchFailure,
+  joinMatchSuccess,
 } from './onlineMatchSlice'
 import { CreateRoomFormValues } from '@/shared.types'
-import { createRoomApi } from './onlineMatchApi'
+import { createMatchApi, joinMatchApi } from './onlineMatchApi'
 
-function* createRoomWorker(
+function* createMatchWorker(
   action: PayloadAction<CreateRoomFormValues>
 ): Generator {
   const { maxPlayersCount = 2 } = action.payload
   yield* apiWorker(
-    createRoomApi,
+    createMatchApi,
     { maxPlayersCount },
     {
       onSuccess: function* (response) {
-        yield put(createRoomSuccess(response.data))
+        yield put(createMatchSuccess(response.data))
       },
       onFailure: function* (error) {
-        yield put(createRoomFailure(error?.message || 'Something went wrong'))
+        yield put(createMatchFailure(error?.message || 'Something went wrong'))
+      },
+    }
+  )
+}
+
+function* joinMatchWorker(
+  action: PayloadAction<{ roomId: string }>
+): Generator {
+  const { roomId } = action.payload
+  yield* apiWorker(
+    joinMatchApi,
+    { roomId },
+    {
+      onSuccess: function* (response) {
+        yield put(joinMatchSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(joinMatchFailure(error?.message || 'Something went wrong'))
       },
     }
   )
 }
 
 export default function* () {
-  yield all([takeLatest(createRoom.type, createRoomWorker)])
+  yield all([
+    takeLatest(createMatch.type, createMatchWorker),
+    takeLatest(joinMatch.type, joinMatchWorker),
+  ])
 }

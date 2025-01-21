@@ -6,3 +6,4 @@ export const USERNAME_CHECK_API = 'auth/check-username'
 export const USER_PROFILE_API = 'user/profile'
 
 export const MATCH_API = 'match'
+export const JOIN_MATCH_API = 'match/join'

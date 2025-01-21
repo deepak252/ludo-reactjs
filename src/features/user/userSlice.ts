@@ -52,7 +52,13 @@ const userSlice = createSlice({
     builder.addCase(signOutSuccess, () => initialState),
 })
 
-export const { getProfile, getProfileSuccess, getProfileFailure } =
-  userSlice.actions
+export const {
+  getProfile,
+  getProfileSuccess,
+  getProfileFailure,
+
+  setUserToast,
+  resetUserState,
+} = userSlice.actions
 
 export default userSlice.reducer

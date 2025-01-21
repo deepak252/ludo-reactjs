@@ -21,18 +21,33 @@ const onlineMatchSlice = createSlice({
   name: 'matchOnline',
   initialState,
   reducers: {
-    createRoom: (state, _: PayloadAction<CreateRoomFormValues>) => {
+    createMatch: (state, _: PayloadAction<CreateRoomFormValues>) => {
       state.room.isLoading = true
     },
-    createRoomSuccess: (state, action: PayloadAction<MatchState>) => {
+    createMatchSuccess: (state, action: PayloadAction<MatchState>) => {
       state.room.isLoading = false
       state.room.match = action.payload
     },
-    createRoomFailure: (state, action: PayloadAction<{ message: string }>) => {
+    createMatchFailure: (state, action) => {
       state.room.isLoading = false
       state.toastData = {
         type: 'failure',
-        message: action.payload.message,
+        message: action.payload,
+      }
+    },
+
+    joinMatch: (state, _: PayloadAction<{ roomId: string }>) => {
+      state.room.isLoading = true
+    },
+    joinMatchSuccess: (state, action: PayloadAction<MatchState>) => {
+      state.room.isLoading = false
+      state.room.match = action.payload
+    },
+    joinMatchFailure: (state, action) => {
+      state.room.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
       }
     },
 
@@ -45,9 +60,13 @@ const onlineMatchSlice = createSlice({
 })
 
 export const {
-  createRoom,
-  createRoomSuccess,
-  createRoomFailure,
+  createMatch,
+  createMatchSuccess,
+  createMatchFailure,
+
+  joinMatch,
+  joinMatchSuccess,
+  joinMatchFailure,
 
   setOnlineMatchToast,
 } = onlineMatchSlice.actions

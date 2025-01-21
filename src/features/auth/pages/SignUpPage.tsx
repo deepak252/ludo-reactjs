@@ -1,13 +1,13 @@
+import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import FormInputWrapper from '@/components/FormInputWrapper'
+import { Spinner } from '@/components/Loader'
 import { SignUpFormError, SignUpFormValues } from '../auth.types'
 import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { validateSignUpForm } from '../authUtil'
 import { checkUsername, signUp } from '../authSlice'
 import _ from 'lodash'
-import { useEffect, useMemo } from 'react'
-import { Spinner } from '@/components/Loader'
 
 export default function SignUpPage() {
   const dispatch = useAppDispatch()

@@ -4,17 +4,20 @@ import FormInputWrapper from '@/components/FormInputWrapper'
 import ModalWrapper from '@/components/ModalWrapper'
 import { CreateRoomFormValues } from '@/shared.types'
 import { validateCreateOnlineMatchForm } from '../onlineMatchUtil'
+import { useAppDispatch } from '@/hooks'
+import { createMatch } from '../onlineMatchSlice'
 
 type CreateMatchModalProps = {
   isOpen: boolean
   onClose: () => void
 }
 const CreateMatchModal = ({ isOpen, onClose }: CreateMatchModalProps) => {
+  const dispatch = useAppDispatch()
   const formik = useFormik<CreateRoomFormValues>({
     initialValues: {},
     validate: validateCreateOnlineMatchForm,
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: ({ maxPlayersCount }) => {
+      dispatch(createMatch({ maxPlayersCount }))
     },
   })
 
@@ -67,10 +70,10 @@ const CreateMatchModal = ({ isOpen, onClose }: CreateMatchModalProps) => {
             <button
               className="btn-filled-secondary mt-6"
               type="submit"
-              onClick={async () => {
-                console.log('sdf')
-                formik.submitForm()
-              }}
+              // onClick={async () => {
+              //   console.log('sdf')
+              //   formik.submitForm()
+              // }}
             >
               Create Match
             </button>
