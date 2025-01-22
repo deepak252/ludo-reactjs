@@ -7,3 +7,5 @@ export const USER_PROFILE_API = 'user/profile'
 
 export const MATCH_API = 'match'
 export const JOIN_MATCH_API = 'match/join'
+export const MATCH_HISTORY_API = 'match/history'
+export const ONGOING_MATCH_API = 'match/ongoing'

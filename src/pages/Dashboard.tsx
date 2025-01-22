@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
 import SignOutIcon from '@/assets/icons/sign-out.svg?react'
 import { useAppDispatch, useSignedIn } from '@/hooks'
 import { signOut } from '@/features/auth/authSlice'
 import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
+import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
+import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
 
 function Dashboard() {
   const dispatch = useAppDispatch()
@@ -14,6 +16,13 @@ function Dashboard() {
   const handleSignOutClick = () => {
     dispatch(signOut())
   }
+
+  useEffect(() => {
+    if (isSignedIn) {
+      dispatch(getOngoingMatch())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedIn])
 
   return (
     <div className="text-white">
@@ -30,19 +39,20 @@ function Dashboard() {
           </div>
         )}
       </div>
-      <h1 className="text-white text-center"> Ludo Champ </h1>
+      {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
+      <OnlineMatchItem />
       <div className="flex justify-center mt-10">
         <button
           onClick={() => setIsJoinMatchModalOpen(true)}
           className="btn-filled bg-secondary inline-block m-4 p-10 text-xl uppercase text-center"
         >
-          Play Online
+          Onclick
         </button>
         <Link
           to="/match/offline"
           className="btn-filled bg-white text-black inline-block m-4 p-10 text-xl uppercase text-center"
         >
-          Play Offline
+          Offclick
         </Link>
       </div>
 

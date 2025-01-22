@@ -1,7 +1,6 @@
 import { LudoState, MatchStatus } from '@/constants/enums'
 
-export type LudoColor = 'green' | 'yellow' | 'blue' | 'red'
-export type PlayerType = 'green' | 'yellow' | 'blue' | 'red'
+export type PlayerColor = 'green' | 'yellow' | 'blue' | 'red'
 
 export type TokenMove = {
   currIndex: number
@@ -12,7 +11,7 @@ export type TokenMove = {
 export type TokenInfo = {
   id: string
   index: number
-  color: LudoColor
+  color: PlayerColor
   pathIndex: number
   // position: Position
   highlight?: boolean
@@ -20,23 +19,26 @@ export type TokenInfo = {
 
 export type KilledToken = {
   token: TokenInfo
-  player: PlayerType
+  player: PlayerColor
 }
 
 export type Player = {
-  username?: string | null
+  userId?: string | null
   tokens: TokenInfo[]
   isPlaying: boolean
 }
 
-export type MatchState = {
+export type MatchOnline = {
+  _id: string
   roomId: string
   maxPlayersCount: number
   joinedPlayersCount: number
   status: MatchStatus
-  players: Record<PlayerType, Player>
-  turn: PlayerType
+  players: Record<PlayerColor, Player>
+  turn: PlayerColor
   diceValue: number
   createdBy: string
-  ludoState?: LudoState
+  ludoState: LudoState
+  createdAt?: Date
+  updatedAt?: Date
 }

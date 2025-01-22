@@ -13,7 +13,7 @@ import {
   signUpFailure,
   signUpSuccess,
 } from './authSlice'
-import { checkUsernameApi, signInApi, signOutApi, signUpApi } from './authApi'
+import AuthService from './authService'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { SignInFormValues, SignUpFormValues } from './auth.types'
 import { apiWorker } from '@/services/api'
@@ -22,7 +22,7 @@ import { removeUserFromStorage, saveAccessToken } from '@/utils/storage'
 function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
   const { usernameOrEmail, password } = action.payload
   yield* apiWorker(
-    signInApi,
+    AuthService.signIn,
     { usernameOrEmail, password },
     {
       onSuccess: function* (response) {
@@ -39,7 +39,7 @@ function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
 function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
   const { username, email, password } = action.payload
   yield* apiWorker(
-    signUpApi,
+    AuthService.signUp,
     { username, email, password },
     {
       onSuccess: function* (response) {
@@ -54,7 +54,7 @@ function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
 }
 
 function* sigOutWorker(): Generator {
-  yield* apiWorker(signOutApi, undefined, {
+  yield* apiWorker(AuthService.signOut, undefined, {
     onSuccess: function* (response) {
       removeUserFromStorage()
       yield put(signOutSuccess(response.data))
@@ -71,7 +71,7 @@ function* checkUsernameWorker(
 ): Generator {
   const { username } = action.payload
   yield* apiWorker(
-    checkUsernameApi,
+    AuthService.checkUsername,
     { username },
     {
       onSuccess: function* (response) {

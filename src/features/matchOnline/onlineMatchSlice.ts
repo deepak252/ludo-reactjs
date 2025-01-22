@@ -1,18 +1,33 @@
 import { CreateRoomFormValues, ToastData } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { MatchState } from './onlineMatch.types'
 import { signOutSuccess } from '../auth/authSlice'
+import { MatchOnline } from './onlineMatch.types'
 
-export type onlineMatchState = {
+type OnlineMatchState = {
   room: {
     isLoading: boolean
-    match?: MatchState
+    match?: MatchOnline
+  }
+  ongoingMatch: {
+    data?: MatchOnline
+    isLoading: boolean
+  }
+  matchHistory: {
+    list: MatchOnline[]
+    isLoading: boolean
   }
   toastData?: ToastData | null
 }
 
-const initialState: onlineMatchState = {
+const initialState: OnlineMatchState = {
   room: {
+    isLoading: false,
+  },
+  ongoingMatch: {
+    isLoading: false,
+  },
+  matchHistory: {
+    list: [],
     isLoading: false,
   },
 }
@@ -24,7 +39,7 @@ const onlineMatchSlice = createSlice({
     createMatch: (state, _: PayloadAction<CreateRoomFormValues>) => {
       state.room.isLoading = true
     },
-    createMatchSuccess: (state, action: PayloadAction<MatchState>) => {
+    createMatchSuccess: (state, action: PayloadAction<MatchOnline>) => {
       state.room.isLoading = false
       state.room.match = action.payload
     },
@@ -39,12 +54,42 @@ const onlineMatchSlice = createSlice({
     joinMatch: (state, _: PayloadAction<{ roomId: string }>) => {
       state.room.isLoading = true
     },
-    joinMatchSuccess: (state, action: PayloadAction<MatchState>) => {
+    joinMatchSuccess: (state, action: PayloadAction<MatchOnline>) => {
       state.room.isLoading = false
       state.room.match = action.payload
     },
     joinMatchFailure: (state, action) => {
       state.room.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    getOngoingMatch: (state) => {
+      state.ongoingMatch.isLoading = true
+    },
+    getOngoingMatchSuccess: (state, action: PayloadAction<MatchOnline>) => {
+      state.ongoingMatch.isLoading = false
+      state.ongoingMatch.data = action.payload
+    },
+    getOngoingMatchFailure: (state, action) => {
+      state.ongoingMatch.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    getMatchHistory: (state) => {
+      state.matchHistory.isLoading = true
+    },
+    getMatchHistorySuccess: (state, action: PayloadAction<MatchOnline[]>) => {
+      state.matchHistory.isLoading = false
+      state.matchHistory.list = action.payload
+    },
+    getMatchHistoryFailure: (state, action) => {
+      state.matchHistory.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -67,6 +112,14 @@ export const {
   joinMatch,
   joinMatchSuccess,
   joinMatchFailure,
+
+  getOngoingMatch,
+  getOngoingMatchSuccess,
+  getMatchHistoryFailure,
+
+  getMatchHistory,
+  getMatchHistorySuccess,
+  getOngoingMatchFailure,
 
   setOnlineMatchToast,
 } = onlineMatchSlice.actions
