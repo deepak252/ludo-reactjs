@@ -8,7 +8,7 @@ function* getProfileWorker(): Generator {
   yield* apiWorker(UserService.getUserProfile, undefined, {
     onSuccess: function* (response) {
       saveUserToStorage(response.data?.data)
-      yield put(getProfileSuccess(response.data))
+      yield put(getProfileSuccess(response.data?.data))
     },
     onFailure: function* (error) {
       yield put(getProfileFailure(error?.message || 'Something went wrong'))

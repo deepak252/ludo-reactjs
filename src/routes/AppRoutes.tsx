@@ -22,9 +22,9 @@ function AppRoutes() {
               element: <Dashboard />,
             },
             matchRoutes,
-            authRoutes,
           ],
         },
+        authRoutes,
       ],
     },
   ])

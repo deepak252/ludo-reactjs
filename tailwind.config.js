@@ -32,6 +32,8 @@ export default {
           200: '#FFD690', // Floating Button
           300: '#B3B5D9',
           500: '#214285',
+          600: '#00235C',
+          700: '#012052',
           800: '#011940',
         },
         secondary: {
@@ -94,10 +96,10 @@ export default {
         },
         shimmer: {
           '0%': {
-            transform: 'translateX(-100%)',
+            transform: 'translateX(-80%)',
           },
           '100%': {
-            transform: 'translateX(100%)',
+            transform: 'translateX(90%)',
           },
         },
       },

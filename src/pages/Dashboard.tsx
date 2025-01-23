@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
-import SignOutIcon from '@/assets/icons/sign-out.svg?react'
 import { useAppDispatch, useSignedIn } from '@/hooks'
-import { signOut } from '@/features/auth/authSlice'
 import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
 import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
 import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
@@ -13,9 +11,6 @@ function Dashboard() {
   const [isJoinMatchModalOpen, setIsJoinMatchModalOpen] = useState(false)
   const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false)
   const isSignedIn = useSignedIn()
-  const handleSignOutClick = () => {
-    dispatch(signOut())
-  }
 
   useEffect(() => {
     if (isSignedIn) {
@@ -25,8 +20,8 @@ function Dashboard() {
   }, [isSignedIn])
 
   return (
-    <div className="text-white">
-      <div className="flex justify-end">
+    <div className="text-white p-6">
+      {/* <div className="flex justify-end">
         {isSignedIn ? (
           <button title="Logout" onClick={handleSignOutClick}>
             <SignOutIcon className="size-10 fill-red-600" />
@@ -38,10 +33,10 @@ function Dashboard() {
             <Link to="/auth/sign-up">Sign Up</Link>
           </div>
         )}
-      </div>
+      </div> */}
       {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
       <OnlineMatchItem />
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center">
         <button
           onClick={() => setIsJoinMatchModalOpen(true)}
           className="btn-filled bg-secondary inline-block m-4 p-10 text-xl uppercase text-center"

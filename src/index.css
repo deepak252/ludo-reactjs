@@ -12,6 +12,10 @@
   font-family: 'Poetsen One', serif;
 }
 
+body {
+  color: white;
+}
+
 @layer components {
   .base-button {
     @apply rounded-xl py-3 px-6 disabled:opacity-50;
@@ -25,9 +29,21 @@
   .btn-filled-secondary {
     @apply base-button bg-secondary border-2 border-b-4 border-secondary-500 rounded-2xl text-white;
   }
+  .btn-filled-red {
+    @apply base-button bg-red-500 border-2 border-b-4 border-red-400 rounded-2xl text-white;
+  }
+  .btn-outlined {
+    @apply base-button border text-white;
+  }
+  .btn-outlined-secondary {
+    @apply base-button border border-secondary text-secondary;
+  }
 
   .card {
-    @apply p-3 rounded-md bg-white shadow-md;
+    /* @apply p-3 rounded-md bg-white shadow-md; */
+    /*   */
+    /* @apply p-4 bg-primary-500 border-[1.5px] border-[#1B1F29] rounded-xl bg-opacity-60; */
+    @apply p-4 bg-primary-300/30 backdrop-blur-md shadow-lg border-[1.5px] border-[#1B1F29] rounded-xl;
   }
   .base-chip {
     @apply bg-primary-500 px-4 py-2 m-2 rounded-xl border border-gray-500;
@@ -55,11 +71,11 @@
   }
 
   .modal-wrapper {
-    @apply flex-center fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-[#00000077] z-modal animate-fadeIn;
+    @apply flex-center fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-[#00000077] backdrop-blur-lg z-modal animate-fadeIn;
   }
   .modal-container {
     /* @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96; */
-    @apply flex flex-col p-5 bg-primary border-4 border-primary-500 rounded-3xl shadow-2xl shadow-primary-500 max-h-[80vh] max-w-[90vw] min-h-40 min-w-80;
+    @apply flex flex-col p-5 bg-primary border-4 border-primary-500 rounded-3xl shadow-2xl shadow-primary-500 max-w-[90vw] min-h-40 min-w-80;
   }
 
   .form-input-wrapper {
