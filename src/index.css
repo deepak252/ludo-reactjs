@@ -18,20 +18,25 @@ body {
 
 @layer components {
   .base-button {
-    @apply rounded-xl py-3 px-6 disabled:opacity-50;
+    @apply rounded-2xl py-3 px-6 border-2 border-b-4 text-white bg-gradient-to-b disabled:opacity-50;
   }
   .btn-filled {
-    @apply base-button bg-primary text-white font-medium;
+    @apply base-button bg-primary font-medium;
   }
   .btn-filled-green {
-    @apply base-button bg-[#03C91E] border-2 border-b-4 border-[#36f14f] rounded-2xl text-white;
+    @apply base-button border-[#36f14f] from-[#36f14f] to-[#03C91E];
   }
   .btn-filled-secondary {
-    @apply base-button bg-secondary border-2 border-b-4 border-secondary-500 rounded-2xl text-white;
+    @apply base-button border-secondary-500 from-secondary-400 to-secondary-600;
   }
   .btn-filled-red {
-    @apply base-button bg-red-500 border-2 border-b-4 border-red-400 rounded-2xl text-white;
+    @apply base-button border-red-400 from-red-400 to-red-500;
   }
+  .btn-filled-blue {
+    /* @apply base-button border-[#a8cce7] from-[#a8cce7] to-[#2055f4]; */
+    @apply base-button border-blue-500 from-blue-400 to-blue-600;
+  }
+
   .btn-outlined {
     @apply base-button border text-white;
   }

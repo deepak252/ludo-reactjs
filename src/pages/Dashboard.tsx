@@ -36,18 +36,17 @@ function Dashboard() {
       </div> */}
       {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
       <OnlineMatchItem />
-      <div className="flex justify-center">
+      <div className="flex flex-col justify-center max-w-96 mx-auto">
         <button
           onClick={() => setIsJoinMatchModalOpen(true)}
-          className="btn-filled bg-secondary inline-block m-4 p-10 text-xl uppercase text-center"
+          className="btn-filled-secondary p-5 text-xl mt-4"
         >
           Onclick
         </button>
-        <Link
-          to="/match/offline"
-          className="btn-filled bg-white text-black inline-block m-4 p-10 text-xl uppercase text-center"
-        >
-          Offclick
+        <Link to="/match/offline">
+          <button className="btn-filled-blue p-5 text-xl w-full mt-4">
+            Offclick
+          </button>
         </Link>
       </div>
 

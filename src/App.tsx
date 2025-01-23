@@ -3,7 +3,7 @@ import AppRoutes from './routes/AppRoutes'
 import { useAppDispatch, useNavigateWithState, useSignedIn } from './hooks'
 import { setupInterceptor } from './services/api'
 import { getProfile } from './features/user/userSlice'
-import SocketService from './services/socket'
+import SocketService from './services/socket/socketService'
 
 function App() {
   const interceptorSetup = useRef(false)

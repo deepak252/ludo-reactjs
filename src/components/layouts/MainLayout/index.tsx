@@ -9,9 +9,6 @@ const MainLayout = () => {
       </div>
       <div className="w-1/2 mx-auto max-lg:w-full">
         <Outlet />
-        <Outlet />
-        <Outlet />
-        <Outlet />
       </div>
       <div className="w-1/4 p-6 fixed top-10 right-0 bottom-0 max-lg:hidden">
         {/* <DashboardUserProfile /> */}
