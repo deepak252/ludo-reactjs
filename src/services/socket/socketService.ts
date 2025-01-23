@@ -9,6 +9,18 @@ import { getAccessToken } from '@/utils/storage'
 //   },
 // })
 
+export const createSocketConnection = (): Socket => {
+  return io(SOCKET_BASE_URL, {
+    extraHeaders: {
+      Authorization: `Bearer ${getAccessToken()}`, // Add the Authorization header
+    },
+    // auth: { token },
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+  })
+}
+
 export default class SocketService {
   static socket: Socket | null = null
 
