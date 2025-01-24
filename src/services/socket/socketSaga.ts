@@ -2,10 +2,11 @@ import { eventChannel, EventChannel } from 'redux-saga'
 import { take, put, call, apply, delay, fork, cancel } from 'redux-saga/effects'
 import { Socket } from 'socket.io-client'
 import { createSocketConnection } from './socketService'
+import { connectSocket, disconnectSocket } from './socketSlice'
 
 // Constants
-const SOCKET_CONNECT = 'SOCKET_CONNECT'
-const SOCKET_DISCONNECT = 'SOCKET_DISCONNECT'
+// const SOCKET_CONNECT = 'SOCKET_CONNECT'
+// const SOCKET_DISCONNECT = 'SOCKET_DISCONNECT'
 const INCOMING_PING = 'INCOMING_PING'
 const SEND_PONG = 'SEND_PONG'
 
@@ -54,7 +55,7 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
 function* handlePong(socket: Socket) {
   while (true) {
     yield delay(5000) // Delay between pongs
-    yield apply(socket, socket.emit, ['pong'])
+    yield apply(socket, socket.emit, ['ping'])
   }
 }
 
@@ -64,7 +65,8 @@ export function* socketSaga(): Generator {
     console.log('socketSaga')
 
     // Wait for connection request
-    yield take(SOCKET_CONNECT)
+    yield take(connectSocket.type)
+    // yield take(disconnectSocket.type)
 
     try {
       // Establish socket connection
@@ -80,6 +82,8 @@ export function* socketSaga(): Generator {
       while (true) {
         const event = yield take(socketChannel)
 
+        console.log({ event })
+
         switch (event.type) {
           case INCOMING_PING:
             yield put({
@@ -87,7 +91,7 @@ export function* socketSaga(): Generator {
               payload: event.payload,
             })
             break
-          case SOCKET_DISCONNECT:
+          case disconnectSocket.type:
             yield cancel(pongTask)
             return
           default:
@@ -95,6 +99,8 @@ export function* socketSaga(): Generator {
         }
       }
     } catch (error) {
+      console.error('socketSaga error: ', error)
+
       // Handle connection errors
       yield put({
         type: 'SOCKET_CONNECTION_ERROR',

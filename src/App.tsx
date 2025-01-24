@@ -1,23 +1,34 @@
 import { useEffect, useRef } from 'react'
 import AppRoutes from './routes/AppRoutes'
-import { useAppDispatch, useNavigateWithState, useSignedIn } from './hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useNavigateWithState,
+  useSignedIn,
+} from './hooks'
 import { setupInterceptor } from './services/api'
 import { getProfile } from './features/user/userSlice'
+import { connectSocket, disconnectSocket } from './services/socket/socketSlice'
 // import SocketService from './services/socket/socketService'
 
 function App() {
   const interceptorSetup = useRef(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
+  const isSocketConnected = useAppSelector((state) => state.socket.connected)
   const isSignedIn = useSignedIn()
 
   useEffect(() => {
+    console.log({ isSocketConnected })
+  }, [isSocketConnected])
+
+  useEffect(() => {
     // Initiate socket connection
-    dispatch({ type: 'SOCKET_CONNECT' })
+    dispatch(connectSocket())
 
     // Cleanup on unmount
     return () => {
-      dispatch({ type: 'SOCKET_DISCONNECT' })
+      // dispatch(disconnectSocket())
     }
   }, [dispatch])
 
