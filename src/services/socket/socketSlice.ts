@@ -16,8 +16,9 @@ const socketSlice = createSlice({
   name: 'socket',
   initialState,
   reducers: {
-    connectSocket: (state) => {
+    connectSocket: (state, _: PayloadAction<{ reconnect?: boolean }>) => {
       state.connecting = true
+      state.connected = false
     },
     connectSocketSuccess: (state) => {
       state.connecting = false
@@ -28,8 +29,9 @@ const socketSlice = createSlice({
       state.connected = false
     },
 
-    ping: () => {},
-    pong: () => {},
+    sendPing: () => {},
+    sendPingSuccess: () => {},
+    sendPingFailure: () => {},
 
     disconnectSocket: (state) => {
       state.connected = false
@@ -49,8 +51,9 @@ export const {
   connectSocketSuccess,
   connectSocketFailure,
 
-  ping,
-  pong,
+  sendPing,
+  sendPingSuccess,
+  sendPingFailure,
 
   disconnectSocket,
 

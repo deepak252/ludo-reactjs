@@ -6,6 +6,7 @@ import MainLayout from '@/components/layouts/MainLayout'
 import matchRoutes from './matchRoutes'
 import { Spinner } from '@/components/Loader'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
+const TempPage = lazy(() => import('@/features/temp/pages/TempPage'))
 
 function AppRoutes() {
   const routes = useRoutes([
@@ -25,6 +26,10 @@ function AppRoutes() {
           ],
         },
         authRoutes,
+        {
+          path: 'temp',
+          element: <TempPage />,
+        },
       ],
     },
   ])

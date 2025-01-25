@@ -8,42 +8,35 @@ import {
 } from './hooks'
 import { setupInterceptor } from './services/api'
 import { getProfile } from './features/user/userSlice'
-import { connectSocket, disconnectSocket } from './services/socket/socketSlice'
-// import SocketService from './services/socket/socketService'
+import { connectSocket, sendPing } from './services/socket/socketSlice'
 
 function App() {
-  const interceptorSetup = useRef(false)
+  const loadedRef = useRef(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
   const isSocketConnected = useAppSelector((state) => state.socket.connected)
   const isSignedIn = useSignedIn()
 
   useEffect(() => {
-    console.log({ isSocketConnected })
+    if (isSocketConnected) {
+      console.log('ping')
+      dispatch(sendPing())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSocketConnected])
 
   useEffect(() => {
-    // Initiate socket connection
-    dispatch(connectSocket())
-
-    // Cleanup on unmount
-    return () => {
-      // dispatch(disconnectSocket())
-    }
-  }, [dispatch])
-
-  useEffect(() => {
-    // SocketService.connect()
-    if (!interceptorSetup.current) {
+    if (!loadedRef.current) {
       setupInterceptor(navigate)
-      interceptorSetup.current = true
+      dispatch(connectSocket({}))
+      loadedRef.current = true
+    } else {
+      dispatch(connectSocket({ reconnect: true }))
     }
     if (isSignedIn) {
       dispatch(getProfile())
     }
-    // return () => {
-    //   SocketService.disconnect()
-    // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn])
 

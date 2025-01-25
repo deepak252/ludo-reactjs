@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { call } from 'redux-saga/effects'
 import { API_BASE_URL } from '@/constants/environment'
-import { getAccessToken } from '@/utils/storage'
+import { getAccessToken, removeUserFromStorage } from '@/utils/storage'
 // import { getAccessToken } from '@/utils/storage'
 
 const api = axios.create({
@@ -39,6 +39,7 @@ export const setupInterceptor = (navigate?: (path: string) => void): void => {
       const statusCode = error.response?.status
       if (statusCode === 401) {
         // removeUserFromStorage();
+        removeUserFromStorage()
         navigate?.('/auth/sign-in')
       }
       return Promise.reject(error)
