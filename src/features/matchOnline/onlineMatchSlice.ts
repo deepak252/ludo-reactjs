@@ -36,6 +36,8 @@ const onlineMatchSlice = createSlice({
   name: 'matchOnline',
   initialState,
   reducers: {
+    connectOnlineMatch: () => {},
+
     createMatch: (state, _: PayloadAction<CreateRoomFormValues>) => {
       state.room.isLoading = true
     },
@@ -105,6 +107,8 @@ const onlineMatchSlice = createSlice({
 })
 
 export const {
+  connectOnlineMatch,
+
   createMatch,
   createMatchSuccess,
   createMatchFailure,

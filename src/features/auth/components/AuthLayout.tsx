@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { resetAuthState } from '../authSlice'
-import { useAppDispatch, useNavigateWithState, useSignedIn } from '@/hooks'
+import { useAppDispatch, useNavigateWithState, useAuth } from '@/hooks'
 
 const AuthLayout = () => {
   const navigate = useNavigateWithState()
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const isLocalSignedIn = useSignedIn()
+  const isLocalSignedIn = useAuth()
 
   const from = (location.state?.from?.pathname as string) || '/'
 

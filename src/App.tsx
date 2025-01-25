@@ -4,7 +4,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useNavigateWithState,
-  useSignedIn,
+  useAuth,
 } from './hooks'
 import { setupInterceptor } from './services/api'
 import { getProfile } from './features/user/userSlice'
@@ -15,7 +15,7 @@ function App() {
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
   const isSocketConnected = useAppSelector((state) => state.socket.connected)
-  const isSignedIn = useSignedIn()
+  const isSignedIn = useAuth()
 
   useEffect(() => {
     if (isSocketConnected) {

@@ -1,7 +1,7 @@
 import { userSignedIn } from '@/utils/storage'
 import { useAppSelector } from '.'
 
-export default function useSignedIn() {
+export default function useAuth() {
   const isLocalSignedIn = userSignedIn()
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 

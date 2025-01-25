@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
-import { useAppDispatch, useSignedIn } from '@/hooks'
+import { useAppDispatch, useAuth } from '@/hooks'
 import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
-import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
+// import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
 import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
+import {
+  connectOnlineMatch,
+  getOngoingMatch,
+} from '@/features/matchOnline/onlineMatchSlice'
 
 function Dashboard() {
   const dispatch = useAppDispatch()
   const [isJoinMatchModalOpen, setIsJoinMatchModalOpen] = useState(false)
   const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false)
-  const isSignedIn = useSignedIn()
+  const isSignedIn = useAuth()
 
   useEffect(() => {
     if (isSignedIn) {
+      dispatch(connectOnlineMatch())
       dispatch(getOngoingMatch())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
