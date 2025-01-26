@@ -1,7 +1,16 @@
-import { PayloadAction } from '@reduxjs/toolkit'
 import { Socket } from 'socket.io-client'
 import { EventChannel, eventChannel } from 'redux-saga'
-import { all, call, fork, put, takeLatest, take } from 'redux-saga/effects'
+import {
+  all,
+  call,
+  fork,
+  put,
+  takeLatest,
+  take,
+  select,
+  delay,
+  takeEvery,
+} from 'redux-saga/effects'
 import { apiWorker } from '@/services/api'
 import {
   connectOnlineMatch,
@@ -12,16 +21,31 @@ import {
   getMatchHistoryFailure,
   getMatchHistorySuccess,
   getOngoingMatch,
-  // getOngoingMatchFailure,
+  getOngoingMatchFailure,
   getOngoingMatchSuccess,
   joinMatch,
   joinMatchFailure,
   joinMatchSuccess,
+  moveToken,
+  rollDice,
+  rollDiceFailure,
+  setMatchState,
+  tokenMoved,
 } from './onlineMatchSlice'
-import { CreateRoomFormValues } from '@/shared.types'
+import { CreateRoomFormValues, KilledToken, TokenMove } from '@/shared.types'
 import OnlineMatchService from './onlineMatchService'
 import SocketService from '@/services/socket/socketService'
 import { MatchOnline } from './onlineMatch.types'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '@/store'
+import BoardConstants from '@/constants/boardConstants'
+
+function* getRoomId() {
+  const roomId: string | undefined = yield select(
+    (state: RootState) => state.matchOnline.room.match?.roomId
+  )
+  return roomId
+}
 
 function createSocketChannel(socket: Socket): EventChannel<any> {
   return eventChannel((emit) => {
@@ -34,7 +58,35 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
       }
     }
 
-    socket.on('ongoingMatch', getOngoingMatchHandler) // Custom event
+    const matchStateChangeHandler = (data: Partial<MatchOnline>) => {
+      console.log(data)
+
+      emit(setMatchState(data))
+    }
+
+    const pickTokenHandler = (data: {
+      match: MatchOnline
+      movableTokens: TokenMove[]
+    }) => {
+      console.log(data)
+    }
+    const tokenMovedHandler = (data: { move: TokenMove }) => {
+      // console.log(data)
+      // yield moveTokenWorker(data.move)
+      emit(tokenMoved(data.move))
+    }
+    const tokenKilledHandler = (data: {
+      match: MatchOnline
+      killedTokens: KilledToken[]
+    }) => {
+      console.log(data)
+    }
+
+    socket.on('ongoingMatch', getOngoingMatchHandler)
+    socket.on('pickToken', pickTokenHandler)
+    socket.on('tokenMoved', tokenMovedHandler)
+    socket.on('tokenKilled', tokenKilledHandler)
+    socket.on('matchStateChange', matchStateChangeHandler)
 
     return () => {
       console.log('onlineMatchSocket: cleanUp')
@@ -42,42 +94,6 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
       socket.off('ongoingMatch', getOngoingMatchHandler)
     }
   })
-}
-
-function* createMatchWorker(
-  action: PayloadAction<CreateRoomFormValues>
-): Generator {
-  const { maxPlayersCount = 2 } = action.payload
-  yield* apiWorker(
-    OnlineMatchService.createMatch,
-    { maxPlayersCount },
-    {
-      onSuccess: function* (response) {
-        yield put(createMatchSuccess(response.data?.data))
-      },
-      onFailure: function* (error) {
-        yield put(createMatchFailure(error?.message || 'Something went wrong'))
-      },
-    }
-  )
-}
-
-function* joinMatchWorker(
-  action: PayloadAction<{ roomId: string }>
-): Generator {
-  const { roomId } = action.payload
-  yield* apiWorker(
-    OnlineMatchService.joinMatch,
-    { roomId },
-    {
-      onSuccess: function* (response) {
-        yield put(joinMatchSuccess(response.data?.data))
-      },
-      onFailure: function* (error) {
-        yield put(joinMatchFailure(error?.message || 'Something went wrong'))
-      },
-    }
-  )
 }
 
 function* getMatchHistoryWorker(): Generator {
@@ -113,30 +129,103 @@ function* handleSocketEvents(socket: Socket): Generator {
   }
 }
 
+function* createMatchWorker(socket: Socket): Generator {
+  while (true) {
+    try {
+      const { payload = {} }: PayloadAction<CreateRoomFormValues> = yield take(
+        createMatch.type
+      )
+      const { maxPlayersCount = 2 } = payload
+      const res: MatchOnline = yield call(
+        OnlineMatchService.createMatch,
+        socket,
+        { maxPlayersCount }
+      )
+      if (res?.roomId) {
+        yield put(createMatchSuccess(res))
+      }
+    } catch (e: any) {
+      console.error('createMatchWorker error:', e)
+      yield put(createMatchFailure(e?.message || 'Failed to create match'))
+    }
+  }
+}
+
+function* joinMatchWorker(socket: Socket): Generator {
+  while (true) {
+    try {
+      const { payload }: PayloadAction<{ roomId: string }> = yield take(
+        joinMatch.type
+      )
+      const { roomId } = payload
+
+      const res: MatchOnline = yield call(
+        OnlineMatchService.joinMatch,
+        socket,
+        { roomId }
+      )
+
+      if (res?.roomId) {
+        yield put(joinMatchSuccess(res))
+      }
+    } catch (e: any) {
+      console.error('joinMatchWorker error:', e)
+      yield put(joinMatchFailure(e?.message || 'Failed to join match'))
+    }
+  }
+}
+
 function* getOngoingMatchWorker(socket: Socket): Generator {
-  try {
-    while (true) {
+  while (true) {
+    try {
       yield take(getOngoingMatch.type)
       socket.emit('ongoingMatch')
+    } catch (e: any) {
+      console.error('getOngoingMatchWorker error:', e)
+      yield put(
+        getOngoingMatchFailure(e?.message || 'Failed to fetch ongoing match')
+      )
     }
-  } catch (error) {
-    console.error('pingWorker error:', error)
+  }
+}
+
+function* rollDiceWorker(socket: Socket): Generator {
+  while (true) {
+    try {
+      yield take(rollDice.type)
+      const roomId = yield call(getRoomId)
+      socket.emit('rollDice', { roomId })
+    } catch (e: any) {
+      console.error('rollDiceWorker error:', e)
+      yield put(rollDiceFailure(e?.message || 'Failed to roll dice'))
+    }
+  }
+}
+
+function* tokenMovedWorker(action: PayloadAction<TokenMove>) {
+  const { currIndex, nextIndex, tokenIndex } = action.payload
+  for (let i = currIndex + 1; i <= nextIndex; i++) {
+    yield put(moveToken({ tokenIndex, pathIndex: i }))
+    if (i < nextIndex) {
+      yield delay(BoardConstants.ANIMATION_DELAY)
+    }
   }
 }
 
 function* onlineMatchWorker(): Generator {
-  const socket = yield call(SocketService.getSocket)
+  const socket: Socket = yield call(SocketService.getSocket)
   // socket.connect()
   yield fork(handleSocketEvents, socket)
   yield fork(getOngoingMatchWorker, socket)
+  yield fork(createMatchWorker, socket)
+  yield fork(joinMatchWorker, socket)
+  yield fork(rollDiceWorker, socket)
 }
 
 export default function* () {
   yield all([
     takeLatest(connectOnlineMatch.type, onlineMatchWorker),
-    takeLatest(createMatch.type, createMatchWorker),
-    takeLatest(joinMatch.type, joinMatchWorker),
-    // takeLatest(getOngoingMatch.type, getOngoingMatchWorker),
+    takeEvery(tokenMoved.type, tokenMovedWorker),
     takeLatest(getMatchHistory.type, getMatchHistoryWorker),
   ])
 }

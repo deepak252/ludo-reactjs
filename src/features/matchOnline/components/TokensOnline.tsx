@@ -1,41 +1,69 @@
-import { useMemo } from 'react'
-import Token from '../../../components/Token'
+import { useCallback, useMemo } from 'react'
+import Token from '@/components/Token'
+import BoardConstants from '@/constants/boardConstants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { pickToken } from '@/features/matchOffline/offlineMatchSlice'
-import { Position, TokenInfo } from '@/shared.types'
+import { PlayerColor, Position, TokenInfo } from '@/shared.types'
 
-const TokensOffline = () => {
+const TokensOnline = () => {
   const dispatch = useAppDispatch()
-  const players = useAppSelector((state) => state.matchOffline.players)
-  const turn = useAppSelector((state) => state.matchOffline.turn)
+  const players = useAppSelector(
+    (state) => state.matchOnline.room.match?.players
+  )
+  const turn = useAppSelector((state) => state.matchOnline.room.match?.turn)
+
+  const getTokenPosition = useCallback(
+    (color: PlayerColor, tokenIndex: number, pathIndex: number) => {
+      if (pathIndex === -1 && tokenIndex >= 0 && tokenIndex < 4) {
+        return BoardConstants.HOME[color][tokenIndex]
+      } else if (pathIndex >= 0 && pathIndex < 56) {
+        return BoardConstants.PATH[color][pathIndex]
+      }
+      return []
+    },
+    []
+  )
 
   const mappedTokens = useMemo(() => {
+    if (!players || !turn) {
+      return {}
+    }
     const tokenMapping: Record<string, TokenInfo[]> = {}
     Object.entries(players).forEach(([key, player]) => {
       if (turn === key) {
         return
       }
       player.tokens.forEach((token) => {
-        const [a, b] = token.position
-        const key = `${a},${b}`
-        if (!tokenMapping[key]) {
-          tokenMapping[key] = []
+        const [a, b] = getTokenPosition(
+          key as PlayerColor,
+          token.index,
+          token.pathIndex
+        )
+        const pathId = `${a},${b}`
+        if (!tokenMapping[pathId]) {
+          tokenMapping[pathId] = []
         }
-        tokenMapping[key].push(token)
+        tokenMapping[pathId].push({
+          ...token,
+          position: [a, b],
+        })
       })
     })
     players[turn].tokens.forEach((token) => {
-      const [a, b] = token.position
-      const key = `${a},${b}`
-      if (!tokenMapping[key]) {
-        tokenMapping[key] = []
+      const [a, b] = getTokenPosition(turn, token.index, token.pathIndex)
+      const pathId = `${a},${b}`
+      if (!tokenMapping[pathId]) {
+        tokenMapping[pathId] = []
       }
-      tokenMapping[key].push(token)
+      tokenMapping[pathId].push({
+        ...token,
+        position: [a, b],
+      })
     })
     return tokenMapping
-  }, [players, turn])
+  }, [players, turn, getTokenPosition])
+
   const handleCellClick = (position: Position) => {
-    dispatch(pickToken({ position }))
+    // dispatch(pickToken({ position }))
   }
   return (
     <div>
@@ -48,7 +76,7 @@ const TokensOffline = () => {
             position={token.position}
             onClick={handleCellClick}
             highlight={token.highlight}
-            // moving={status === LudoStatus.moving && turn === token.color}
+            // moving={status === BoardState.moving && turn === token.color}
           />
         ))
       })}
@@ -56,4 +84,4 @@ const TokensOffline = () => {
   )
 }
 
-export default TokensOffline
+export default TokensOnline

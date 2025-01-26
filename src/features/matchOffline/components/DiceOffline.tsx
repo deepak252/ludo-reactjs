@@ -1,4 +1,4 @@
-import { LudoStatus } from '@/constants'
+import { BoardState } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { throwDice } from '@/features/matchOffline/offlineMatchSlice'
 import Dice from '@/components/Dice'
@@ -10,7 +10,7 @@ const DiceOffline = () => {
   const status = useAppSelector((state) => state.matchOffline.status)
 
   const handleDiceClick = () => {
-    if (status === LudoStatus.throwDice) {
+    if (status === BoardState.throwDice) {
       dispatch(throwDice())
     }
   }

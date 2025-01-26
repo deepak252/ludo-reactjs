@@ -1,28 +1,35 @@
-import { LudoStatus } from '@/constants'
-import { useAppDispatch, useAppSelector } from '@/hooks'
-import { throwDice } from '@/features/matchOffline/offlineMatchSlice'
 import Dice from '@/components/Dice'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { BoardState } from '@/constants/enums'
+import { rollDice } from '../onlineMatchSlice'
 
-const DiceOffline = () => {
+const DiceOnline = () => {
   const dispatch = useAppDispatch()
-  const dice = useAppSelector((state) => state.matchOffline.dice)
-  const playerTurn = useAppSelector((state) => state.matchOffline.turn)
-  const status = useAppSelector((state) => state.matchOffline.status)
+  const dice = useAppSelector(
+    (state) => state.matchOnline.room.match?.diceValue
+  )
+  const playerTurn = useAppSelector(
+    (state) => state.matchOnline.room.match?.turn
+  )
+  const boardState = useAppSelector(
+    (state) => state.matchOnline.room.match?.boardState
+  )
+  // console.log({ boardState, playerTurn })
 
   const handleDiceClick = () => {
-    if (status === LudoStatus.throwDice) {
-      dispatch(throwDice())
+    if (boardState === BoardState.RollDice) {
+      dispatch(rollDice())
     }
   }
 
   return (
     <Dice
-      value={dice.value}
+      value={dice ?? 0}
       playerTurn={playerTurn}
-      status={status}
+      boardState={boardState}
       onClick={handleDiceClick}
     />
   )
 }
 
-export default DiceOffline
+export default DiceOnline

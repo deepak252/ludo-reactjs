@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LudoStatus, PlayerTypes } from '@/constants'
+import { PlayerTypes } from '@/constants'
 import BoardConstants from '@/constants/boardConstants'
-import { KilledToken, PlayerType, Position, TokenInfo } from '@/shared.types'
+import { BoardState } from '@/constants/enums'
+import { KilledToken, PlayerColor, Position, TokenInfo } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type Player = {
@@ -11,10 +12,10 @@ type Player = {
 
 export type OfflineMatchState = {
   isOngoing: boolean
-  players: Record<PlayerType, Player>
-  turn: PlayerType
+  players: Record<PlayerColor, Player>
+  turn: PlayerColor
   dice: { value: number }
-  status?: LudoStatus
+  boardState?: BoardState
 }
 
 const initialState: OfflineMatchState = {
@@ -42,7 +43,7 @@ const offlineMatchSlice = createSlice({
       if (playerCount < 2 || playerCount > 4) {
         return
       }
-      const playerTypes: PlayerType[] = []
+      const playerTypes: PlayerColor[] = []
       playerTypes.push('green')
       if (playerCount >= 2) {
         playerTypes.push('blue')
@@ -66,7 +67,7 @@ const offlineMatchSlice = createSlice({
         }
       }
       state.turn = 'green'
-      state.status = LudoStatus.throwDice
+      state.boardState = BoardState.RollDice
       console.log('Match started', action.payload)
     },
 
@@ -77,15 +78,15 @@ const offlineMatchSlice = createSlice({
       state,
       action: PayloadAction<{
         diceValue: number
-        status: LudoStatus
+        status: BoardState
         isNextPlayerTurn: boolean
       }>
     ) => {
       const { diceValue: value, status, isNextPlayerTurn } = action.payload
       state.dice = { value }
-      // state.status = LudoStatus.pickToken
-      state.status = status
-      if (isNextPlayerTurn && status === LudoStatus.throwDice) {
+      // state.boardState = BoardState.pickToken
+      state.boardState = status
+      if (isNextPlayerTurn && status === BoardState.RollDice) {
         nextPlayerTurn(state)
       }
       console.log('throwDiceSuccess')
@@ -108,7 +109,7 @@ const offlineMatchSlice = createSlice({
     ) => {
       console.log('pickTokenSuccess')
       const { isNextPlayerTurn } = action.payload
-      state.status = LudoStatus.throwDice
+      state.boardState = BoardState.RollDice
       if (isNextPlayerTurn) {
         nextPlayerTurn(state)
       }
@@ -124,7 +125,7 @@ const offlineMatchSlice = createSlice({
       console.log('moveToken')
       const { tokenIndex, pathIndex } = action.payload
       const currPlayer = state.turn
-      state.status = LudoStatus.moving
+      state.boardState = BoardState.TokenMoving
       state.players[currPlayer].tokens[tokenIndex].pathIndex = pathIndex
       state.players[currPlayer].tokens[tokenIndex].position =
         BoardConstants.PATH[currPlayer][pathIndex]
@@ -161,8 +162,8 @@ const offlineMatchSlice = createSlice({
         }
       }
     },
-    setStatus: (state, action: PayloadAction<LudoStatus>) => {
-      state.status = action.payload
+    setStatus: (state, action: PayloadAction<BoardState>) => {
+      state.boardState = action.payload
     },
   },
 })

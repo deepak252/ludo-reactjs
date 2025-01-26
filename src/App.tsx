@@ -9,27 +9,24 @@ import {
 import { setupInterceptor } from './services/api'
 import { getProfile } from './features/user/userSlice'
 import { connectSocket, sendPing } from './services/socket/socketSlice'
+import {
+  connectOnlineMatch,
+  getOngoingMatch,
+} from './features/matchOnline/onlineMatchSlice'
 
 function App() {
-  const loadedRef = useRef(false)
+  const loadedRef1 = useRef(false)
+  const loadedRef2 = useRef(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
   const isSocketConnected = useAppSelector((state) => state.socket.connected)
   const isSignedIn = useAuth()
 
   useEffect(() => {
-    if (isSocketConnected) {
-      console.log('ping')
-      dispatch(sendPing())
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSocketConnected])
-
-  useEffect(() => {
-    if (!loadedRef.current) {
+    if (!loadedRef1.current) {
+      loadedRef1.current = true
       setupInterceptor(navigate)
       dispatch(connectSocket({}))
-      loadedRef.current = true
     } else {
       dispatch(connectSocket({ reconnect: true }))
     }
@@ -39,6 +36,18 @@ function App() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn])
+
+  useEffect(() => {
+    if (isSocketConnected) {
+      loadedRef2.current = true
+      dispatch(sendPing())
+      dispatch(connectOnlineMatch())
+      if (isSignedIn) {
+        dispatch(getOngoingMatch())
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSocketConnected, isSignedIn])
 
   return (
     <div className="bg-primary-600 min-h-screen">

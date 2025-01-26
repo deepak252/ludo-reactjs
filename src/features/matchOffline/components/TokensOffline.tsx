@@ -48,7 +48,7 @@ const TokensOffline = () => {
             position={token.position}
             onClick={handleCellClick}
             highlight={token.highlight}
-            // moving={status === LudoStatus.moving && turn === token.color}
+            // moving={status === BoardState.moving && turn === token.color}
           />
         ))
       })}

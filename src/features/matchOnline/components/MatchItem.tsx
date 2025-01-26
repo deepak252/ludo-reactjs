@@ -7,7 +7,7 @@ type MatchItemProps = {
   onJoinClick?: () => void
 }
 
-const MatchItem = ({ match }: MatchItemProps) => {
+const MatchItem = ({ match, onJoinClick }: MatchItemProps) => {
   return (
     <div className="rounded-2xl bg-primary-500 shadow-sm">
       <div className="flex p-3">
@@ -15,7 +15,11 @@ const MatchItem = ({ match }: MatchItemProps) => {
         <div className="me-2">{match.roomId}</div>
         {[MatchStatus.Waiting, MatchStatus.InProgress].includes(
           match.status
-        ) && <button className="btn-filled-green py-2">JOIN</button>}
+        ) && (
+          <button onClick={onJoinClick} className="btn-filled-green py-2">
+            JOIN
+          </button>
+        )}
       </div>
       {/* <div className="bg-primary rounded-br-2xl rounded-bl-2xl">
         <div className="flex px-3 py-1">

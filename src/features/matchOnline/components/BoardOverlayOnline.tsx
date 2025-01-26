@@ -2,7 +2,9 @@ import BoardOverlay from '@/components/BoardOverlay'
 import { useAppSelector } from '@/hooks'
 
 const BoardOverlayOnline = () => {
-  const playerTurn = useAppSelector((state) => state.matchOffline.turn)
+  const playerTurn = useAppSelector(
+    (state) => state.matchOnline.room.match?.turn
+  )
 
   return (
     <div>

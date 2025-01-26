@@ -1,3 +1,4 @@
+import OnlineMatchPage from '@/features/matchOnline/pages/OnlilneMatchPage'
 import { lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
 const OfflineMatchPage = lazy(
@@ -12,8 +13,8 @@ const matchRoutes: RouteObject = {
       element: <OfflineMatchPage />,
     },
     {
-      path: 'online',
-      element: <OfflineMatchPage />,
+      path: 'online/:roomId',
+      element: <OnlineMatchPage />,
     },
   ],
 }

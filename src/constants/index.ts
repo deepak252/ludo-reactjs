@@ -1,4 +1,4 @@
-import { PlayerType } from '@/shared.types'
+import { PlayerColor } from '@/shared.types'
 
 export const REGEX = Object.freeze({
   EMAIL: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -10,14 +10,14 @@ export const REGEX = Object.freeze({
   URL: /^(https?:\/\/)?([\w.-]+)\.([a-zA-Z]{2,})(\/[^\s]*)?(\?[\w%.-]+=[\w%.-]+(&[\w%.-]+=[\w%.-]+)*)?$/,
 })
 
-export const PlayerTypes: PlayerType[] = ['green', 'yellow', 'blue', 'red']
+export const PlayerTypes: PlayerColor[] = ['green', 'yellow', 'blue', 'red']
 
-export enum LudoStatus {
-  throwDice,
-  throwing,
-  pickToken,
-  moving,
-  ended,
-}
+// export enum BoardState {
+//   throwDice,
+//   throwing,
+//   pickToken,
+//   moving,
+//   ended,
+// }
 
 export const DICE_VALUES = [6, 1, 2, 6, 3, 4, 5, 6]

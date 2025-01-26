@@ -5,16 +5,16 @@ import Dice3 from '@/assets/images/dice/dice-3.png'
 import Dice4 from '@/assets/images/dice/dice-4.png'
 import Dice5 from '@/assets/images/dice/dice-5.png'
 import Dice6 from '@/assets/images/dice/dice-6.png'
-import { PlayerType } from '@/shared.types'
-import { LudoStatus } from '@/constants'
+import { PlayerColor } from '@/shared.types'
+import { BoardState } from '@/constants/enums'
 
 type DiceProps = {
   value: number
-  playerTurn: PlayerType
-  status?: LudoStatus
+  playerTurn?: PlayerColor
+  boardState?: BoardState
   onClick?: () => void
 }
-const Dice = ({ value, status, playerTurn, onClick }: DiceProps) => {
+const Dice = ({ value, boardState, playerTurn, onClick }: DiceProps) => {
   const getFace = () => {
     switch (value) {
       case 2:
@@ -35,7 +35,7 @@ const Dice = ({ value, status, playerTurn, onClick }: DiceProps) => {
   return (
     <div className="flex items-center m-4">
       <div className="cursor-pointer disable-select">
-        {status === LudoStatus.throwing ? (
+        {boardState === BoardState.DiceRolling ? (
           <img
             src="/assets/dice-throw.gif"
             alt="Dice Throw"
@@ -46,7 +46,8 @@ const Dice = ({ value, status, playerTurn, onClick }: DiceProps) => {
             src={getFace()}
             alt="Dice Throw"
             className={classNames('relative z-10 size-20 rounded-xl m-4', {
-              [`animate-glow-${playerTurn}`]: status === LudoStatus.throwDice,
+              [`animate-glow-${playerTurn}`]:
+                boardState === BoardState.RollDice,
             })}
             onClick={onClick}
           />
@@ -65,7 +66,7 @@ export default Dice
 // import Dice4 from '@/assets/images/dice/dice-4.png'
 // import Dice5 from '@/assets/images/dice/dice-5.png'
 // import Dice6 from '@/assets/images/dice/dice-6.png'
-// import { LudoStatus } from '@/constants'
+// import { BoardState } from '@/constants'
 // import { useAppDispatch, useAppSelector } from '@/hooks'
 // import { throwDice } from '@/features/matchOffline/matchSlice'
 
@@ -76,7 +77,7 @@ export default Dice
 //   const status = useAppSelector((state) => state.match.status)
 
 //   const handleDiceClick = () => {
-//     if (status === LudoStatus.throwDice) {
+//     if (status === BoardState.throwDice) {
 //       dispatch(throwDice())
 //     }
 //   }
@@ -101,7 +102,7 @@ export default Dice
 //   return (
 //     <div className="flex items-center m-4">
 //       <div className="cursor-pointer disable-select">
-//         {status === LudoStatus.throwing ? (
+//         {status === BoardState.throwing ? (
 //           <img
 //             src="/assets/dice-throw.gif"
 //             alt="Dice Throw"
@@ -112,7 +113,7 @@ export default Dice
 //             src={getFace()}
 //             alt="Dice Throw"
 //             className={classNames('relative z-10 size-20 rounded-xl m-4', {
-//               [`animate-glow-${playerTurn}`]: status === LudoStatus.throwDice,
+//               [`animate-glow-${playerTurn}`]: status === BoardState.throwDice,
 //             })}
 //             onClick={handleDiceClick}
 //           />

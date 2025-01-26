@@ -1,18 +1,24 @@
 import {
-  JOIN_MATCH_API,
-  MATCH_API,
+  // JOIN_MATCH_API,
+  // MATCH_API,
   MATCH_HISTORY_API,
   ONGOING_MATCH_API,
 } from '@/constants/apiUrls'
-import { getRequest, postRequest } from '@/services/api'
+import { getRequest } from '@/services/api'
+import { Socket } from 'socket.io-client'
+import { MatchOnline } from './onlineMatch.types'
+import { emitAsync } from '@/services/socket/util'
 
 export default class OnlineMatchService {
-  static createMatch = async (data: { maxPlayersCount: number }) => {
-    return await postRequest(MATCH_API, { data })
+  static createMatch = async (
+    socket: Socket,
+    data: { maxPlayersCount: number }
+  ) => {
+    return emitAsync<MatchOnline | undefined>(socket, 'createMatch', data)
   }
 
-  static joinMatch = async (data: { roomId: string }) => {
-    return await postRequest(JOIN_MATCH_API, { data })
+  static joinMatch = async (socket: Socket, data: { roomId: string }) => {
+    return emitAsync<MatchOnline | undefined>(socket, 'joinMatch', data)
   }
 
   static getMatchHistory = async () => {

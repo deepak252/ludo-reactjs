@@ -1,6 +1,6 @@
 import { DICE_VALUES } from '@/constants'
 import { OfflineMatchState } from './offlineMatchSlice'
-import { KilledToken, PlayerType, Position, TokenMove } from '@/shared.types'
+import { KilledToken, PlayerColor, Position, TokenMove } from '@/shared.types'
 import _ from 'lodash'
 import BoardConstants from '@/constants/boardConstants'
 /**
@@ -36,7 +36,8 @@ export const getTokenMove = (
       return null
     }
   }
-  return { currIndex, nextIndex }
+  const delayInterval = BoardConstants.ANIMATION_DELAY * (nextIndex - currIndex)
+  return { tokenIndex, currIndex, nextIndex, delayInterval }
 }
 
 /**
@@ -107,7 +108,7 @@ export const checkTokenKill = (
       if (_.isEqual(tokens[i].position, pos)) {
         killedTokens.push({
           token: tokens[i],
-          player: key as PlayerType,
+          player: key as PlayerColor,
         })
       }
     }

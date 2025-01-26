@@ -1,4 +1,3 @@
-import { LudoStatus } from '@/constants'
 import { Position } from '@/shared.types'
 import {
   killTokens,
@@ -32,16 +31,17 @@ import {
   getTokenMove,
 } from './offlineMatchUtil'
 import BoardConstants from '@/constants/boardConstants'
+import { BoardState } from '@/constants/enums'
 
 function* throwDiceWorker(): Generator<any, any, any> {
   const state = yield select((state: RootState) => state.matchOffline)
   const matchState: OfflineMatchState = { ...state }
-  console.log('throwDiceWorker', matchState.status)
-  if (!matchState.isOngoing || matchState.status !== LudoStatus.throwDice) {
+  console.log('throwDiceWorker', matchState.boardState)
+  if (!matchState.isOngoing || matchState.boardState !== BoardState.RollDice) {
     yield put(throwDiceFailure({ message: 'Throw dice disabled' }))
     return
   }
-  yield put(setStatus(LudoStatus.throwing))
+  yield put(setStatus(BoardState.DiceRolling))
   const diceValue = getDiceRandomNumber()
   yield delay(BoardConstants.DICE_DELAY)
 
@@ -49,7 +49,7 @@ function* throwDiceWorker(): Generator<any, any, any> {
   yield put(
     throwDiceSuccess({
       diceValue,
-      status: LudoStatus.moving,
+      status: BoardState.TokenMoving,
       isNextPlayerTurn: false,
     })
   )
@@ -62,7 +62,7 @@ function* throwDiceWorker(): Generator<any, any, any> {
     yield put(
       throwDiceSuccess({
         diceValue,
-        status: LudoStatus.throwDice,
+        status: BoardState.RollDice,
         isNextPlayerTurn: diceValue !== 6,
       })
     )
@@ -84,7 +84,7 @@ function* throwDiceWorker(): Generator<any, any, any> {
     yield put(
       throwDiceSuccess({
         diceValue,
-        status: LudoStatus.throwDice,
+        status: BoardState.RollDice,
         isNextPlayerTurn:
           diceValue !== 6 && !killedTokens.length && nextIndex !== 56,
       })
@@ -99,7 +99,7 @@ function* throwDiceWorker(): Generator<any, any, any> {
     yield put(
       throwDiceSuccess({
         diceValue,
-        status: LudoStatus.pickToken,
+        status: BoardState.PickToken,
         isNextPlayerTurn: diceValue !== 6,
       })
     )
@@ -112,7 +112,7 @@ function* pickTokenWorker(
   console.log('pickTokenWorker')
   const state = yield select((state: RootState) => state.matchOffline)
   const matchState: OfflineMatchState = { ...state }
-  if (!matchState.isOngoing || matchState.status !== LudoStatus.pickToken) {
+  if (!matchState.isOngoing || matchState.boardState !== BoardState.PickToken) {
     yield put(pickTokenFailure({ message: 'Pick token disabled' }))
     return
   }

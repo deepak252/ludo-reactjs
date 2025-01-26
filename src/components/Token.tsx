@@ -1,9 +1,9 @@
-import { LudoColor, Position } from '@/shared.types'
+import { PlayerColor, Position } from '@/shared.types'
 import classNames from 'classnames'
 
 type TokenProps = {
-  color: LudoColor
-  position: Position
+  color: PlayerColor
+  position?: Position
   delta?: number
   highlight?: boolean
   // moving?: boolean
