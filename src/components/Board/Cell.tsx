@@ -16,10 +16,7 @@ const Cell = ({
 }) => {
   return (
     <div
-      className={classNames(
-        'relative size-full border border-black text-xs text-center',
-        className
-      )}
+      className={classNames('board-cell', className)}
       onClick={() => onClick?.([row, col])}
     >
       {isSafeCell && <StarIcon className="size-2/3 absolute-center" />}

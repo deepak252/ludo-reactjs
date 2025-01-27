@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Shimmer from '@/components/Shimmer'
-import UserIcon from '@/assets/icons/user-circle.svg?react'
+// import UserIcon from '@/assets/icons/user-circle.svg?react'
+import UserImg from '@/assets/images/user.png'
 
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { signOut } from '@/features/auth/authSlice'
@@ -15,10 +16,13 @@ const DashboardUserProfile = () => {
 
   if (userProfile.data) {
     return (
-      <div className="card text-center pt-10">
-        <div>
-          <UserIcon className="size-20 absolute-center !top-0" />
+      <div className="card text-center pt-12">
+        <div className="p-3 bg-secondary-400 size-20 absolute-center !top-0 rounded-full">
+          <img src={UserImg} />
         </div>
+        {/* <div className="bg-primary-300/30 backdrop-blur-md shadow-lg size-20 absolute-center !top-0 rounded-full">
+          <UserIcon className="size-full" />
+        </div> */}
         <p className="text-lg">{userProfile.data.username}</p>
         <p className="text-sm">{userProfile.data.email}</p>
         <button

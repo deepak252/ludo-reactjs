@@ -4,6 +4,7 @@ import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
 import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
 // import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
 import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
+import AppLogo from '@/assets/images/logo1.png'
 
 function Dashboard() {
   const [isJoinMatchModalOpen, setIsJoinMatchModalOpen] = useState(false)
@@ -24,17 +25,19 @@ function Dashboard() {
           </div>
         )}
       </div> */}
-      {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
+      <h1 className="text-white text-center"> Ludo Champ </h1>
+
+      <img src={AppLogo} className="mx-auto size-60" />
       <OnlineMatchItem />
       <div className="flex flex-col justify-center max-w-96 mx-auto">
         <button
           onClick={() => setIsJoinMatchModalOpen(true)}
-          className="btn-filled-secondary p-5 text-xl mt-4"
+          className="btn-filled-secondary p-5 text-xl my-8"
         >
           Play Online
         </button>
         <Link to="/match/offline">
-          <button className="btn-filled-blue p-5 text-xl w-full mt-4">
+          <button className="btn-filled-blue p-5 text-xl w-full">
             Play Offline
           </button>
         </Link>

@@ -1,11 +1,11 @@
 import classNames from 'classnames'
-import { LudoColor } from '@/shared.types'
+import { PlayerColor } from '@/shared.types'
 
 const Base = ({
   color,
   className,
 }: {
-  color: LudoColor
+  color: PlayerColor
   className?: string
 }) => {
   return (

@@ -45,10 +45,8 @@ body {
   }
 
   .card {
-    /* @apply p-3 rounded-md bg-white shadow-md; */
-    /*   */
-    /* @apply p-4 bg-primary-500 border-[1.5px] border-[#1B1F29] rounded-xl bg-opacity-60; */
-    @apply p-4 bg-primary-300/30 backdrop-blur-md shadow-lg border-[1.5px] border-[#1B1F29] rounded-xl;
+    /* @apply p-4 bg-primary-300/30 backdrop-blur-md shadow shadow-secondary-500 border-[2px] border-secondary-500  rounded-xl bg-radial-gradient; */
+    @apply p-4 backdrop-blur-md shadow shadow-secondary-500 border-[2px] border-secondary-500  rounded-xl bg-radial-gradient;
   }
   .base-chip {
     @apply bg-primary-500 px-4 py-2 m-2 rounded-xl border border-gray-500;
@@ -85,7 +83,7 @@ body {
 
   .form-input-wrapper {
     /* @apply relative inline-flex items-center bg-gray-200 w-full rounded-lg mt-2 overflow-hidden; */
-    @apply relative inline-flex items-center bg-primary-500 border border-gray-500 w-full rounded-2xl mt-2 overflow-hidden;
+    @apply relative inline-flex items-center bg-primary-400 border border-gray-500 w-full rounded-2xl mt-2 overflow-hidden;
   }
   .form-input-wrapper input:not([type='color']),
   .form-input-wrapper textarea,
@@ -105,6 +103,10 @@ body {
 
   .form-input-error {
     @apply text-sm text-red-600;
+  }
+
+  .board-cell {
+    @apply relative size-full border border-black text-xs text-center;
   }
 }
 
@@ -235,4 +237,7 @@ input[type='number']::-webkit-outer-spin-button {
     #bdbdbd 50%,
     transparent 100%
   );
+  /* background-color: #ffcd0382; */
+  /* background-color: #21428579; */
+  /* background-color: #001e4f; */
 }

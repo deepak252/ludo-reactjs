@@ -3,8 +3,8 @@ import Token from '@/components/Token'
 import BoardConstants from '@/constants/boardConstants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { PlayerColor, Position, TokenInfo } from '@/shared.types'
-import { pickToken } from '../onlineMatchSlice'
-import { checkTokenPresent } from '../onlineMatchUtil'
+import { pickToken } from '../../onlineMatchSlice'
+import { checkTokenPresent } from '../../onlineMatchUtil'
 
 const TokensOnline = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +34,7 @@ const TokensOnline = () => {
     }
     const tokenMapping: Record<string, TokenInfo[]> = {}
     Object.entries(players).forEach(([key, player]) => {
-      if (turn === key) {
+      if (turn === key || !player.userId) {
         return
       }
       player.tokens.forEach((token) => {

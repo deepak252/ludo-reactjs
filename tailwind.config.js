@@ -21,6 +21,10 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        // 'radial-gradient': 'radial-gradient(#ffcd0382, #00235C)',
+        'radial-gradient': 'radial-gradient(#B3B5D980, #083071)',
+      },
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
         token: '0 2px 4px rgba(0, 0, 0, 0.4)',
@@ -28,10 +32,11 @@ export default {
       colors: {
         primary: {
           DEFAULT: '#00235C', //// Buttons, Active State (Checkbox), Textfield border (Focus)
-          100: '#E1E0F9', // Chip
-          200: '#FFD690', // Floating Button
-          300: '#B3B5D9',
-          500: '#214285',
+          100: '#94B2EF', // Chip
+          200: '#5D86D8', // Floating Button
+          300: '#3C62B0',
+          400: '#214285',
+          500: '#083071',
           600: '#00235C',
           700: '#012052',
           800: '#011940',
@@ -116,6 +121,9 @@ export default {
       },
       screens: {
         xs: '480px',
+      },
+      spacing: {
+        'min-screen': 'min(100vw, 100vh)',
       },
       zIndex: {
         dropdown: 50,

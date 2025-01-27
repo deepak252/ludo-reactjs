@@ -26,11 +26,13 @@ import {
   joinMatch,
   joinMatchFailure,
   joinMatchSuccess,
+  killToken,
   moveToken,
   pickToken,
   rollDice,
   rollDiceFailure,
   setMatchState,
+  tokenKilled,
   tokenMoved,
 } from './onlineMatchSlice'
 import { CreateRoomFormValues, KilledToken, TokenMove } from '@/shared.types'
@@ -73,15 +75,10 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
     //   console.log(data)
     // }
     const tokenMovedHandler = (data: { move: TokenMove }) => {
-      // console.log(data)
-      // yield moveTokenWorker(data.move)
       emit(tokenMoved(data.move))
     }
-    const tokenKilledHandler = (data: {
-      match: MatchOnline
-      killedTokens: KilledToken[]
-    }) => {
-      console.log(data)
+    const tokenKilledHandler = (data: { killedTokens: KilledToken[] }) => {
+      emit(tokenKilled(data.killedTokens))
     }
 
     socket.on('ongoingMatch', getOngoingMatchHandler)
@@ -230,6 +227,32 @@ function* tokenMovedWorker(action: PayloadAction<TokenMove>) {
   }
 }
 
+function* tokenKilledWorker(action: PayloadAction<KilledToken[]>) {
+  // const { currIndex, nextIndex, tokenIndex } = action.payload
+  const killedTokens = action.payload
+  const player = killedTokens?.[0]?.player
+  const currIndex = killedTokens?.[0]?.token?.pathIndex
+  if (!player) return
+
+  for (let i = currIndex - 1; i >= -1; i--) {
+    for (const killedToken of killedTokens) {
+      yield put(
+        killToken({ player, tokenIndex: killedToken.token.index, pathIndex: i })
+      )
+    }
+    // if (i < nextIndex) {
+    yield delay(50)
+    // }
+  }
+  // const killedTokens = action.payload.killedTokens
+  // killedTokens.forEach((killedToken) => {
+  //   const { token, player } = killedToken
+  //   state.players[player].tokens[token.index].pathIndex = -1
+  //   state.players[player].tokens[token.index].position =
+  //     BoardConstants.HOME[player][token.index]
+  // })
+}
+
 function* onlineMatchWorker(): Generator {
   const socket: Socket = yield call(SocketService.getSocket)
   // socket.connect()
@@ -245,6 +268,7 @@ export default function* () {
   yield all([
     takeLatest(connectOnlineMatch.type, onlineMatchWorker),
     takeEvery(tokenMoved.type, tokenMovedWorker),
+    takeEvery(tokenKilled.type, tokenKilledWorker),
     takeLatest(getMatchHistory.type, getMatchHistoryWorker),
   ])
 }

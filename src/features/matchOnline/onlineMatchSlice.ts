@@ -1,5 +1,7 @@
 import {
   CreateRoomFormValues,
+  KilledToken,
+  PlayerColor,
   Position,
   ToastData,
   TokenMove,
@@ -132,13 +134,29 @@ const onlineMatchSlice = createSlice({
       console.log('moveToken')
       const { tokenIndex, pathIndex } = action.payload
       const currPlayer = state.room.match.turn
-      // state.room.match.boardState = BoardState.TokenMoving
       state.room.match.players[currPlayer].tokens[tokenIndex].pathIndex =
         pathIndex
       state.room.match.players[currPlayer].tokens[tokenIndex].position =
         BoardConstants.PATH[currPlayer][pathIndex]
     },
     tokenMoved: (_, __: PayloadAction<TokenMove>) => {},
+
+    killToken: (
+      state,
+      action: PayloadAction<{
+        player: PlayerColor
+        tokenIndex: number
+        pathIndex: number
+      }>
+    ) => {
+      if (!state.room.match) return
+      console.log('killToken')
+      const { player, tokenIndex, pathIndex } = action.payload
+      state.room.match.players[player].tokens[tokenIndex].pathIndex = pathIndex
+      state.room.match.players[player].tokens[tokenIndex].position =
+        BoardConstants.PATH[player][pathIndex]
+    },
+    tokenKilled: (_, __: PayloadAction<KilledToken[]>) => {},
 
     setMatchState: (state, action: PayloadAction<Partial<MatchOnline>>) => {
       if (!state.room.match) return
@@ -182,6 +200,9 @@ export const {
 
   moveToken,
   tokenMoved,
+
+  killToken,
+  tokenKilled,
 
   setMatchState,
 

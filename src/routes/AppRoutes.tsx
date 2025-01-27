@@ -3,10 +3,15 @@ import { useRoutes } from 'react-router-dom'
 import authRoutes from './authRoutes'
 import RootLayout from '@/components/layouts/RootLayout'
 import MainLayout from '@/components/layouts/MainLayout'
-import matchRoutes from './matchRoutes'
 import { Spinner } from '@/components/Loader'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const TempPage = lazy(() => import('@/features/temp/pages/TempPage'))
+const OnlineMatchPage = lazy(
+  () => import('@/features/matchOnline/pages/OnlineMatchPage')
+)
+const OfflineMatchPage = lazy(
+  () => import('@/features/matchOffline/pages/OfflineMatchPage')
+)
 
 function AppRoutes() {
   const routes = useRoutes([
@@ -22,13 +27,21 @@ function AppRoutes() {
               path: '',
               element: <Dashboard />,
             },
-            matchRoutes,
+            // matchRoutes,
+            {
+              path: '/match/offline',
+              element: <OfflineMatchPage />,
+            },
           ],
         },
         authRoutes,
         {
           path: 'temp',
           element: <TempPage />,
+        },
+        {
+          path: 'match/online/:roomId',
+          element: <OnlineMatchPage />,
         },
       ],
     },

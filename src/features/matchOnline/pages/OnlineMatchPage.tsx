@@ -1,10 +1,7 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Board from '@/components/Board'
 import Loader from '@/components/Loader'
-import TokensOnline from '../components/TokensOnline'
-import BoardOverlayOnline from '../components/BoardOverlayOnline'
-import DiceOnline from '../components/DiceOnline'
+import BoardOnline from '../components/BoardOnline'
 import { joinMatch } from '../onlineMatchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 
@@ -24,17 +21,25 @@ function OnlineMatchPage() {
   }, [roomId, isSocketConnected])
 
   return (
-    <div>
-      <div className="relative size-[min(calc(90vh-100px),90vw)] mx-auto">
-        <Board />
-        <TokensOnline />
-        <BoardOverlayOnline />
+    <div className="relative h-screen">
+      <div className="absolute-center w-full p-10 max-h-screen">
+        <BoardOnline />
+        {/* <PlayersOnline /> */}
       </div>
-      <div className="mt-6 flex justify-center">
-        <DiceOnline />
-      </div>
+      {/* <DiceOnline /> */}
       <Loader isLoading={isLoading} />
     </div>
+    // <div>
+    //   <div className="relative size-[min(calc(90vh-100px),90vw)] mx-auto">
+    //     <Board />
+    //     <TokensOnline />
+    //     <BoardOverlayOnline />
+    //   </div>
+    //   <div className="mt-6 flex justify-center">
+    //     <DiceOnline />
+    //   </div>
+    //   <Loader isLoading={isLoading} />
+    // </div>
   )
 }
 
