@@ -31,11 +31,11 @@ function Dashboard() {
           onClick={() => setIsJoinMatchModalOpen(true)}
           className="btn-filled-secondary p-5 text-xl mt-4"
         >
-          Onclick
+          Play Online
         </button>
         <Link to="/match/offline">
           <button className="btn-filled-blue p-5 text-xl w-full mt-4">
-            Offclick
+            Play Offline
           </button>
         </Link>
       </div>

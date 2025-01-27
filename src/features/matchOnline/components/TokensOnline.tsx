@@ -3,13 +3,18 @@ import Token from '@/components/Token'
 import BoardConstants from '@/constants/boardConstants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { PlayerColor, Position, TokenInfo } from '@/shared.types'
+import { pickToken } from '../onlineMatchSlice'
+import { checkTokenPresent } from '../onlineMatchUtil'
 
 const TokensOnline = () => {
   const dispatch = useAppDispatch()
-  const players = useAppSelector(
-    (state) => state.matchOnline.room.match?.players
-  )
-  const turn = useAppSelector((state) => state.matchOnline.room.match?.turn)
+  const match = useAppSelector((state) => state.matchOnline.room.match)
+  const { players, turn } = match ?? {}
+
+  // const players = useAppSelector(
+  //   (state) => state.matchOnline.room.match?.players
+  // )
+  // const turn = useAppSelector((state) => state.matchOnline.room.match?.turn)
 
   const getTokenPosition = useCallback(
     (color: PlayerColor, tokenIndex: number, pathIndex: number) => {
@@ -63,7 +68,13 @@ const TokensOnline = () => {
   }, [players, turn, getTokenPosition])
 
   const handleCellClick = (position: Position) => {
-    // dispatch(pickToken({ position }))
+    if (!match) return
+    const tokenIndex = checkTokenPresent(match, position)
+    console.log({ match, position, tokenIndex })
+
+    if (tokenIndex === -1) return
+
+    dispatch(pickToken({ tokenIndex }))
   }
   return (
     <div>

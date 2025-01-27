@@ -1,4 +1,9 @@
-import { CreateRoomFormValues, ToastData, TokenMove } from '@/shared.types'
+import {
+  CreateRoomFormValues,
+  Position,
+  ToastData,
+  TokenMove,
+} from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { signOutSuccess } from '../auth/authSlice'
 import { MatchOnline } from './onlineMatch.types'
@@ -100,6 +105,10 @@ const onlineMatchSlice = createSlice({
     },
 
     rollDice: () => {},
+    pickToken: (
+      _,
+      __: PayloadAction<{ tokenIndex: number; position?: Position }>
+    ) => {},
     // diceRolling: (state) => {
     //   if (!state.room.match) return
     //   state.room.match.boardState = BoardState.DiceRolling
@@ -168,6 +177,8 @@ export const {
 
   rollDice,
   rollDiceFailure,
+
+  pickToken,
 
   moveToken,
   tokenMoved,

@@ -96,7 +96,7 @@ const offlineMatchSlice = createSlice({
       console.log('throwDiceFailure: ', message)
     },
     /**
-     *  @param position is used to hancle click for overlapped tokens
+     *  @param position is used to handle click for overlapped tokens
      */
     pickToken: (_, __: PayloadAction<{ position: Position }>) => {
       console.log('Pick Token')

@@ -27,6 +27,7 @@ import {
   joinMatchFailure,
   joinMatchSuccess,
   moveToken,
+  pickToken,
   rollDice,
   rollDiceFailure,
   setMatchState,
@@ -39,6 +40,7 @@ import { MatchOnline } from './onlineMatch.types'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '@/store'
 import BoardConstants from '@/constants/boardConstants'
+import { pickTokenFailure } from '../matchOffline/offlineMatchSlice'
 
 function* getRoomId() {
   const roomId: string | undefined = yield select(
@@ -64,12 +66,12 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
       emit(setMatchState(data))
     }
 
-    const pickTokenHandler = (data: {
-      match: MatchOnline
-      movableTokens: TokenMove[]
-    }) => {
-      console.log(data)
-    }
+    // const pickTokenHandler = (data: {
+    //   // match: MatchOnline
+    //   // movableTokens: TokenMove[]
+    // }) => {
+    //   console.log(data)
+    // }
     const tokenMovedHandler = (data: { move: TokenMove }) => {
       // console.log(data)
       // yield moveTokenWorker(data.move)
@@ -83,7 +85,7 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
     }
 
     socket.on('ongoingMatch', getOngoingMatchHandler)
-    socket.on('pickToken', pickTokenHandler)
+    // socket.on('pickToken', pickTokenHandler)
     socket.on('tokenMoved', tokenMovedHandler)
     socket.on('tokenKilled', tokenKilledHandler)
     socket.on('matchStateChange', matchStateChangeHandler)
@@ -202,6 +204,22 @@ function* rollDiceWorker(socket: Socket): Generator {
   }
 }
 
+function* pickTokenWorker(socket: Socket): Generator {
+  while (true) {
+    try {
+      const { payload }: PayloadAction<{ tokenIndex: number }> = yield take(
+        pickToken.type
+      )
+      const { tokenIndex } = payload
+      const roomId = yield call(getRoomId)
+      socket.emit('pickToken', { roomId, tokenIndex })
+    } catch (e: any) {
+      console.error('pickTokenWorker error:', e)
+      yield put(pickTokenFailure(e?.message || 'Failed to pick token'))
+    }
+  }
+}
+
 function* tokenMovedWorker(action: PayloadAction<TokenMove>) {
   const { currIndex, nextIndex, tokenIndex } = action.payload
   for (let i = currIndex + 1; i <= nextIndex; i++) {
@@ -220,6 +238,7 @@ function* onlineMatchWorker(): Generator {
   yield fork(createMatchWorker, socket)
   yield fork(joinMatchWorker, socket)
   yield fork(rollDiceWorker, socket)
+  yield fork(pickTokenWorker, socket)
 }
 
 export default function* () {
