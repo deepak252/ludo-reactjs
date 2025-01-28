@@ -1,21 +1,37 @@
 import { useEffect } from 'react'
 import TokenMoveAudio from '@/assets/audio/token-move.mp3'
+import TokenKillAudio from '@/assets/audio/token-kill.mp3'
 import useAudio from '@/hooks/useAudio'
 import { useAppSelector } from '@/hooks'
 
 const AudioItems = () => {
-  const { replay } = useAudio(TokenMoveAudio)
+  const { replay: playTokenMove } = useAudio(TokenMoveAudio)
+  const { replay: playTokenKill, stop: stopTokenKill } =
+    useAudio(TokenKillAudio)
 
-  const tokenMoving = useAppSelector(
+  const tokenMoved = useAppSelector(
     (state) => state.matchOnline.tokenMovementSound
+  )
+  const tokenKilled = useAppSelector(
+    (state) => state.matchOnline.tokenKillSound
   )
 
   useEffect(() => {
-    if (tokenMoving) {
-      replay()
+    if (tokenMoved) {
+      playTokenMove()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenMoving])
+  }, [tokenMoved])
+
+  useEffect(() => {
+    if (tokenKilled) {
+      playTokenKill()
+    } else {
+      stopTokenKill()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenKilled])
+
   return <div></div>
 }
 

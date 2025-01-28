@@ -34,7 +34,8 @@ import {
   setMatchState,
   tokenKilled,
   tokenMoved,
-  tokenMovementOff,
+  tokenMoveCompleted,
+  tokenKillCompleted,
 } from './onlineMatchSlice'
 import { CreateRoomFormValues, KilledToken, TokenMove } from '@/shared.types'
 import OnlineMatchService from './onlineMatchService'
@@ -217,7 +218,7 @@ function* tokenMovedWorker(action: PayloadAction<TokenMove>) {
     yield put(moveToken({ tokenIndex, pathIndex: i }))
     yield delay(BoardConstants.ANIMATION_DELAY)
   }
-  yield put(tokenMovementOff())
+  yield put(tokenMoveCompleted())
 }
 
 function* tokenKilledWorker(action: PayloadAction<KilledToken[]>) {
@@ -240,6 +241,7 @@ function* tokenKilledWorker(action: PayloadAction<KilledToken[]>) {
     yield delay(50)
     // }
   }
+  yield put(tokenKillCompleted())
 }
 
 function* onlineMatchWorker(): Generator {

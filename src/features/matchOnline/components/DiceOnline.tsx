@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import Dice from '@/components/Dice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { BoardState } from '@/constants/enums'
@@ -23,12 +24,21 @@ const DiceOnline = () => {
   }
 
   return (
-    <Dice
-      value={dice ?? 0}
-      playerTurn={playerTurn}
-      boardState={boardState}
-      onClick={handleDiceClick}
-    />
+    <div
+      className={classNames('absolute', {
+        '-top-32 left-0': playerTurn === 'green',
+        '-top-32 right-0': playerTurn === 'yellow',
+        '-bottom-32 right-0': playerTurn === 'blue',
+        '-bottom-32 left-0': playerTurn === 'red',
+      })}
+    >
+      <Dice
+        value={dice ?? 0}
+        playerTurn={playerTurn}
+        boardState={boardState}
+        onClick={handleDiceClick}
+      />
+    </div>
   )
 }
 

@@ -20,7 +20,7 @@ const TokensOnline = () => {
     (color: PlayerColor, tokenIndex: number, pathIndex: number) => {
       if (pathIndex === -1 && tokenIndex >= 0 && tokenIndex < 4) {
         return BoardConstants.HOME[color][tokenIndex]
-      } else if (pathIndex >= 0 && pathIndex < 56) {
+      } else if (pathIndex >= 0 && pathIndex <= 56) {
         return BoardConstants.PATH[color][pathIndex]
       }
       return []

@@ -5,6 +5,7 @@ export default function useAudio(url: string) {
   const [playing, setPlaying] = useState(false)
 
   const toggle = () => setPlaying(!playing)
+  const stop = () => setPlaying(false)
 
   const replay = () => {
     audio.currentTime = 0 // Reset to the beginning
@@ -25,5 +26,5 @@ export default function useAudio(url: string) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return { playing, toggle, replay }
+  return { playing, toggle, replay, stop }
 }

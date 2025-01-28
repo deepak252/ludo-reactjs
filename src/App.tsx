@@ -50,7 +50,7 @@ function App() {
   }, [isSocketConnected, isSignedIn])
 
   return (
-    <div className="bg-primary-600 min-h-screen opacity-10">
+    <div className="bg-primary-600 min-h-screen">
       <AppRoutes />
     </div>
   )

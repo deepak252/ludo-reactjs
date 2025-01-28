@@ -24,6 +24,7 @@ type OnlineMatchState = {
     isLoading: boolean
   }
   tokenMovementSound: number
+  tokenKillSound: number
   toastData?: ToastData | null
 }
 
@@ -39,6 +40,7 @@ const initialState: OnlineMatchState = {
     isLoading: false,
   },
   tokenMovementSound: 0,
+  tokenKillSound: 0,
 }
 
 const onlineMatchSlice = createSlice({
@@ -139,8 +141,15 @@ const onlineMatchSlice = createSlice({
         pathIndex
       state.tokenMovementSound++
     },
-    tokenMoved: (_, __: PayloadAction<TokenMove>) => {},
-    tokenMovementOff: (state) => {
+    tokenMoved: (state, _: PayloadAction<TokenMove>) => {
+      if (!state.room.match) return
+      // Unhighlight token
+      const currPlayer = state.room.match.turn
+      for (let i = 0; i < 4; i++) {
+        state.room.match.players[currPlayer].tokens[i].highlight = false
+      }
+    },
+    tokenMoveCompleted: (state) => {
       state.tokenMovementSound = 0
     },
 
@@ -157,7 +166,12 @@ const onlineMatchSlice = createSlice({
       const { player, tokenIndex, pathIndex } = action.payload
       state.room.match.players[player].tokens[tokenIndex].pathIndex = pathIndex
     },
-    tokenKilled: (_, __: PayloadAction<KilledToken[]>) => {},
+    tokenKilled: (state, _: PayloadAction<KilledToken[]>) => {
+      state.tokenKillSound++
+    },
+    tokenKillCompleted: (state) => {
+      state.tokenKillSound = 0
+    },
 
     setMatchState: (state, action: PayloadAction<Partial<MatchOnline>>) => {
       if (!state.room.match) return
@@ -201,10 +215,11 @@ export const {
 
   moveToken,
   tokenMoved,
-  tokenMovementOff,
+  tokenMoveCompleted,
 
   killToken,
   tokenKilled,
+  tokenKillCompleted,
 
   setMatchState,
 
