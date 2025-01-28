@@ -19,7 +19,8 @@ export type TokenInfo = {
 }
 
 export type KilledToken = {
-  token: TokenInfo
+  // token: TokenInfo
+  move: TokenMove
   player: PlayerColor
 }
 

@@ -34,6 +34,7 @@ import {
   setMatchState,
   tokenKilled,
   tokenMoved,
+  tokenMovementOff,
 } from './onlineMatchSlice'
 import { CreateRoomFormValues, KilledToken, TokenMove } from '@/shared.types'
 import OnlineMatchService from './onlineMatchService'
@@ -68,12 +69,6 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
       emit(setMatchState(data))
     }
 
-    // const pickTokenHandler = (data: {
-    //   // match: MatchOnline
-    //   // movableTokens: TokenMove[]
-    // }) => {
-    //   console.log(data)
-    // }
     const tokenMovedHandler = (data: { move: TokenMove }) => {
       emit(tokenMoved(data.move))
     }
@@ -82,7 +77,6 @@ function createSocketChannel(socket: Socket): EventChannel<any> {
     }
 
     socket.on('ongoingMatch', getOngoingMatchHandler)
-    // socket.on('pickToken', pickTokenHandler)
     socket.on('tokenMoved', tokenMovedHandler)
     socket.on('tokenKilled', tokenKilledHandler)
     socket.on('matchStateChange', matchStateChangeHandler)
@@ -221,36 +215,31 @@ function* tokenMovedWorker(action: PayloadAction<TokenMove>) {
   const { currIndex, nextIndex, tokenIndex } = action.payload
   for (let i = currIndex + 1; i <= nextIndex; i++) {
     yield put(moveToken({ tokenIndex, pathIndex: i }))
-    if (i < nextIndex) {
-      yield delay(BoardConstants.ANIMATION_DELAY)
-    }
+    yield delay(BoardConstants.ANIMATION_DELAY)
   }
+  yield put(tokenMovementOff())
 }
 
 function* tokenKilledWorker(action: PayloadAction<KilledToken[]>) {
-  // const { currIndex, nextIndex, tokenIndex } = action.payload
   const killedTokens = action.payload
   const player = killedTokens?.[0]?.player
-  const currIndex = killedTokens?.[0]?.token?.pathIndex
+  const currIndex = killedTokens?.[0]?.move.currIndex
   if (!player) return
 
   for (let i = currIndex - 1; i >= -1; i--) {
     for (const killedToken of killedTokens) {
       yield put(
-        killToken({ player, tokenIndex: killedToken.token.index, pathIndex: i })
+        killToken({
+          player,
+          tokenIndex: killedToken.move.tokenIndex,
+          pathIndex: i,
+        })
       )
     }
     // if (i < nextIndex) {
     yield delay(50)
     // }
   }
-  // const killedTokens = action.payload.killedTokens
-  // killedTokens.forEach((killedToken) => {
-  //   const { token, player } = killedToken
-  //   state.players[player].tokens[token.index].pathIndex = -1
-  //   state.players[player].tokens[token.index].position =
-  //     BoardConstants.HOME[player][token.index]
-  // })
 }
 
 function* onlineMatchWorker(): Generator {

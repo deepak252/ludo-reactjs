@@ -1,5 +1,5 @@
-import { PlayerColor, Position } from '@/shared.types'
 import classNames from 'classnames'
+import { PlayerColor, Position } from '@/shared.types'
 
 type TokenProps = {
   color: PlayerColor

@@ -9,7 +9,6 @@ import {
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { signOutSuccess } from '../auth/authSlice'
 import { MatchOnline } from './onlineMatch.types'
-import BoardConstants from '@/constants/boardConstants'
 
 type OnlineMatchState = {
   room: {
@@ -24,6 +23,7 @@ type OnlineMatchState = {
     list: MatchOnline[]
     isLoading: boolean
   }
+  tokenMovementSound: number
   toastData?: ToastData | null
 }
 
@@ -38,6 +38,7 @@ const initialState: OnlineMatchState = {
     list: [],
     isLoading: false,
   },
+  tokenMovementSound: 0,
 }
 
 const onlineMatchSlice = createSlice({
@@ -136,10 +137,12 @@ const onlineMatchSlice = createSlice({
       const currPlayer = state.room.match.turn
       state.room.match.players[currPlayer].tokens[tokenIndex].pathIndex =
         pathIndex
-      state.room.match.players[currPlayer].tokens[tokenIndex].position =
-        BoardConstants.PATH[currPlayer][pathIndex]
+      state.tokenMovementSound++
     },
     tokenMoved: (_, __: PayloadAction<TokenMove>) => {},
+    tokenMovementOff: (state) => {
+      state.tokenMovementSound = 0
+    },
 
     killToken: (
       state,
@@ -153,8 +156,6 @@ const onlineMatchSlice = createSlice({
       console.log('killToken')
       const { player, tokenIndex, pathIndex } = action.payload
       state.room.match.players[player].tokens[tokenIndex].pathIndex = pathIndex
-      state.room.match.players[player].tokens[tokenIndex].position =
-        BoardConstants.PATH[player][pathIndex]
     },
     tokenKilled: (_, __: PayloadAction<KilledToken[]>) => {},
 
@@ -200,6 +201,7 @@ export const {
 
   moveToken,
   tokenMoved,
+  tokenMovementOff,
 
   killToken,
   tokenKilled,

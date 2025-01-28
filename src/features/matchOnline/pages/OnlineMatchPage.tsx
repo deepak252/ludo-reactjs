@@ -4,6 +4,7 @@ import Loader from '@/components/Loader'
 import BoardOnline from '../components/BoardOnline'
 import { joinMatch } from '../onlineMatchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
+import AudioItems from '../components/AudioItems'
 
 function OnlineMatchPage() {
   const { roomId } = useParams()
@@ -28,6 +29,7 @@ function OnlineMatchPage() {
       </div>
       {/* <DiceOnline /> */}
       <Loader isLoading={isLoading} />
+      <AudioItems />
     </div>
     // <div>
     //   <div className="relative size-[min(calc(90vh-100px),90vw)] mx-auto">

@@ -27,7 +27,7 @@ function Dashboard() {
       </div> */}
       <h1 className="text-white text-center"> Ludo Champ </h1>
 
-      <img src={AppLogo} className="mx-auto size-60" />
+      {/* <img src={AppLogo} className="mx-auto size-60" /> */}
       <OnlineMatchItem />
       <div className="flex flex-col justify-center max-w-96 mx-auto">
         <button

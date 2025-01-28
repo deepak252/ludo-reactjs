@@ -6,7 +6,7 @@ import { getAccessToken, removeUserFromStorage } from '@/utils/storage'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,
+  // withCredentials: true,
 })
 
 type RequestConfig = AxiosRequestConfig & {

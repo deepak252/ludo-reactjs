@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import classNames from 'classnames'
 import Dice1 from '@/assets/images/dice/dice-1.png'
 import Dice2 from '@/assets/images/dice/dice-2.png'
@@ -5,6 +6,8 @@ import Dice3 from '@/assets/images/dice/dice-3.png'
 import Dice4 from '@/assets/images/dice/dice-4.png'
 import Dice5 from '@/assets/images/dice/dice-5.png'
 import Dice6 from '@/assets/images/dice/dice-6.png'
+import DiceThrowAudio from '@/assets/audio/dice-throw.mp3'
+import useAudio from '@/hooks/useAudio'
 import { PlayerColor } from '@/shared.types'
 import { BoardState } from '@/constants/enums'
 
@@ -15,6 +18,15 @@ type DiceProps = {
   onClick?: () => void
 }
 const Dice = ({ value, boardState, playerTurn, onClick }: DiceProps) => {
+  const { replay } = useAudio(DiceThrowAudio)
+
+  useEffect(() => {
+    if (boardState === BoardState.DiceRolling) {
+      replay()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardState])
+
   const getFace = () => {
     switch (value) {
       case 2:
