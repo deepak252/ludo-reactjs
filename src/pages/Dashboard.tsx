@@ -25,7 +25,7 @@ function Dashboard() {
           </div>
         )}
       </div> */}
-      <h1 className="text-white text-center"> Ludo Champ </h1>
+      {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
 
       {/* <img src={AppLogo} className="mx-auto size-60" /> */}
       <OnlineMatchItem />
@@ -45,7 +45,6 @@ function Dashboard() {
 
       {isJoinMatchModalOpen && (
         <JoinMatchModal
-          isOpen={isJoinMatchModalOpen}
           onClose={() => setIsJoinMatchModalOpen(false)}
           onCreateMatchClick={() => {
             setIsJoinMatchModalOpen(false)
@@ -56,10 +55,7 @@ function Dashboard() {
         />
       )}
       {isCreateMatchModalOpen && (
-        <CreateMatchModal
-          isOpen={isCreateMatchModalOpen}
-          onClose={() => setIsCreateMatchModalOpen(false)}
-        />
+        <CreateMatchModal onClose={() => setIsCreateMatchModalOpen(false)} />
       )}
     </div>
   )

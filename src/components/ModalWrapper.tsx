@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react'
 import classNames from 'classnames'
+import CloseIcon from '@/assets/icons/close-v2.svg?react'
 
 type ModalWrapperProps = {
   isOpen: boolean
+  showCloseIcon?: boolean
   onClose?: () => void
   closeOnOutsideClick?: boolean
   closeOnEsc?: boolean
@@ -13,6 +15,7 @@ type ModalWrapperProps = {
 const ModalWrapper = ({
   isOpen,
   onClose,
+  showCloseIcon,
   closeOnOutsideClick = false,
   closeOnEsc = false,
   children,
@@ -68,7 +71,14 @@ const ModalWrapper = ({
     <>
       {isOpen && (
         <div className={classNames('modal-wrapper', className)}>
-          <div ref={modalRef}>{children}</div>
+          <div ref={modalRef} className="relative">
+            {showCloseIcon && (
+              <button className="absolute -top-16 right-0" onClick={onClose}>
+                <CloseIcon className="size-16" />
+              </button>
+            )}
+            {children}
+          </div>
         </div>
       )}
     </>

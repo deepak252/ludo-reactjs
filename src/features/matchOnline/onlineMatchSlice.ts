@@ -78,6 +78,9 @@ const onlineMatchSlice = createSlice({
         message: action.payload,
       }
     },
+    resetMatch: (state) => {
+      state.room = initialState.room
+    },
 
     getOngoingMatch: (state) => {
       state.ongoingMatch.isLoading = true
@@ -199,6 +202,7 @@ export const {
   joinMatch,
   joinMatchSuccess,
   joinMatchFailure,
+  resetMatch,
 
   getOngoingMatch,
   getOngoingMatchSuccess,

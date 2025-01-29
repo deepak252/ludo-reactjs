@@ -15,16 +15,15 @@ import {
 } from './features/matchOnline/onlineMatchSlice'
 
 function App() {
-  const loadedRef1 = useRef(false)
-  const loadedRef2 = useRef(false)
+  const loadedRef = useRef(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
   const isSocketConnected = useAppSelector((state) => state.socket.connected)
   const isSignedIn = useAuth()
 
   useEffect(() => {
-    if (!loadedRef1.current) {
-      loadedRef1.current = true
+    if (!loadedRef.current) {
+      loadedRef.current = true
       setupInterceptor(navigate)
       dispatch(connectSocket({}))
     } else {
@@ -39,7 +38,6 @@ function App() {
 
   useEffect(() => {
     if (isSocketConnected) {
-      loadedRef2.current = true
       dispatch(sendPing())
       dispatch(connectOnlineMatch())
       if (isSignedIn) {

@@ -5,10 +5,12 @@ import UserImg from '@/assets/images/user.png'
 
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { signOut } from '@/features/auth/authSlice'
+import classNames from 'classnames'
 
 const DashboardUserProfile = () => {
   const dispatch = useAppDispatch()
   const userProfile = useAppSelector((state) => state.user.profile)
+  const isConnected = useAppSelector((state) => state.socket.connected)
 
   const handleSignOutClick = () => {
     dispatch(signOut())
@@ -25,6 +27,14 @@ const DashboardUserProfile = () => {
         </div> */}
         <p className="text-lg">{userProfile.data.username}</p>
         <p className="text-sm">{userProfile.data.email}</p>
+        <p
+          className={classNames('text-sm', {
+            'text-green-500': isConnected,
+            'text-orange-500': !isConnected,
+          })}
+        >
+          {isConnected ? 'Online' : 'Offline'}
+        </p>
         <button
           className="btn-filled-red mt-6"
           title="Logout"
