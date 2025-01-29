@@ -56,20 +56,11 @@ const DashboardUserProfile = () => {
         <Link to="/auth/sign-in">
           <button className="btn-outlined w-full">Login</button>
         </Link>
-        {/* <div>
-          <span className="mx-2">or</span>
-        </div> */}
         <div className="my-3 text-center"> OR </div>
         <Link to="/auth/sign-up">
           <button className="btn-filled w-full">Create Account</button>
         </Link>
       </div>
-      {/* <Link
-        to="/match/offline"
-        className="btn-filled bg-white text-black inline-block m-4 p-10 text-xl uppercase text-center"
-      >
-        Offclick
-      </Link> */}
     </div>
   )
 }

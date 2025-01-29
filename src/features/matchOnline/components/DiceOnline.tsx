@@ -24,22 +24,63 @@ const DiceOnline = () => {
   }
 
   return (
-    <div
-      className={classNames('absolute', {
-        '-top-32 left-0': playerTurn === 'green',
-        '-top-32 right-0': playerTurn === 'yellow',
-        '-bottom-32 right-0': playerTurn === 'blue',
-        '-bottom-32 left-0': playerTurn === 'red',
-      })}
-    >
-      <Dice
-        value={dice ?? 0}
-        playerTurn={playerTurn}
-        boardState={boardState}
-        onClick={handleDiceClick}
-      />
-    </div>
+    <>
+      <div className="w-full flex justify-between absolute -top-32">
+        <div className="flex-center size-24 border-4 border-white rounded-xl">
+          <Dice
+            value={dice ?? 0}
+            playerTurn={playerTurn}
+            boardState={boardState}
+            onClick={handleDiceClick}
+          />
+        </div>
+        <div className="flex-center size-24 border-4 border-white rounded-xl">
+          <Dice
+            value={dice ?? 0}
+            playerTurn={playerTurn}
+            boardState={boardState}
+            onClick={handleDiceClick}
+          />
+        </div>
+      </div>
+      <div className="w-full flex justify-between absolute -bottom-32">
+        <div className="flex-center size-24 border-4 border-white rounded-xl">
+          <Dice
+            value={dice ?? 0}
+            playerTurn={playerTurn}
+            boardState={boardState}
+            onClick={handleDiceClick}
+          />
+        </div>
+        <div className="flex-center size-24 border-4 border-white rounded-xl">
+          <Dice
+            value={dice ?? 0}
+            playerTurn={playerTurn}
+            boardState={boardState}
+            onClick={handleDiceClick}
+          />
+        </div>
+      </div>
+    </>
   )
+
+  // return (
+  //   <div
+  //     className={classNames('absolute', {
+  //       '-top-32 left-0': playerTurn === 'green',
+  //       '-top-32 right-0': playerTurn === 'yellow',
+  //       '-bottom-32 right-0': playerTurn === 'blue',
+  //       '-bottom-32 left-0': playerTurn === 'red',
+  //     })}
+  //   >
+  //     <Dice
+  //       value={dice ?? 0}
+  //       playerTurn={playerTurn}
+  //       boardState={boardState}
+  //       onClick={handleDiceClick}
+  //     />
+  //   </div>
+  // )
 }
 
 export default DiceOnline

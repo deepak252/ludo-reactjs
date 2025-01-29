@@ -45,26 +45,23 @@ const Dice = ({ value, boardState, playerTurn, onClick }: DiceProps) => {
   }
 
   return (
-    <div className="flex items-center m-4">
-      <div className="cursor-pointer disable-select">
-        {boardState === BoardState.DiceRolling ? (
-          <img
-            src="/assets/dice-throw.gif"
-            alt="Dice Throw"
-            className="relative z-10 size-28"
-          />
-        ) : (
-          <img
-            src={getFace()}
-            alt="Dice Throw"
-            className={classNames('relative z-10 size-20 rounded-xl m-4', {
-              [`animate-glow-${playerTurn}`]:
-                boardState === BoardState.RollDice,
-            })}
-            onClick={onClick}
-          />
-        )}
-      </div>
+    <div className="cursor-pointer disable-select">
+      {boardState === BoardState.DiceRolling ? (
+        <img
+          src="/assets/dice-throw.gif"
+          alt="Dice Throw"
+          className="relative z-10 size-16"
+        />
+      ) : (
+        <img
+          src={getFace()}
+          alt="Dice Throw"
+          className={classNames('relative z-10 size-14 rounded-xl', {
+            [`animate-glow-${playerTurn}`]: boardState === BoardState.RollDice,
+          })}
+          onClick={onClick}
+        />
+      )}
     </div>
   )
 }

@@ -5,7 +5,7 @@ import DiceOnline from '../DiceOnline'
 
 const BoardOnline = () => {
   return (
-    <div className="relative mx-auto aspect-square w-[min(100vh-240px,100%)] min-w-80">
+    <div className="relative mx-auto aspect-square w-[min(80vh-240px,100%)] min-w-80">
       <Board />
       <TokensOnline />
       <BoardOverlayOnline />

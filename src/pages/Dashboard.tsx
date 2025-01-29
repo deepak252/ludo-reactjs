@@ -12,22 +12,16 @@ function Dashboard() {
 
   return (
     <div className="text-white p-6">
-      {/* <div className="flex justify-end">
-        {isSignedIn ? (
-          <button title="Logout" onClick={handleSignOutClick}>
-            <SignOutIcon className="size-10 fill-red-600" />
-          </button>
-        ) : (
-          <div>
-            <Link to="/auth/sign-in">Sign In</Link>{' '}
-            <span className="mx-2">or</span>
-            <Link to="/auth/sign-up">Sign Up</Link>
-          </div>
-        )}
-      </div> */}
-      {/* <h1 className="text-white text-center"> Ludo Champ </h1> */}
+      <h1 className="text-white text-center">
+        {' '}
+        <span className="text-green-500">L</span>
+        <span className="text-red-500">u</span>
+        <span className="text-yellow-500">d</span>
+        <span className="text-blue-500">o</span>
+        <span className="text-white"> Champ</span>
+      </h1>
 
-      {/* <img src={AppLogo} className="mx-auto size-60" /> */}
+      <img src={AppLogo} className="mx-auto size-60" />
       <OnlineMatchItem />
       <div className="flex flex-col justify-center max-w-96 mx-auto">
         <button

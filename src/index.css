@@ -46,7 +46,7 @@ body {
 
   .card {
     /* @apply p-4 bg-primary-300/30 backdrop-blur-md shadow shadow-secondary-500 border-[2px] border-secondary-500  rounded-xl bg-radial-gradient; */
-    @apply p-4 backdrop-blur-md shadow shadow-secondary-500 border-[2px] border-secondary-500  rounded-xl bg-radial-gradient;
+    @apply p-4 backdrop-blur-md shadow shadow-secondary-500 border-2 border-secondary-500  rounded-xl bg-radial-gradient;
   }
   .base-chip {
     @apply bg-primary-500 px-4 py-2 m-2 rounded-xl border border-gray-500;
@@ -78,7 +78,7 @@ body {
   }
   .modal-container {
     /* @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96; */
-    @apply flex flex-col p-5 bg-primary border-4 border-primary-500 rounded-3xl shadow-2xl shadow-primary-500 max-w-[90vw] min-h-40 min-w-80;
+    @apply flex flex-col p-5 bg-primary shadow-3xl shadow-secondary-500 border-2 border-secondary-500 rounded-3xl max-w-[90vw] min-h-40 min-w-80;
   }
 
   .form-input-wrapper {
