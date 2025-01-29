@@ -160,7 +160,15 @@ function* joinMatchWorker(socket: Socket): Generator {
       )
 
       if (res?.roomId) {
-        yield put(joinMatchSuccess(res))
+        const currUserId = yield select(
+          (state: RootState) => state.user.profile.data?._id
+        )
+        yield put(
+          joinMatchSuccess({
+            match: res,
+            currUserId,
+          })
+        )
       }
     } catch (e: any) {
       console.error('joinMatchWorker error:', e)

@@ -14,6 +14,7 @@ type OnlineMatchState = {
   room: {
     isLoading: boolean
     match?: MatchOnline
+    currUserColor?: PlayerColor
   }
   ongoingMatch: {
     data?: MatchOnline
@@ -67,9 +68,23 @@ const onlineMatchSlice = createSlice({
     joinMatch: (state, _: PayloadAction<{ roomId: string }>) => {
       state.room.isLoading = true
     },
-    joinMatchSuccess: (state, action: PayloadAction<MatchOnline>) => {
+    joinMatchSuccess: (
+      state,
+      action: PayloadAction<{
+        match: MatchOnline
+        currUserId?: string
+      }>
+    ) => {
+      const { match, currUserId } = action.payload
       state.room.isLoading = false
-      state.room.match = action.payload
+      state.room.match = match
+
+      const players = match.players
+
+      if (!players || !currUserId) return
+      state.room.currUserColor = Object.keys(players).find(
+        (key) => players[key as PlayerColor].userId === currUserId
+      ) as PlayerColor
     },
     joinMatchFailure: (state, action) => {
       state.room.isLoading = false
