@@ -44,8 +44,8 @@ const JoinMatchModal = ({
       onClose={onClose}
       isOpen
       showCloseIcon
-      closeOnEsc
-      closeOnOutsideClick
+      closeOnEsc={false}
+      closeOnOutsideClick={false}
     >
       <form onSubmit={formik.handleSubmit}>
         <div className="modal-container">

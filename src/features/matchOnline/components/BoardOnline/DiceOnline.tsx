@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { BoardState } from '@/constants/enums'
 import { rollDice } from '../../onlineMatchSlice'
 import { PlayerColor } from '@/shared.types'
+import classNames from 'classnames'
 
 const DiceOnline = ({ currUserColor }: { currUserColor?: PlayerColor }) => {
   const dispatch = useAppDispatch()
@@ -16,18 +17,22 @@ const DiceOnline = ({ currUserColor }: { currUserColor?: PlayerColor }) => {
   const boardState = useAppSelector(
     (state) => state.matchOnline.room.match?.boardState
   )
-  const isGreenPlaying = useAppSelector(
-    (state) => state.matchOnline.room.match?.players.green.isPlaying
-  )
-  const isYellowPlaying = useAppSelector(
-    (state) => state.matchOnline.room.match?.players.yellow.isPlaying
-  )
-  const isBluePlaying = useAppSelector(
-    (state) => state.matchOnline.room.match?.players.blue.isPlaying
-  )
-  const isRedPlaying = useAppSelector(
-    (state) => state.matchOnline.room.match?.players.red.isPlaying
-  )
+  const playersCount =
+    useAppSelector(
+      (state) => state.matchOnline.room.match?.joinedPlayersCount
+    ) || 0
+  // const isGreenPlaying = useAppSelector(
+  //   (state) => state.matchOnline.room.match?.players.green.isPlaying
+  // )
+  // const isYellowPlaying = useAppSelector(
+  //   (state) => state.matchOnline.room.match?.players.yellow.isPlaying
+  // )
+  // const isBluePlaying = useAppSelector(
+  //   (state) => state.matchOnline.room.match?.players.blue.isPlaying
+  // )
+  // const isRedPlaying = useAppSelector(
+  //   (state) => state.matchOnline.room.match?.players.red.isPlaying
+  // )
 
   const handleDiceClick = () => {
     if (boardState === BoardState.RollDice) {
@@ -81,17 +86,27 @@ const DiceOnline = ({ currUserColor }: { currUserColor?: PlayerColor }) => {
   return (
     <>
       <div className="w-full flex justify-between absolute -top-32">
-        <div className="flex-center size-24 border-4 border-white rounded-xl">
-          {topLeft && (
-            <Dice
-              value={dice ?? 0}
-              playerTurn={playerTurn}
-              boardState={boardState}
-              onClick={handleDiceClick}
-            />
-          )}
+        <div>
+          <div
+            className={classNames('dice-container ', {
+              '!hidden': playersCount < 2,
+            })}
+          >
+            {topLeft && (
+              <Dice
+                value={dice ?? 0}
+                playerTurn={playerTurn}
+                boardState={boardState}
+                onClick={handleDiceClick}
+              />
+            )}
+          </div>
         </div>
-        <div className="flex-center size-24 border-4 border-white rounded-xl">
+        <div
+          className={classNames('dice-container', {
+            '!hidden': playersCount < 3,
+          })}
+        >
           {topRight && (
             <Dice
               value={dice ?? 0}
@@ -103,7 +118,12 @@ const DiceOnline = ({ currUserColor }: { currUserColor?: PlayerColor }) => {
         </div>
       </div>
       <div className="w-full flex justify-between absolute -bottom-32">
-        <div className="flex-center size-24 border-4 border-white rounded-xl">
+        {playersCount < 4 && <div />}
+        <div
+          className={classNames('dice-container', {
+            '!hidden': playersCount < 4,
+          })}
+        >
           {bottomLeft && (
             <Dice
               value={dice ?? 0}
@@ -113,7 +133,11 @@ const DiceOnline = ({ currUserColor }: { currUserColor?: PlayerColor }) => {
             />
           )}
         </div>
-        <div className="flex-center size-24 border-4 border-white rounded-xl">
+        <div
+          className={classNames('dice-container', {
+            '!hidden': playersCount === 0,
+          })}
+        >
           {bottomRight && (
             <Dice
               value={dice ?? 0}

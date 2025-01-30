@@ -11,11 +11,6 @@ const TokensOnline = () => {
   const match = useAppSelector((state) => state.matchOnline.room.match)
   const { players, turn } = match ?? {}
 
-  // const players = useAppSelector(
-  //   (state) => state.matchOnline.room.match?.players
-  // )
-  // const turn = useAppSelector((state) => state.matchOnline.room.match?.turn)
-
   const getTokenPosition = useCallback(
     (color: PlayerColor, tokenIndex: number, pathIndex: number) => {
       if (pathIndex === -1 && tokenIndex >= 0 && tokenIndex < 4) {

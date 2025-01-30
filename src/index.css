@@ -108,6 +108,9 @@ body {
   .board-cell {
     @apply relative size-full border border-black text-xs text-center;
   }
+  .dice-container {
+    @apply flex-center size-24 border-4 border-white rounded-xl;
+  }
 }
 
 @layer utilities {

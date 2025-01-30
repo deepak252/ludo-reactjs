@@ -1,17 +1,23 @@
+import { useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { useFormik } from 'formik'
 import FormInputWrapper from '@/components/FormInputWrapper'
 import ModalWrapper from '@/components/ModalWrapper'
 import { CreateRoomFormValues } from '@/shared.types'
 import { validateCreateOnlineMatchForm } from '../onlineMatchUtil'
-import { useAppDispatch } from '@/hooks'
-import { createMatch } from '../onlineMatchSlice'
+import { useAppDispatch, useAppSelector, useNavigateWithState } from '@/hooks'
+import { createMatch, resetMatch } from '../onlineMatchSlice'
 
 type CreateMatchModalProps = {
   onClose: () => void
 }
-const CreateMatchModal = ({ isOpen, onClose }: CreateMatchModalProps) => {
+const CreateMatchModal = ({ onClose }: CreateMatchModalProps) => {
   const dispatch = useAppDispatch()
+  const roomIdRef = useRef('')
+  const room = useAppSelector((state) => state.matchOnline.room)
+  const roomId = room.match?.roomId
+  const navigate = useNavigateWithState()
+
   const formik = useFormik<CreateRoomFormValues>({
     initialValues: {},
     validate: validateCreateOnlineMatchForm,
@@ -20,13 +26,24 @@ const CreateMatchModal = ({ isOpen, onClose }: CreateMatchModalProps) => {
     },
   })
 
+  useEffect(() => {
+    if (roomId && roomIdRef.current !== roomId) {
+      roomIdRef.current = roomId
+      navigate(`/match/online/${roomId}`)
+    }
+    return () => {
+      dispatch(resetMatch())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId])
+
   return (
     <ModalWrapper
       onClose={onClose}
       isOpen
       showCloseIcon
-      closeOnEsc
-      closeOnOutsideClick
+      closeOnEsc={false}
+      closeOnOutsideClick={false}
     >
       <form onSubmit={formik.handleSubmit}>
         <div className="modal-container">
