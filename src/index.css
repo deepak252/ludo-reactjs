@@ -21,7 +21,7 @@ body {
     @apply rounded-2xl py-3 px-6 border-2 border-b-4 text-white bg-gradient-to-b disabled:opacity-50;
   }
   .btn-filled {
-    @apply base-button bg-primary font-medium;
+    @apply base-button border-primary-300 from-primary-300 to-primary;
   }
   .btn-filled-green {
     @apply base-button border-[#36f14f] from-[#36f14f] to-[#03C91E];
@@ -38,10 +38,10 @@ body {
   }
 
   .btn-outlined {
-    @apply base-button border text-white;
+    @apply base-button border-2 text-white;
   }
   .btn-outlined-secondary {
-    @apply base-button border border-secondary text-secondary;
+    @apply base-button border-2 border-secondary text-secondary;
   }
 
   .card {
@@ -206,7 +206,7 @@ textarea {
   border-radius: 100px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #ff8036;
+  background: #F5A50C;
   border-radius: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {

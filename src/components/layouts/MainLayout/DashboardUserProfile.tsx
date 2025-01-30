@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import Shimmer from '@/components/Shimmer'
-// import UserIcon from '@/assets/icons/user-circle.svg?react'
 import UserImg from '@/assets/images/user.png'
 
 import { useAppDispatch, useAppSelector } from '@/hooks'
@@ -22,9 +21,6 @@ const DashboardUserProfile = () => {
         <div className="p-3 bg-secondary-400 size-20 absolute-center !top-0 rounded-full">
           <img src={UserImg} />
         </div>
-        {/* <div className="bg-primary-300/30 backdrop-blur-md shadow-lg size-20 absolute-center !top-0 rounded-full">
-          <UserIcon className="size-full" />
-        </div> */}
         <p className="text-lg">{userProfile.data.username}</p>
         <p className="text-sm">{userProfile.data.email}</p>
         <p
@@ -54,9 +50,9 @@ const DashboardUserProfile = () => {
       <p>Log in or create an account to get started.</p>
       <div className="mt-8 px-4">
         <Link to="/auth/sign-in">
-          <button className="btn-outlined w-full">Login</button>
+          <button className="btn-filled-green w-full">Login</button>
         </Link>
-        <div className="my-3 text-center"> OR </div>
+        <div className="my-3 text-center text-sm"> OR </div>
         <Link to="/auth/sign-up">
           <button className="btn-filled w-full">Create Account</button>
         </Link>

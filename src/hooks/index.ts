@@ -5,8 +5,15 @@ import useFormikErrors from './useFormikErrors'
 import useAuth from './useAuth'
 import useWindowDimensions from './useWindowDimensions'
 import useNavigateWithState from './useNavigateWithState'
+import useAudio from './useAudio'
 
-export { useFormikErrors, useAuth, useWindowDimensions, useNavigateWithState }
+export {
+  useFormikErrors,
+  useAuth,
+  useWindowDimensions,
+  useNavigateWithState,
+  useAudio,
+}
 
 // Use throughout the app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch

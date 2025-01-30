@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import TokenMoveAudio from '@/assets/audio/token-move.mp3'
 import TokenKillAudio from '@/assets/audio/token-kill.mp3'
-import useAudio from '@/hooks/useAudio'
-import { useAppSelector } from '@/hooks'
+import { useAppSelector, useAudio } from '@/hooks'
 
 const AudioItems = () => {
   const { replay: playTokenMove } = useAudio(TokenMoveAudio)

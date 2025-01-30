@@ -1,14 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
 import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
 // import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
 import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
 import AppLogo from '@/assets/images/logo1.png'
+// import HomeAudio from '@/assets/audio/home.mp3'
+// import { useAudio } from '@/hooks'
 
 function Dashboard() {
   const [isJoinMatchModalOpen, setIsJoinMatchModalOpen] = useState(false)
   const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false)
+  // const { replay: playHomeAudio } = useAudio(HomeAudio)
+
+  useEffect(() => {
+    // playHomeAudio()
+  }, [])
 
   return (
     <div className="text-white p-6">
