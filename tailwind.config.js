@@ -24,12 +24,24 @@ export default {
       backgroundImage: {
         // 'radial-gradient': 'radial-gradient(#ffcd0382, #00235C)',
         'radial-gradient': 'radial-gradient(#B3B5D980, #083071)',
+        // 'radial-gradient': 'radial-gradient(#B3B5D980, #710057)',
       },
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
         token: '0 2px 4px rgba(0, 0, 0, 0.4)',
       },
       colors: {
+        // primary: {
+        //   DEFAULT: '#00235C', //// Buttons, Active State (Checkbox), Textfield border (Focus)
+        //   100: '#94B2EF', // Chip
+        //   200: '#5D86D8', // Floating Button
+        //   300: '#3C62B0',
+        //   400: '#8C006C',
+        //   500: '#710057',
+        //   600: '#5C0047',
+        //   700: '#012052',
+        //   800: '#011940',
+        // },
         primary: {
           DEFAULT: '#00235C', //// Buttons, Active State (Checkbox), Textfield border (Focus)
           100: '#94B2EF', // Chip
@@ -109,6 +121,11 @@ export default {
             transform: 'translateX(90%)',
           },
         },
+        blink: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 0 },
+          '50%': { opacity: 1 },
+        },
       },
       animation: {
         'glow-red': 'glowRed 2s infinite', // 2 seconds, infinite loop
@@ -118,6 +135,7 @@ export default {
         fadeIn: 'fadeIn 0.2s ease-in-out',
         fadeOut: 'fadeOut 0.2s ease-in-out',
         shimmer: 'shimmer 1.5s infinite',
+        blink: 'blink 1.5s infinite',
       },
       screens: {
         xs: '480px',

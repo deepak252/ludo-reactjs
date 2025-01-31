@@ -13,6 +13,7 @@ import {
   connectOnlineMatch,
   getOngoingMatch,
 } from './features/matchOnline/onlineMatchSlice'
+import Background from './components/Background'
 
 function App() {
   const loadedRef = useRef(false)
@@ -48,8 +49,9 @@ function App() {
   }, [isSocketConnected, isSignedIn])
 
   return (
-    <div className="bg-primary-600 min-h-screen opacity-100">
+    <div className="bg-primary-600 min-h-screen opacity-10">
       <AppRoutes />
+      <Background />
     </div>
   )
 }

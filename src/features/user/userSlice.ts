@@ -9,6 +9,7 @@ type UserState = {
     data?: User
     isLoading?: boolean
   }
+  muted: boolean
   toastData?: ToastData | null
 }
 
@@ -16,6 +17,7 @@ const initialState: UserState = {
   profile: {
     isLoading: false,
   },
+  muted: true,
 }
 
 const userSlice = createSlice({
@@ -38,6 +40,10 @@ const userSlice = createSlice({
       }
     },
 
+    toggleMuted: (state) => {
+      state.muted = !state.muted
+    },
+
     setUserToast: (state, action: PayloadAction<ToastData | null>) => {
       state.toastData = action.payload
     },
@@ -56,6 +62,8 @@ export const {
   getProfile,
   getProfileSuccess,
   getProfileFailure,
+
+  toggleMuted,
 
   setUserToast,
   resetUserState,
