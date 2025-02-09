@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import JoinMatchModal from '@/features/matchOnline/components/JoinMatchModal'
-import CreateMatchModal from '@/features/matchOnline/components/CreateMatchModal'
+import CreateOnlineMatchModal from '@/features/matchOnline/components/CreateOnlineMatchModal'
 // import { getOngoingMatch } from '@/features/matchOnline/onlineMatchSlice'
 import OnlineMatchItem from '@/features/matchOnline/components/OngoingMatchItem'
 import VolumeOnIcon from '@/assets/icons/volume-on.svg?react'
@@ -10,11 +9,14 @@ import AppLogo from '@/assets/images/logo1.png'
 import HomeAudio from '@/assets/audio/home.mp3'
 import { useAppDispatch, useAppSelector, useAudio } from '@/hooks'
 import { toggleMuted } from '@/features/user/userSlice'
+import CreateOfflineMatchModal from '@/features/matchOffline/components/CreateOfflineMatchModal'
 
 function Dashboard() {
   const dispatch = useAppDispatch()
-  const [isJoinMatchModalOpen, setIsJoinMatchModalOpen] = useState(false)
-  const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false)
+  const [isJoinMatch, setIsJoinMatch] = useState(false)
+  const [isCreateOnlineMatch, setIsCreateOnlineMatch] = useState(false)
+  const [isCreateOfflineMatch, setIsCreateOfflineMatch] = useState(false)
+
   const isMuted = useAppSelector((state) => state.user.muted)
   const { mute: muteAudio, play: playAudio } = useAudio(HomeAudio, {
     loop: true,
@@ -45,31 +47,38 @@ function Dashboard() {
       <OnlineMatchItem />
       <div className="flex flex-col justify-center max-w-96 mx-auto">
         <button
-          onClick={() => setIsJoinMatchModalOpen(true)}
-          className="btn-filled-secondary p-5 text-xl my-8"
+          onClick={() => setIsJoinMatch(true)}
+          className="btn-filled-secondary p-8 text-xl my-8"
         >
           Play Online
         </button>
-        <Link to="/match/offline">
-          <button className="btn-filled-blue p-5 text-xl w-full">
-            Play Offline
-          </button>
-        </Link>
+
+        <button
+          onClick={() => setIsCreateOfflineMatch(true)}
+          className="btn-filled-blue p-8 text-xl w-full"
+        >
+          Play Offline
+        </button>
       </div>
 
-      {isJoinMatchModalOpen && (
+      {isJoinMatch && (
         <JoinMatchModal
-          onClose={() => setIsJoinMatchModalOpen(false)}
+          onClose={() => setIsJoinMatch(false)}
           onCreateMatchClick={() => {
-            setIsJoinMatchModalOpen(false)
+            setIsJoinMatch(false)
             setTimeout(() => {
-              setIsCreateMatchModalOpen(true)
+              setIsCreateOnlineMatch(true)
             }, 200)
           }}
         />
       )}
-      {isCreateMatchModalOpen && (
-        <CreateMatchModal onClose={() => setIsCreateMatchModalOpen(false)} />
+      {isCreateOnlineMatch && (
+        <CreateOnlineMatchModal onClose={() => setIsCreateOnlineMatch(false)} />
+      )}
+      {isCreateOfflineMatch && (
+        <CreateOfflineMatchModal
+          onClose={() => setIsCreateOfflineMatch(false)}
+        />
       )}
 
       <button

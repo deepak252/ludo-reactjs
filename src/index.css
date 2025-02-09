@@ -36,6 +36,9 @@ body {
     /* @apply base-button border-[#a8cce7] from-[#a8cce7] to-[#2055f4]; */
     @apply base-button border-blue-500 from-blue-400 to-blue-600;
   }
+  .btn-filled-gray {
+    @apply base-button border-gray-400 from-gray-400 to-gray-500;
+  }
 
   .btn-outlined {
     @apply base-button border-2 text-white;
@@ -109,7 +112,7 @@ body {
     @apply relative size-full border border-black text-xs text-center;
   }
   .dice-container {
-    @apply flex-center size-24 border-4 border-white rounded-xl;
+    @apply flex-center size-24 border-4 border-white rounded-xl bg-black bg-opacity-50 max-sm:size-20;
   }
 }
 

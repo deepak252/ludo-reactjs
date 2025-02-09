@@ -23,7 +23,7 @@ export default function SignInPage() {
   const errors = useFormikErrors<SignInFormValues, SignInFormError>(formik)
 
   return (
-    <div className="max-w-md mx-auto text-white">
+    <div className="max-w-sm mx-auto text-white">
       <form onSubmit={formik.handleSubmit}>
         <h2 className="text-center mt-10 max-md:text-2xl">Welcome Back</h2>
         <p className="text-center text-gray-300 text-sm">

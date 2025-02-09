@@ -1,0 +1,79 @@
+{
+  "playersCount": 2,
+  "diceValue": 4,
+  "players": {
+    "green": {
+      "tokens": [
+        {
+          "id": "green_0",
+          "index": 0,
+          "color": "green",
+          "pathIndex": 17,
+          "highlight": false
+        },
+        {
+          "id": "green_1",
+          "index": 1,
+          "color": "green",
+          "pathIndex": 5,
+          "highlight": false
+        },
+        {
+          "id": "green_2",
+          "index": 2,
+          "color": "green",
+          "pathIndex": 1,
+          "highlight": false
+        },
+        {
+          "id": "green_3",
+          "index": 3,
+          "color": "green",
+          "pathIndex": 0,
+          "highlight": false
+        }
+      ],
+      "isPlaying": true,
+      "userId": "Player 1"
+    },
+    "yellow": { "tokens": [], "isPlaying": false },
+    "blue": {
+      "tokens": [
+        {
+          "id": "blue_0",
+          "index": 0,
+          "color": "blue",
+          "pathIndex": 29,
+          "highlight": false
+        },
+        {
+          "id": "blue_1",
+          "index": 1,
+          "color": "blue",
+          "pathIndex": 16,
+          "highlight": false
+        },
+        {
+          "id": "blue_2",
+          "index": 2,
+          "color": "blue",
+          "pathIndex": 25,
+          "highlight": false
+        },
+        {
+          "id": "blue_3",
+          "index": 3,
+          "color": "blue",
+          "pathIndex": 0,
+          "highlight": false
+        }
+      ],
+      "isPlaying": true,
+      "userId": "Player 2"
+    },
+    "red": { "tokens": [], "isPlaying": false }
+  },
+  "status": "InProgress",
+  "boardState": "RollDice",
+  "turn": "green"
+}

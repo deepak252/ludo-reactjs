@@ -6,6 +6,7 @@ import Dice3 from '@/assets/images/dice/dice-3.png'
 import Dice4 from '@/assets/images/dice/dice-4.png'
 import Dice5 from '@/assets/images/dice/dice-5.png'
 import Dice6 from '@/assets/images/dice/dice-6.png'
+import DiceThrowGif from '@/assets/dice-throw.gif'
 import DiceThrowAudio from '@/assets/audio/dice-throw.mp3'
 import useAudio from '@/hooks/useAudio'
 import { PlayerColor } from '@/shared.types'
@@ -17,7 +18,7 @@ type DiceProps = {
   boardState?: BoardState
   onClick?: () => void
 }
-const Dice = ({ value, boardState, playerTurn, onClick }: DiceProps) => {
+const Dice = ({ value, boardState, onClick }: DiceProps) => {
   const { replay } = useAudio(DiceThrowAudio)
 
   useEffect(() => {
@@ -43,22 +44,28 @@ const Dice = ({ value, boardState, playerTurn, onClick }: DiceProps) => {
         return Dice1
     }
   }
+  console.log({ boardState })
 
   return (
     <div className="cursor-pointer disable-select">
       {boardState === BoardState.DiceRolling ? (
         <img
-          src="/assets/dice-throw.gif"
+          // src="/assets/dice-throw.gif"
+          src={DiceThrowGif}
           alt="Dice Throw"
-          className="relative z-10 size-16"
+          className="relative z-10 size-16 max-sm:size-14"
         />
       ) : (
         <img
           src={getFace()}
           alt="Dice Throw"
-          className={classNames('relative z-10 size-14 rounded-xl', {
-            [`animate-glow-${playerTurn}`]: boardState === BoardState.RollDice,
-          })}
+          className={classNames(
+            'relative z-10 size-14 rounded-xl max-sm:size-12',
+            {
+              // [`animate-glow-${playerTurn}`]: boardState === BoardState.RollDice,
+              'animate-dice': boardState === BoardState.RollDice,
+            }
+          )}
           onClick={onClick}
         />
       )}

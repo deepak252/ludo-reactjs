@@ -1,6 +1,8 @@
+import { MatchOffline } from '@/features/matchOffline/offlineMatch.types'
 import { User } from '@/features/user/user.types'
 
 const ACCESS_TOKEN_KEY = 'access_token'
+const OFFLINE_MATCH_KEY = 'match_offline'
 const USER_KEY = 'user'
 
 export const saveAccessToken = (token?: string) => {
@@ -30,6 +32,30 @@ export const getUserFromStorage = (): User | undefined => {
   } catch (e) {
     console.error('getUserFromStorage', e)
   }
+}
+
+export const saveOfflineMatch = (data: MatchOffline) => {
+  if (!data) return
+  try {
+    localStorage.setItem(OFFLINE_MATCH_KEY, JSON.stringify(data))
+  } catch (e) {
+    console.error('saveOfflineMatch', e)
+  }
+}
+
+export const getOfflineMatch = (): MatchOffline | undefined => {
+  const data = localStorage.getItem(OFFLINE_MATCH_KEY)
+  try {
+    if (data) {
+      return JSON.parse(data)
+    }
+  } catch (e) {
+    console.error('getOfflineMatch', e)
+  }
+}
+
+export const removeOfflineMatch = () => {
+  localStorage.removeItem(OFFLINE_MATCH_KEY)
 }
 
 export const userSignedIn = () => {

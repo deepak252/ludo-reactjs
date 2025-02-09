@@ -49,7 +49,7 @@ export default function SignUpPage() {
   }, [formik.values.username, debouncedCheckUsername])
 
   return (
-    <div className="max-w-md mx-auto text-white">
+    <div className="max-w-sm mx-auto text-white">
       <form onSubmit={formik.handleSubmit}>
         <h2 className="text-center mt-10 max-md:text-2xl">Create Account</h2>
         <p className="text-center text-gray-300 text-sm">

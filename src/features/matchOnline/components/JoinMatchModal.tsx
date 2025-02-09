@@ -1,7 +1,12 @@
 import { useEffect, useRef } from 'react'
 import FormInputWrapper from '@/components/FormInputWrapper'
 import ModalWrapper from '@/components/ModalWrapper'
-import { useAppDispatch, useAppSelector, useNavigateWithState } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuth,
+  useNavigateWithState,
+} from '@/hooks'
 import { useFormik } from 'formik'
 import { joinMatch, resetMatch } from '../onlineMatchSlice'
 
@@ -14,10 +19,18 @@ const JoinMatchModal = ({
   onCreateMatchClick,
 }: JoinMatchModalProps) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigateWithState()
   const roomIdRef = useRef('')
+  const isSignedIn = useAuth()
   const room = useAppSelector((state) => state.matchOnline.room)
   const roomId = room.match?.roomId
-  const navigate = useNavigateWithState()
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      navigate('/auth/sign-in')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedIn])
 
   useEffect(() => {
     if (roomId && roomIdRef.current !== roomId) {

@@ -10,7 +10,7 @@ export const REGEX = Object.freeze({
   URL: /^(https?:\/\/)?([\w.-]+)\.([a-zA-Z]{2,})(\/[^\s]*)?(\?[\w%.-]+=[\w%.-]+(&[\w%.-]+=[\w%.-]+)*)?$/,
 })
 
-export const PlayerTypes: PlayerColor[] = ['green', 'yellow', 'blue', 'red']
+export const PLAYER_TYPES: PlayerColor[] = ['green', 'blue', 'yellow', 'red']
 
 // export enum BoardState {
 //   throwDice,

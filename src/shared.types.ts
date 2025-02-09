@@ -2,6 +2,8 @@ export type Position = [number, number]
 
 export type PlayerColor = 'green' | 'yellow' | 'blue' | 'red'
 
+export type Players = Record<PlayerColor, Player>
+
 export type TokenMove = {
   tokenIndex: number
   currIndex: number

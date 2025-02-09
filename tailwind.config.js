@@ -126,6 +126,14 @@ export default {
           '100%': { opacity: 0 },
           '50%': { opacity: 1 },
         },
+        dice: {
+          '0%, 15%, 25%, 100%': { transform: 'scale(1)' },
+          '10%, 20%': { transform: 'scale(1.2)' },
+        },
+        scaleBounce: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+        },
       },
       animation: {
         'glow-red': 'glowRed 2s infinite', // 2 seconds, infinite loop
@@ -136,6 +144,9 @@ export default {
         fadeOut: 'fadeOut 0.2s ease-in-out',
         shimmer: 'shimmer 1.5s infinite',
         blink: 'blink 1.5s infinite',
+        scale: 'scale 1s infinite ease-in-out',
+        dice: 'dice 3s infinite ease-in-out',
+        'scale-bounce': 'scaleBounce 1s infinite ease-in-out',
       },
       screens: {
         xs: '480px',

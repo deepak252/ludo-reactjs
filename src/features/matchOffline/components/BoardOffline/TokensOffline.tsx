@@ -3,13 +3,15 @@ import Token from '@/components/Token'
 import BoardConstants from '@/constants/boardConstants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { PlayerColor, Position, TokenInfo } from '@/shared.types'
-import { pickToken } from '../../onlineMatchSlice'
+import { pickToken } from '../../offlineMatchSlice'
 import { checkTokenPresent } from '@/utils/matchUtil'
 
-const TokensOnline = () => {
+const TokensOffline = () => {
   const dispatch = useAppDispatch()
-  const match = useAppSelector((state) => state.matchOnline.room.match)
-  const { players, turn } = match ?? {}
+  // const match = useAppSelector((state) => state.matchOnline.room.match)
+  const players = useAppSelector((state) => state.matchOffline.match.players)
+  const turn = useAppSelector((state) => state.matchOffline.match.turn)
+  // const { players, turn } = match ?? {}
 
   const getTokenPosition = useCallback(
     (color: PlayerColor, tokenIndex: number, pathIndex: number) => {
@@ -63,13 +65,13 @@ const TokensOnline = () => {
   }, [players, turn, getTokenPosition])
 
   const handleCellClick = (position: Position) => {
-    if (!match) return
-    const tokenIndex = checkTokenPresent(match.players, match.turn, position)
-    console.log({ match, position, tokenIndex })
+    const tokenIndex = checkTokenPresent(players, turn, position)
+    console.log({ players, position, tokenIndex })
 
     if (tokenIndex === -1) return
 
-    dispatch(pickToken({ tokenIndex }))
+    // dispatch(pickToken({ tokenIndex }))
+    dispatch(pickToken({ position }))
   }
   return (
     <div>
@@ -90,4 +92,4 @@ const TokensOnline = () => {
   )
 }
 
-export default TokensOnline
+export default TokensOffline

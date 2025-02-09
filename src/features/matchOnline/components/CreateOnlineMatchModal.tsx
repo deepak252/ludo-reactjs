@@ -8,10 +8,10 @@ import { validateCreateOnlineMatchForm } from '../onlineMatchUtil'
 import { useAppDispatch, useAppSelector, useNavigateWithState } from '@/hooks'
 import { createMatch, resetMatch } from '../onlineMatchSlice'
 
-type CreateMatchModalProps = {
+type CreateOnlineMatchModalProps = {
   onClose: () => void
 }
-const CreateMatchModal = ({ onClose }: CreateMatchModalProps) => {
+const CreateOnlineMatchModal = ({ onClose }: CreateOnlineMatchModalProps) => {
   const dispatch = useAppDispatch()
   const roomIdRef = useRef('')
   const room = useAppSelector((state) => state.matchOnline.room)
@@ -83,14 +83,7 @@ const CreateMatchModal = ({ onClose }: CreateMatchModalProps) => {
             />
           </FormInputWrapper>
 
-          <button
-            className="btn-filled-secondary mt-6"
-            type="submit"
-            // onClick={async () => {
-            //   console.log('sdf')
-            //   formik.submitForm()
-            // }}
-          >
+          <button className="btn-filled-secondary mt-6" type="submit">
             Create Match
           </button>
         </div>
@@ -99,4 +92,4 @@ const CreateMatchModal = ({ onClose }: CreateMatchModalProps) => {
   )
 }
 
-export default CreateMatchModal
+export default CreateOnlineMatchModal
